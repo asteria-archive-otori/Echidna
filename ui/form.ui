@@ -66,7 +66,7 @@
      <string notr="true">background-color: #282A36</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <property name="styleSheet">
@@ -92,7 +92,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="problemsTab">
      <attribute name="title">
@@ -125,11 +125,6 @@
      <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuEchidna">
-    <property name="title">
-     <string>File</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="menuEdiut">
     <property name="title">
      <string>Edit</string>
@@ -177,6 +172,21 @@
      <string>Help</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuEchidna">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="menuNew">
+     <property name="title">
+      <string>New</string>
+     </property>
+     <addaction name="actionFile"/>
+     <addaction name="actionWindow"/>
+    </widget>
+    <addaction name="menuNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+   </widget>
    <addaction name="menuEchidna"/>
    <addaction name="menuEdiut"/>
    <addaction name="menuSelection"/>
@@ -220,6 +230,26 @@
   <action name="actionTerminal_2">
    <property name="text">
     <string>Terminal</string>
+   </property>
+  </action>
+  <action name="actionFile">
+   <property name="text">
+    <string>File</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionWindow">
+   <property name="text">
+    <string>Window</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
    </property>
   </action>
  </widget>
