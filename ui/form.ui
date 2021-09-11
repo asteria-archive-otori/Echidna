@@ -14,42 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>0</y>
-      <width>531</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QWidget" name="sidebarMenu" native="true">
     <property name="geometry">
      <rect>
@@ -67,9 +31,9 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>30</y>
-      <width>201</width>
-      <height>481</height>
+      <y>40</y>
+      <width>211</width>
+      <height>471</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -89,18 +53,67 @@
      <string notr="true">background-color: #191A21</string>
     </property>
    </widget>
-   <widget class="QWidget" name="widget" native="true">
+   <widget class="QTabWidget" name="editorTab">
     <property name="geometry">
      <rect>
-      <x>269</x>
-      <y>29</y>
+      <x>274</x>
+      <y>-1</y>
       <width>531</width>
-      <height>461</height>
+      <height>491</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: #282A36</string>
     </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab">
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <attribute name="title">
+      <string>Tab 1</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Tab 2</string>
+     </attribute>
+    </widget>
+   </widget>
+   <widget class="QTabWidget" name="langFeaturesTab">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>290</y>
+      <width>521</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>3</number>
+    </property>
+    <widget class="QWidget" name="problemsTab">
+     <attribute name="title">
+      <string>Problems</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="outputTab">
+     <attribute name="title">
+      <string>Output</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="terminalTab">
+     <attribute name="title">
+      <string>Terminal</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="debugConsoleTab">
+     <attribute name="title">
+      <string>Debug Console</string>
+     </attribute>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
