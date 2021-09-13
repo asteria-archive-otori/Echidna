@@ -16,16 +16,3 @@ this->setCentralWidget(ui->centralWidget);
 EchidnaEditor::~EchidnaEditor(){
     delete ui;
 }
-
-
-/**
- * undefined reference to `vtable for EchidnaEditor'
- * 
- * /
-
-
-/*
-
-undefined reference to `vtable for EchidnaEditor'
-
-*/
