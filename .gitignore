@@ -58,3 +58,8 @@ lib/*
 bin/*
 test/test_runner
 
+
+
+# Added by cargo
+
+/target
