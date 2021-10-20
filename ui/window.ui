@@ -2,6 +2,9 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <object class="GtkApplicationWindow" id="window">
+    <property name="title">Echidna Code Editor</propertY>
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
     <child>
       <object class="GtkBox" id="echidna-root">
         <property name="orientation">vertical</property>
