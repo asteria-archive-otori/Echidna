@@ -69,7 +69,7 @@ impl MenubarImplementedEditor for EchidnaEditor {
 
             about_dialog.set_license_type(gtk::License::Mpl20);
             about_dialog.set_program_name(Some("Echidna Code Editor"));
-            about_dialog.set_website(Some("https://gitlab.com/EchidnaHQ/Echidna"));
+            about_dialog.set_website(Some("https://github.com/EchidnaHQ/Echidna"));
             about_dialog.set_authors(&["FortressValkriye"]);
             about_dialog.set_copyright(Some("Made with by ❤️ Echidna contributors"));
             about_dialog.set_visible(true);
