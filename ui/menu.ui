@@ -55,7 +55,7 @@
             <section>
                 <item>
                     <attribute name="label">Close Window</attribute>
-
+                    <attribute name="action">win.close</attribute>
                 </item>
             </section>
             <section>
@@ -147,11 +147,17 @@
             <section>
                 <item>
                     <attribute name="label">View License</attribute>
+                    <attribute name="action">app.view-license</attribute>
                 </item>
             </section>
             <section>
                 <item>
                     <attribute name="label">Search Feature Requests</attribute>
+                    <attribute name="action">app.search-feature-requests</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Report Issue</attribute>
+                    <attribute name="action">app.report-issue</attribute>
                 </item>
             </section>
             <section>
