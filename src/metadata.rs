@@ -1,1 +1,0 @@
-"Echidna Code Editor";
