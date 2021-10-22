@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
  
+ use glib::subclass::types::ObjectSubclassExt;
+ use super::imp::EchidnaEditor; 
  use std::path::Path;
  use serde::{Deserialize, Serialize};
  use relative_path::RelativePath;
@@ -32,10 +34,27 @@ struct MonacoFolder {
 struct MonacoWorkspace {
      folders: Vec<MonacoFolder>
 }
+
+trait WorkspaceImplementedEditor {
+    fn action_open_workspace(
+        &self,
+        window: ApplicationWindow,
+        app: super::EchidnaEditor,
+        _action: &SimpleAction,
+        _variant: Option<&glib::Variant>,
+    );
+
+    fn open_workspace(&self, file: File);
+    fn recursive_add_files_into_tree_store(&self, parent_file: File, tree: &TreeStore);
+    fn open_folder(&self, file: File);
+}
+
+impl WorkspaceImplementedEditor for EchidnaEditor {
  
- pub fn action_open_workspace(
-     window: ApplicationWindow,
-     app: super::imp::EchidnaEditor,
+ fn action_open_workspace(
+    &self, 
+    window: ApplicationWindow,
+     app: super::EchidnaEditor,
      _action: &SimpleAction,
      _variant: Option<&glib::Variant>,
  ) {
@@ -53,7 +72,7 @@ struct MonacoWorkspace {
  
      // TODO: Somehow inserts self to this function.
      // This function sets the callback function as 'static, which for some reasons ban cloning self into it. Idk why.
-     dialog.connect_response(clone!(@weak window =>
+     dialog.connect_response(clone!(@weak window, @weak app =>
          move |dialog, response| {
  
              if response == ResponseType::Accept {
@@ -63,7 +82,7 @@ struct MonacoWorkspace {
                  match file_option {
                      Some(file) => {
                          dialog.destroy();   
-                         open_workspace(file);
+                         Self::from_instance(&app).open_workspace(file);
  },
  None => {
  
@@ -87,7 +106,7 @@ struct MonacoWorkspace {
  *   - Create a GFile instance of that path, and call open_folder(file: File) and pass the GFile instance to it.
  *
  */
-pub fn open_workspace(file: File){
+fn open_workspace(&self, file: File){
     let cancellable = Cancellable::new();
     let filepath_raw = &file.path().expect("Could not get the file path of the file.");
     let filepath = Path::new(&filepath_raw);
@@ -114,7 +133,7 @@ pub fn open_workspace(file: File){
                             let folder = File::for_path(path.to_path(filepath));
 
                             // Do something with the folder, perhaps lists its child and .
-                            open_folder(folder);
+                            self.open_folder(folder);
                         },
                     Err(e) => println!("Could not parse {:#?} because of:\n{}", filepath, e),
                 }
@@ -138,7 +157,7 @@ pub fn open_workspace(file: File){
  * 
  * 
  */
-fn recursive_add_files_into_tree_store(parent_file: File, tree: TreeStore){
+fn recursive_add_files_into_tree_store(&self, parent_file: File, tree: &TreeStore){
     let child_enumerate_cancellable = Cancellable::new();
     let child_files = parent_file.enumerate_children("*", FileQueryInfoFlags::NONE, Some(&child_enumerate_cancellable));
     let filepath = &parent_file.path().expect("Could not get the file path of the file.");
@@ -152,7 +171,7 @@ fn recursive_add_files_into_tree_store(parent_file: File, tree: TreeStore){
                         tree.set_value(&tree_iter, 2, &file_info.name().to_str().to_value());
                         
                         if file_info.file_type() == FileType::Directory {
-                            recursive_add_files_into_tree_store(file, tree);
+                            self.recursive_add_files_into_tree_store(file, tree);
 
                         }
 
@@ -173,10 +192,11 @@ fn recursive_add_files_into_tree_store(parent_file: File, tree: TreeStore){
  - Create a new tree
  - Enumerate over child files of 'file'. (PS: In the Unix family of OS-es, directories are files too)
  */
-pub fn open_folder(file: File){
+fn open_folder(&self, file: File){
     let tree = TreeStore::new(&[gdk::Texture::static_type(), Type::STRING]);
-   recursive_add_files_into_tree_store(file, tree);
+    self.recursive_add_files_into_tree_store(file, &tree);
    
 
 
     }
+}
