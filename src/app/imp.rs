@@ -89,7 +89,7 @@ impl EchidnaEditorExt for EchidnaEditor {
 
                 // TODO: Somehow inserts self to this function.
                 // This function sets the callback function as 'static, which for some reasons ban cloning self into it. Idk why.
-                dialog.connect_response(clone!(@weak window =>
+                dialog.connect_response(clone!( @weak app, @weak window, =>
         move |dialog, response| {
     
             if response == ResponseType::Accept {
@@ -98,8 +98,9 @@ impl EchidnaEditorExt for EchidnaEditor {
                
                 match file_option {
                         Some(file) => {
-                                dialog.destroy();   
-                                Self::open_file(file);
+                                dialog.destroy();
+                            
+                                Self::open_file(&notebook, file);
 
                         },
                         None => {
@@ -115,12 +116,11 @@ impl EchidnaEditorExt for EchidnaEditor {
     
         fn open_file(notebook: &gtk::Notebook, file: gio::File){
                 let cancellable = Cancellable::new();
-                let filepath = file.path();
+                let filepath = file.path().expect("No filepath");
                 let file_info_result = file.query_info(
                  "*",
                 gio::FileQueryInfoFlags::NONE,
                 Some(&cancellable));
-    
                 match file_info_result {
                                 Ok(info) => {
                 match info.content_type() {
@@ -130,12 +130,23 @@ impl EchidnaEditorExt for EchidnaEditor {
                 let file_content = file.load_contents(Some(&content_cancellable));
                 match file_content {
                         Ok(content) => {
-                            let (int_vec, text_option) = content;
-                                println!("The int vector of {:?} is {:?}", filepath, int_vec);
-                            match text_option {
-                                Some(text) => println!("Opened {:?} and its content is:\n{}", filepath, text.as_str()),
-                                None => println!("No value for {:?}.", filepath),
+                            let (int_vec, _text_option) = content;
+                            let language_manager = LanguageManager::new();
+                            let language = language_manager.guess_language(Some(&info.name().to_str().expect("Could not open the file because its name is not supported by Unicode.")), None);
+                            
+                            let buffer = Buffer::new(None);
+                            buffer.set_text(from_utf8(&int_vec).expect(format!("Could not parse the contents of {:?} as it's unsupported by UTF-8", filepath).as_str()));
+                            match language {
+                                    Some(lang) => buffer.set_language(Some(&lang)),
+                                    None => {}
                             }
+
+                            let sourceview = View::with_buffer(&buffer);
+                          
+                            notebook.prepend_page(&sourceview, 
+                                   Some(&Label::new(Some(&info.name().to_str()
+                                   .expect("Could not parse file's name")))));
+                          
                         }
                         Err(e) => println!("Could not open {:?} because:\n{:#?}", filepath, e),
                 }
