@@ -9,8 +9,8 @@ pub trait MenubarImplementedEditor {
     fn setup_menubar(
         &self,
         app: &super::EchidnaEditor,
-        window: gtk::ApplicationWindow,
-        builder: gtk::Builder,
+        window: &gtk::ApplicationWindow,
+        builder: &gtk::Builder,
     );
 }
 
@@ -18,8 +18,8 @@ impl MenubarImplementedEditor for EchidnaEditor {
     fn setup_menubar(
         &self,
         app: &super::EchidnaEditor,
-        window: gtk::ApplicationWindow,
-        builder: gtk::Builder,
+        window: &gtk::ApplicationWindow,
+        builder: &gtk::Builder,
     ) {
         let menubuilder = gtk::Builder::from_string(include_str!("../../ui/menu.ui"));
         let menubar: MenuModel = menubuilder
@@ -74,6 +74,17 @@ impl MenubarImplementedEditor for EchidnaEditor {
             about_dialog.set_copyright(Some("Made with by ❤️ Echidna contributors"));
             about_dialog.set_visible(true);
         });
+
+
+        let act_window_close = SimpleAction::new("close", None);
+
+        window.add_action(&act_window_close);
+
+        act_window_close.connect_activate(clone!(@weak window => 
+            move | _action, _variant | {
+                window.close();
+            }
+        ));
 
         let action_open_file: SimpleAction = SimpleAction::new("open-file", None);
 
