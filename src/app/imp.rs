@@ -33,7 +33,10 @@ pub struct EchidnaEditor {
     pub app_id: &'static str
 }
 
-
+pub trait EchidnaEditorExt {
+        fn action_open_file(window: ApplicationWindow, app: super::EchidnaEditor, action: &SimpleAction, variant: Option<&glib::Variant>, notebook: gtk::Notebook);
+        fn open_file(notebook: &gtk::Notebook, file: gio::File);
+}
 
 
 
@@ -47,13 +50,13 @@ impl ObjectSubclass for EchidnaEditor {
             Self {
                     name: "Echidna Code Editor",
                     app_id: "land.echidna.editor"
-            }
+                }
     }
 }
 
 
 
-impl EchidnaEditor {
+impl EchidnaEditorExt for EchidnaEditor {
 
         /*
         Open a file and put it in an editor and the opened files bar.
@@ -71,7 +74,7 @@ impl EchidnaEditor {
 
         Perhaps some of the last points should not be implemented in this function but rather in another function that keeps track of every files.
         */
-        fn action_open_file(window: ApplicationWindow, app: &Self, action: &SimpleAction, variant: Option<&glib::Variant>){
+        fn action_open_file(window: ApplicationWindow, app: super::EchidnaEditor, _action: &SimpleAction, variant: Option<&glib::Variant>, notebook: gtk::Notebook){
 
                 let dialog: FileChooserDialog = FileChooserDialog::new(Some("Open a file"), 
                                                                         Some(&window), 
@@ -110,7 +113,7 @@ impl EchidnaEditor {
         
         }
     
-        fn open_file(file: gio::File){
+        fn open_file(notebook: &gtk::Notebook, file: gio::File){
                 let cancellable = Cancellable::new();
                 let filepath = file.path();
                 let file_info_result = file.query_info(
