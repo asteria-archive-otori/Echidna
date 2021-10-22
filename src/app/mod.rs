@@ -3,11 +3,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 pub mod imp;
+pub mod menubar;
 pub mod workspace;
-
 use glib::wrapper;
-
-
 
 wrapper! {
     pub struct EchidnaEditor(ObjectSubclass<imp::EchidnaEditor>) @extends gio::Application, gtk::Application, @implements gio::ActionGroup, gio::ActionMap;
@@ -15,39 +13,20 @@ wrapper! {
 
 impl Default for EchidnaEditor {
     fn default() -> Self {
-      Self::new("land.echidna.editor")
-
+        Self::new("land.echidna.editor")
     }
-
-
 }
-
 
 impl EchidnaEditor {
-    
-
-    pub fn new( 
-                app_id: &'static str) -> Self {
-        
-   let object = glib::Object::new(&[
+    pub fn new(app_id: &'static str) -> Self {
+        let object = glib::Object::new(&[
             ("application-id", &app_id),
-            ("flags", &gio::ApplicationFlags::empty())
+            ("flags", &gio::ApplicationFlags::empty()),
         ]);
 
-  match object {
-      Ok(o) => o,
-      Err(e) => panic!("Error in making EchidnaApplication {}", e),
-  }
-
- 
+        match object {
+            Ok(o) => o,
+            Err(e) => panic!("Error in making EchidnaApplication {}", e),
+        }
     }
-
-  
-
-
-    
-
-  
-  
 }
-
