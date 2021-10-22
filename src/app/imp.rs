@@ -7,7 +7,6 @@ use sourceview::{View, Buffer, LanguageManager, };
 use sourceview::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::prelude::*;
-use std::rc::Rc;
 use super::menubar::MenubarImplementedEditor;
 use gtk::{
         ApplicationWindow, 
@@ -185,10 +184,8 @@ impl ApplicationImpl for EchidnaEditor {
           .object("menu")
           .expect("Could not get object 'menu' from builder.");
 
-         self.setup_menubar(app, window, builder);
-         let notebook: gtk::Notebook = builder
-                .object("echidna-notebook")
-                .expect("Could not get 'echidna-notebook' from builder.");
+         self.setup_menubar(app, &window, &builder.clone());
+       
          window.set_application(Some(app));
         
          window.present();
