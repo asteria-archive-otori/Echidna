@@ -2,18 +2,23 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-
-
+use std::str::from_utf8;
+use sourceview::{View, Buffer, LanguageManager, };
+use sourceview::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::prelude::*;
+use std::rc::Rc;
+use super::menubar::MenubarImplementedEditor;
 use gtk::{
         ApplicationWindow, 
         Application, 
         FileChooserDialog, 
         FileChooserAction,
-        AboutDialog, 
-        ResponseType
+        ResponseType,
+        Label
+
 };
+
 use gio::{
         MenuModel, 
         SimpleAction, 
@@ -153,62 +158,28 @@ impl ObjectImpl for EchidnaEditor {
 }
 
 impl ApplicationImpl for EchidnaEditor {
-
+     
         fn activate(&self, app: &Self::Type){
 
-                let builder = gtk::Builder::from_string(include_str!("../../ui/window.ui"));
-                let window: ApplicationWindow = builder
-                        .object("window")
-                        .expect("Could not get object 'window' from builder.");
-        
-                let menubuilder = gtk::Builder::from_string(include_str!("../../ui/menu.ui"));
-                let menubar: MenuModel = menubuilder
-                        .object("menu")
-                        .expect("Could not get object 'menu' from builder.");
-        
-                app.set_menubar(Some(&menubar));
-        
-                let act_exit: SimpleAction = SimpleAction::new("exit", None);
-                app.add_action(&act_exit);
-        
-                act_exit.connect_activate(clone!(@weak app =>
-                        move |_action, _value| {
-                                app.quit();
-                        }
-                ));
-        
-        
-                let act_about: SimpleAction = SimpleAction::new("about", None);
-                app.add_action(&act_about);
-                act_about.connect_activate( |_action, _value| {
-        
-                                        let about_dialog: AboutDialog = AboutDialog::new();
-        
-                             
-                                        about_dialog.set_license_type(gtk::License::Mpl20);
-                                        about_dialog.set_program_name(Some("Echidna Code Editor"));
-                                        about_dialog.set_website(Some("https://gitlab.com/EchidnaHQ/Echidna"));
-                                        about_dialog.set_authors(&["FortressValkriye"]);
-                                        about_dialog.set_copyright(Some("Made with by ❤️ Echidna contributors"));
-                                        about_dialog.set_visible(true);
-                });
-        
+         let builder = gtk::Builder::from_string(include_str!("../../ui/window.ui"));
+         let window: ApplicationWindow = builder
+          .object("window")
+          .expect("Could not get object 'window' from builder.");
 
-                let action_open_file: SimpleAction = SimpleAction::new("open-file", None);
+         let menubuilder = gtk::Builder::from_string(include_str!("../../ui/menu.ui"));
+         let menubar: MenuModel = menubuilder
+          .object("menu")
+          .expect("Could not get object 'menu' from builder.");
 
-                window.add_action(&action_open_file);
-                action_open_file.connect_activate(clone!(@weak window, @weak app =>
-                        move |action, variant| {
-                        Self::action_open_file(window, Self::from_instance(&app), action, variant);
-                }));
-                window.set_application(Some(app));
+         self.setup_menubar(app, window, builder);
+         let notebook: gtk::Notebook = builder
+                .object("echidna-notebook")
+                .expect("Could not get 'echidna-notebook' from builder.");
+         window.set_application(Some(app));
         
-                window.present();
+         window.present();
         
-            }
-
-
-     
+        }
 
 }
 
