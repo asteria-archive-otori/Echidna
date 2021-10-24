@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0" />
+  <template class="EchidnaWindow">
+    <property name="title">Echidna Code Editor</property>
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
+    <child>
+      <object class="GtkBox" id="echidna-root">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkBox" id="bars-box">
+            <property name="vexpand">1</property>
+            <child>
+              <object class="GtkStackSidebar" id="sidebar"></object>
+            </child>
+            <child>
+              <placeholder />
+            </child>
+            <child>
+              <!-- <object class="GtkGrid" id="editor-tabs">
+                <property name="hexpand">1</property>
+                <child>
+                -->
+              <object class="GtkNotebook" id="notebook">
+                <child>
+                  <object id="getting-started" class="GtkLabel">
+                    <property name="label">Hello from Echidna!</property>
+                  </object>
+                </child>
+                <child type="tab">
+                  <object class="GtkLabel" id="notebook-welcome">
+                    <property name="label">Welcome</property>
+                  </object>
+                </child>
+              </object>
+              <!-- </child>
+              </object> -->
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStatusbar" id="status-bar">
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -3,12 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 pub mod imp;
-pub mod menubar;
-pub mod workspace;
+
 use glib::wrapper;
 
 wrapper! {
     pub struct EchidnaEditor(ObjectSubclass<imp::EchidnaEditor>) @extends gio::Application, gtk::Application, @implements gio::ActionGroup, gio::ActionMap;
+    
 }
 
 impl Default for EchidnaEditor {

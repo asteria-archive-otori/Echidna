@@ -1,32 +1,25 @@
-use super::imp::EchidnaEditor;
-use super::imp::EchidnaEditorExt;
+use super::file::FileImplementedEditor;
+use super::EchidnaWindow;
 use gio::{MenuModel, SimpleAction};
 use glib::clone;
 use gtk::prelude::*;
 use gtk::AboutDialog;
 
 pub trait MenubarImplementedEditor {
-    fn setup_menubar(
-        &self,
-        app: &super::EchidnaEditor,
-        window: &gtk::ApplicationWindow,
-        builder: &gtk::Builder,
-    );
+    fn setup_menubar(&self);
 }
 
-impl MenubarImplementedEditor for EchidnaEditor {
-    fn setup_menubar(
-        &self,
-        app: &super::EchidnaEditor,
-        window: &gtk::ApplicationWindow,
-        builder: &gtk::Builder,
-    ) {
-        let menubuilder = gtk::Builder::from_string(include_str!("../../ui/menu.ui"));
+impl MenubarImplementedEditor for EchidnaWindow {
+    fn setup_menubar(&self) {
+        let app = &self
+            .application()
+            .expect("&self does not have an application set.");
+        let menubuilder = gtk::Builder::from_string(include_str!("../../../ui/menu.ui"));
         let menubar: MenuModel = menubuilder
             .object("menu")
             .expect("Could not get object 'menu' from builder.");
         app.set_menubar(Some(&menubar));
-        window.set_show_menubar(true);
+        &self.set_show_menubar(true);
         let act_exit: SimpleAction = SimpleAction::new("exit", None);
         app.add_action(&act_exit);
 
@@ -49,9 +42,6 @@ impl MenubarImplementedEditor for EchidnaEditor {
             about_dialog.set_visible(true);
         });
 
-        let notebook: gtk::Notebook = builder
-            .object("echidna-notebook")
-            .expect("Could not get 'echidna-notebook' from builder.");
         //app.notebook = Some(Rc::new(RefCell::new(notebook)));
         let act_exit: SimpleAction = SimpleAction::new("exit", None);
         app.add_action(&act_exit);
@@ -92,20 +82,22 @@ impl MenubarImplementedEditor for EchidnaEditor {
 
         let act_window_close = SimpleAction::new("close", None);
 
-        window.add_action(&act_window_close);
+        &self.add_action(&act_window_close);
+     
+        {
+            let window = self.clone();
 
-        act_window_close.connect_activate(clone!(@weak window =>
-            move | _action, _variant | {
+            act_window_close.connect_activate(move |_action, _variant| {
                 window.close();
-            }
-        ));
+            });
+        }
 
         let action_open_file: SimpleAction = SimpleAction::new("open-file", None);
 
-        window.add_action(&action_open_file);
-        action_open_file.connect_activate(clone!(@weak window, @weak app, @weak notebook =>
+        &self.add_action(&action_open_file);
+        action_open_file.connect_activate(clone!(@weak self as window =>
                 move |action, variant| {
-                Self::action_open_file(window, app, action, variant, notebook);
+                Self::action_open_file(window);
         }));
     }
 }
