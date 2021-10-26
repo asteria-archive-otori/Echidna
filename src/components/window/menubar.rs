@@ -87,7 +87,6 @@ impl MenubarImplementedEditor for EchidnaWindow {
         let act_window_close = SimpleAction::new("close", None);
 
         &self.add_action(&act_window_close);
-     
         {
             let window = self.clone();
 
