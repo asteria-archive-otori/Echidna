@@ -25,43 +25,43 @@ use gtk::{
 };
 
 pub trait FileImplementedEditor {
-    fn action_open_file/*<P: IsA<gtk::Application>>*/(window: Self);
+    fn action_open_file(&self);
     fn open_file(notebook: &gtk::Notebook, file: gio::File);
 }
 
 impl FileImplementedEditor for super::EchidnaWindow {
-     /*
-        Open a file and put it in an editor and the opened files bar.
+    /*
+    Open a file and put it in an editor and the opened files bar.
 
-        - Open a file chooser dialog.
-        - Connect a signal to it and get the file choosen.
-        - Read th file's information and
-        - TODO: if it's a plain text,
-        - TODO: Load the file's content
-        - TODO: Create an editor
-        - TODO: Set the editor's content to the file's content.
-        - TODO: Somehow keep track of what file belongs to what editor/opened file bar widget.
-        - TODO: If the user enables Autosave, listen to the editor's changes and automatically save the editor's content.
-        - TODO: Close the editor and the tab widget when the file is closed (triggered by the X button on them).
+    - Open a file chooser dialog.
+    - Connect a signal to it and get the file choosen.
+    - Read th file's information and
+    - TODO: if it's a plain text,
+    - TODO: Load the file's content
+    - TODO: Create an editor
+    - TODO: Set the editor's content to the file's content.
+    - TODO: Somehow keep track of what file belongs to what editor/opened file bar widget.
+    - TODO: If the user enables Autosave, listen to the editor's changes and automatically save the editor's content.
+    - TODO: Close the editor and the tab widget when the file is closed (triggered by the X button on them).
 
-        Perhaps some of the last points should not be implemented in this function but rather in another function that keeps track of every files.
-        */
-        fn action_open_file/*<P: IsA<gtk::Application>>*/(window: Self){
+    Perhaps some of the last points should not be implemented in this function but rather in another function that keeps track of every files.
+    */
+    fn action_open_file(&self) {
+        let dialog: FileChooserDialog = FileChooserDialog::new(
+            Some("Open a file"),
+            Some(self),
+            FileChooserAction::Open,
+            &[
+                ("Cancel", ResponseType::Cancel),
+                ("Open", ResponseType::Accept),
+            ],
+        );
 
-            let dialog: FileChooserDialog = FileChooserDialog::new(Some("Open a file"), 
-                                                                    Some(&window), 
-                                                                    FileChooserAction::Open, 
-                                                                    &[("Cancel", ResponseType::Cancel),
-                                                                  ("Open", ResponseType::Accept)        ]);
+        dialog.set_visible(true);
 
-
-            dialog.set_visible(true);
-
-                                               
-
-            // TODO: Somehow inserts self to this function.
-            // This function sets the callback function as 'static, which for some reasons ban cloning self into it. Idk why.
-            dialog.connect_response(clone!( @weak window, =>
+        // TODO: Somehow inserts self to this function.
+        // This function sets the callback function as 'static, which for some reasons ban cloning self into it. Idk why.
+        dialog.connect_response(clone!( @weak self as window, =>
     move |dialog, response| {
 
         if response == ResponseType::Accept {
