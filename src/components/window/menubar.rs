@@ -100,7 +100,7 @@ impl MenubarImplementedEditor for EchidnaWindow {
         &self.add_action(&action_open_file);
         action_open_file.connect_activate(clone!(@weak self as window =>
                 move |action, variant| {
-                Self::action_open_file(window);
+                window.action_open_file();
         }));
     }
 }
