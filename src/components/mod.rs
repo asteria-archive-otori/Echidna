@@ -5,3 +5,4 @@
 pub mod app;
 pub mod sidebar;
 pub mod window;
+pub mod editor;

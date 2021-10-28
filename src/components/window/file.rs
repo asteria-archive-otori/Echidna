@@ -2,12 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-use gio::Cancellable;
+use crate::components::editor::EchidnaCoreEditor;
+// use gio::Cancellable;
 use glib::clone;
 use gtk::{
     prelude::*, subclass::prelude::*, FileChooserAction, FileChooserDialog, Label, ResponseType,
 };
-use sourceview::{prelude::*, Buffer, LanguageManager, View};
+use sourceview::File;
 
 pub trait FileImplementedEditor {
     fn action_open_file(&self);
@@ -49,65 +50,28 @@ impl FileImplementedEditor for super::EchidnaWindow {
         dialog.connect_response(clone!( @weak self as window, =>
     move |dialog, response| {
         if response == ResponseType::Accept {
-            let file_option = dialog.file();
-            match file_option {
-                    Some(file) => {
-                            dialog.destroy();
-                            Self::open_file(&super::imp::EchidnaWindow::from_instance(&window).notebook, file);
-                    },
-                    None => {},
-            }
+            let file = dialog.file().expect("");
+            Self::open_file(&super::imp::EchidnaWindow::from_instance(&window).notebook, file);
+
            } else if response == ResponseType::Cancel {
                    dialog.destroy();
            }  }));
     }
 
-    fn open_file(notebook: &gtk::Notebook, file: gio::File) {
-        let cancellable = Cancellable::new();
-        let filepath = file.path().expect("No filepath");
-        let file_info_result =
-            file.query_info("*", gio::FileQueryInfoFlags::NONE, Some(&cancellable));
-        match file_info_result {
-            Ok(info) => match info.content_type() {
-                Some(content_type) => {
-                    println!(
-                        "Opened {} and found its content type is {}.",
-                        "file",
-                        content_type.to_string()
-                    );
-                    let content_cancellable = Cancellable::new();
-                    let file_content = file.load_contents(Some(&content_cancellable));
-                    match file_content {
-                        Ok(content) => {
-                            let (int_vec, _text_option) = content;
-                            let language_manager = LanguageManager::new();
-                            let language = language_manager.guess_language(Some(&info.name().to_str().expect("Could not open the file because its name is not supported by Unicode.")), None);
-
-                            let buffer = Buffer::new(None);
-                            buffer.set_text(std::str::from_utf8(&int_vec).expect(format!("Could not parse the contents of {:?} as it's unsupported by UTF-8", filepath).as_str()));
-                            match language {
-                                Some(lang) => buffer.set_language(Some(&lang)),
-                                None => {}
-                            }
-
-                            let sourceview = View::with_buffer(&buffer);
-
-                            notebook.prepend_page(
-                                &sourceview,
-                                Some(&Label::new(Some(
-                                    &info.name().to_str().expect("Could not parse file's name"),
-                                ))),
-                            );
-                        }
-                        Err(e) => println!("Could not open {:?} because:\n{:#?}", filepath, e),
-                    }
-                }
-                None => println!("It does not seem like {:?} has a type", filepath),
-            },
-            Err(e) => println!(
-                "Could not retrieve file information for {:?} because:\n{}",
-                filepath, e
-            ),
-        }
+    fn open_file(notebook: &gtk::Notebook, file_location: gio::File) {
+        let file = File::builder().location(&file_location).build();
+        let editor_page = EchidnaCoreEditor::new(Some(&file));
+        notebook.prepend_page(
+            &editor_page,
+            Some(&Label::new(Some(
+                &file_location
+                    .path()
+                    .expect("The file's path is missing")
+                    .file_name()
+                    .expect("Could not get the file name, as it ends with ..")
+                    .to_str()
+                    .expect("Could not parse the file name, as it is not a valid Unicode."),
+            ))),
+        );
     }
 }
