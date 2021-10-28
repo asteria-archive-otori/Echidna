@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="4.5.0" />
+  <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at https://mozilla.org/MPL/2.0/.
+-->
+  <template class="EchidnaSidebar">
+    <child>
+      <object class="GtkStackSidebar">
+        <property name="stack">
+          <object class="GtkStack">
+            <child>
+              <object class="GtkStackPage">
+                <!-- Explorer Tab -->
+                <property name="name">explorer</property>
+                <property name="title">Explorer</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                    <child>
+                      <object class="GtkTreeView" id="treeview">
+                        <property name="model">liststore1</property>
+                        <child></child>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="selection">
+                            <signal name="changed" handler="on_treeview_selection_changed" />
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <!-- Search Tab -->
+                <property name="name">search</property>
+                <property name="title">Search</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">Search</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <!-- Extensions Tab -->
+                <property name="name">extensions</property>
+                <property name="title">Extensions</property>
+                <property name="child"></property>
+
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+  </template>
+</interface>
