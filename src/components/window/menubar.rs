@@ -15,15 +15,15 @@ pub trait MenubarImplementedEditor {
 
 impl MenubarImplementedEditor for EchidnaWindow {
     fn setup_menubar(&self) {
-        let app = &self
+        let app = self
             .application()
-            .expect("&self does not have an application set.");
+            .expect("self does not have an application set.");
         let menubuilder = gtk::Builder::from_string(include_str!("../../../ui/menu.ui"));
         let menubar: MenuModel = menubuilder
             .object("menu")
             .expect("Could not get object 'menu' from builder.");
         app.set_menubar(Some(&menubar));
-        &self.set_show_menubar(true);
+        self.set_show_menubar(true);
         let act_exit: SimpleAction = SimpleAction::new("exit", None);
         app.add_action(&act_exit);
 
@@ -86,7 +86,7 @@ impl MenubarImplementedEditor for EchidnaWindow {
 
         let act_window_close = SimpleAction::new("close", None);
 
-        &self.add_action(&act_window_close);
+        self.add_action(&act_window_close);
         {
             let window = self.clone();
 
@@ -97,9 +97,9 @@ impl MenubarImplementedEditor for EchidnaWindow {
 
         let action_open_file: SimpleAction = SimpleAction::new("open-file", None);
 
-        &self.add_action(&action_open_file);
+        self.add_action(&action_open_file);
         action_open_file.connect_activate(clone!(@weak self as window =>
-                move |action, variant| {
+                move |_action, _variant| {
                 window.action_open_file();
         }));
     }
