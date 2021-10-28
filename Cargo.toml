@@ -13,5 +13,5 @@ serde_json = "^1.0.68"
 serde = { version = "^1.0.130", features = ["derive"] }
 relative-path = "^1.5.0"
 gdk = { version = "^0.3.0", package = "gdk4"}
-sourceview = { package = "sourceview5", version = "^0.3.0"}
+sourceview = { package = "sourceview5", version = "^0.1.0", git = "https://github.com/EchidnaHQ/sourceview" }
 webbrowser = { version = "^0.5.5" }

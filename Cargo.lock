@@ -669,28 +669,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fe0f37c9e8f3c5a4a66ad655a93c74daac4ad00c441533bf5c6e7990bb42604e"
 
 [[package]]
-name = "sourceview5"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f2f8375300de56f43ef03876a8c6ede4be89ea994b76e0f07e080aeb43c6dc3"
+name = "sourceview-sys"
+version = "0.1.0"
+source = "git+https://github.com/EchidnaHQ/sourceview#06d42d92effc5cebbc225f4795c52a8d9583d9aa"
 dependencies = [
- "bitflags",
- "gdk-pixbuf",
- "gdk4",
- "gio",
- "glib",
- "gtk4",
- "libc",
- "pango",
- "sourceview5-sys",
-]
-
-[[package]]
-name = "sourceview5-sys"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1be3031333cb0f2300aa9e57a25b82f9c9c915dce25b81ac703fbe9a4e6e8986"
-dependencies = [
+ "cairo-sys-rs",
  "gdk-pixbuf-sys",
  "gdk4-sys",
  "gio-sys",
@@ -699,7 +682,32 @@ dependencies = [
  "gtk4-sys",
  "libc",
  "pango-sys",
- "system-deps 4.0.0",
+ "system-deps 5.0.0",
+]
+
+[[package]]
+name = "sourceview5"
+version = "0.1.0"
+source = "git+https://github.com/EchidnaHQ/sourceview#06d42d92effc5cebbc225f4795c52a8d9583d9aa"
+dependencies = [
+ "bitflags",
+ "cairo-rs",
+ "cairo-sys-rs",
+ "gdk-pixbuf",
+ "gdk-pixbuf-sys",
+ "gdk4",
+ "gdk4-sys",
+ "gio",
+ "gio-sys",
+ "glib",
+ "glib-sys",
+ "gobject-sys",
+ "gtk4",
+ "gtk4-sys",
+ "libc",
+ "pango",
+ "pango-sys",
+ "sourceview-sys",
 ]
 
 [[package]]
@@ -754,6 +762,19 @@ name = "system-deps"
 version = "4.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6c1889ab44c2a423ba9ba4d64cd04989b25c0280ca7ade813f05368418722a04"
+dependencies = [
+ "cfg-expr 0.9.0",
+ "heck",
+ "pkg-config",
+ "toml",
+ "version-compare",
+]
+
+[[package]]
+name = "system-deps"
+version = "5.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "18db855554db7bd0e73e06cf7ba3df39f97812cb11d3f75e71c39bf45171797e"
 dependencies = [
  "cfg-expr 0.9.0",
  "heck",
