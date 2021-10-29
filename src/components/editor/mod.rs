@@ -13,19 +13,13 @@ glib::wrapper! {
     @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Orientable;
 }
 
-
-
 impl EchidnaCoreEditor {
-  
-  
     pub fn new<P: glib::IsA<sourceview::File>>(file: Option<&P>) -> Self {
         let this: Self =
             glib::Object::new(&[]).expect("Failed to create 'EchidnaCoreEditor' component.");
         let this_imp = this.to_imp();
         // Without cloning it, for some reasons the Rust compiler complains about &this.to_imp().sourceview not being IsA<sourceview::View>
-       this_imp
-            .minimap
-            .set_view(&this_imp.sourceview.clone());
+        this_imp.minimap.set_view(&this_imp.sourceview.clone());
 
         if file.is_some() {
             let file = file.unwrap();
@@ -49,7 +43,6 @@ impl EchidnaCoreEditor {
                         let language_manager = LanguageManager::new();
                         let language = language_manager.guess_language(Some(&info.name().to_str().expect("Could not open the file because its name is not supported by Unicode.")), None);
 
-                    
                         match language {
                             Some(lang) => buffer.set_language(Some(&lang)),
                             None => {}

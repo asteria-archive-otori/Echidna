@@ -3,6 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 pub mod app;
+pub mod editor;
 pub mod sidebar;
 pub mod window;
-pub mod editor;
