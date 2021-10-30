@@ -7,7 +7,9 @@ pub mod imp;
 use glib::wrapper;
 
 wrapper! {
-    pub struct EchidnaEditor(ObjectSubclass<imp::EchidnaEditor>) @extends gio::Application, gtk::Application, @implements gio::ActionGroup, gio::ActionMap;
+    pub struct EchidnaEditor(ObjectSubclass<imp::EchidnaEditor>)
+        @extends gio::Application, gtk::Application,
+        @implements gio::ActionGroup, gio::ActionMap;
 
 }
 
