@@ -10,14 +10,19 @@
         <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
 
         <child>
-            <object class="GtkSourceView" id="sourceview">
-                <property name="vexpand">1</property>
-                <property name="hexpand">1</property>
-                <property name="buffer">
-                    <object class="GtkSourceBuffer"></object>
-                </property>
+            <object class="GtkScrolledWindow">
+                <child>
+                    <object class="GtkSourceView" id="sourceview">
+                        <property name="vexpand">1</property>
+                        <property name="hexpand">1</property>
+                        <property name="buffer">
+                            <object class="GtkSourceBuffer"></object>
+                        </property>
 
+                    </object>
+                </child>
             </object>
+
         </child>
         <child>
             <object class="GtkSourceMap" id="minimap">
