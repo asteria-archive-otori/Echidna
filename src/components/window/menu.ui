@@ -52,6 +52,10 @@
                     <attribute name="action">win.save</attribute>
                 </item>
                 <item>
+                    <attribute name="label">Save As...</attribute>
+                    <attribute name="action">win.save-file-as</attribute>
+                </item>
+                <item>
                     <attribute name="label">Save All</attribute>
                     <attribute name="action">win.save-all</attribute>
                 </item>

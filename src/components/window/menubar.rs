@@ -24,7 +24,6 @@ impl MenubarImplementedEditor for EchidnaWindow {
             .expect("Could not get object 'menu' from builder.");
         app.set_menubar(Some(&menubar));
         self.set_show_menubar(true);
-
         {
             let act_exit: SimpleAction = SimpleAction::new("exit", None);
             app.add_action(&act_exit);
@@ -109,6 +108,16 @@ impl MenubarImplementedEditor for EchidnaWindow {
             action_open_file.connect_activate(clone!(@weak self as window =>
                     move |_action, _variant| {
                     window.action_open_file();
+            }));
+        }
+        {
+            let action_save_file_as = SimpleAction::new("save-file-as", None);
+
+            self.add_action(&action_save_file_as);
+
+            action_save_file_as.connect_activate(clone!(@weak self as window =>
+                move |_action, _variant| {
+                window.action_save_file_as();
             }));
         }
     }

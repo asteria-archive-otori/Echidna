@@ -82,6 +82,7 @@ dependencies = [
  "gio",
  "glib",
  "gtk4",
+ "once_cell",
  "relative-path",
  "serde",
  "serde_json",

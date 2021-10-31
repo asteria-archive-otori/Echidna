@@ -14,7 +14,7 @@ glib::wrapper! {
 }
 
 impl EchidnaCoreEditor {
-    pub fn new<P: glib::IsA<sourceview::File>>(file: Option<&P>) -> Self {
+    pub fn new(file: Option<sourceview::File>) -> Self {
         let this: Self =
             glib::Object::new(&[]).expect("Failed to create 'EchidnaCoreEditor' component.");
         let this_imp = this.to_imp();
@@ -23,10 +23,12 @@ impl EchidnaCoreEditor {
 
         if file.is_some() {
             let file = file.unwrap();
-
             let file_location = file
                 .location()
                 .expect("file is required to have a location");
+            
+                this.set_property("file", &file).expect("Could not set the 'file' property of EchidnaCoreEditor");
+
             let cancellable = gio::Cancellable::new();
             let filepath = file_location.path().expect("No filepath");
             let file_info_result =
@@ -48,7 +50,7 @@ impl EchidnaCoreEditor {
                             None => {}
                         }
 
-                        let file_loader: FileLoader = FileLoader::new(&buffer, file);
+                        let file_loader: FileLoader = FileLoader::new(&buffer, &file);
 
                         file_loader.load_async(
                             glib::Priority::default(),
@@ -74,5 +76,9 @@ impl EchidnaCoreEditor {
 
     pub fn to_imp(&self) -> &imp::EchidnaCoreEditor {
         imp::EchidnaCoreEditor::from_instance(self)
+    }
+
+    pub fn file(&self) -> sourceview::File {
+        self.property("file").expect("Could not get property 'file' of EchidnaCoreEditor").get::<sourceview::File>().expect("Could not get property 'file' of EchidnaCoreEditor because its type is not IsA<sourceview::File>")
     }
 }
