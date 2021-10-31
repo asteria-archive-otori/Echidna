@@ -56,7 +56,11 @@
                 <!-- Extensions Tab -->
                 <property name="name">extensions</property>
                 <property name="title">Extensions</property>
-                <property name="child"></property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                  </object>
+                </property>
 
               </object>
             </child>
