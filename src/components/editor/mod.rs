@@ -26,8 +26,9 @@ impl EchidnaCoreEditor {
             let file_location = file
                 .location()
                 .expect("file is required to have a location");
-            
-                this.set_property("file", &file).expect("Could not set the 'file' property of EchidnaCoreEditor");
+
+            this.set_property("file", &file)
+                .expect("Could not set the 'file' property of EchidnaCoreEditor");
 
             let cancellable = gio::Cancellable::new();
             let filepath = file_location.path().expect("No filepath");
