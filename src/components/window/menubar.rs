@@ -18,89 +18,98 @@ impl MenubarImplementedEditor for EchidnaWindow {
         let app = self
             .application()
             .expect("self does not have an application set.");
-        let menubuilder = gtk::Builder::from_string(include_str!("../../../ui/menu.ui"));
+        let menubuilder = gtk::Builder::from_string(include_str!("./menu.ui"));
         let menubar: MenuModel = menubuilder
             .object("menu")
             .expect("Could not get object 'menu' from builder.");
         app.set_menubar(Some(&menubar));
         self.set_show_menubar(true);
-        let act_exit: SimpleAction = SimpleAction::new("exit", None);
-        app.add_action(&act_exit);
 
-        act_exit.connect_activate(clone!(@weak app =>
-                move |_action, _value| {
-                        app.quit();
-                }
-        ));
+        {
+            let act_exit: SimpleAction = SimpleAction::new("exit", None);
+            app.add_action(&act_exit);
 
-        let act_about: SimpleAction = SimpleAction::new("about", None);
-        app.add_action(&act_about);
-        act_about.connect_activate(|_action, _value| {
-            let about_dialog: AboutDialog = AboutDialog::new();
+            act_exit.connect_activate(clone!(@weak app =>
+                    move |_action, _value| {
+                            app.quit();
+                    }
+            ));
+        }
+        {
+            let act_about: SimpleAction = SimpleAction::new("about", None);
+            app.add_action(&act_about);
+            act_about.connect_activate(|_action, _value| {
+                let about_dialog: AboutDialog = AboutDialog::new();
 
-            about_dialog.set_license_type(gtk::License::Mpl20);
-            about_dialog.set_program_name(Some("Echidna Code Editor"));
-            about_dialog.set_website(Some("https://gitlab.com/EchidnaHQ/Echidna"));
-            about_dialog.set_authors(&["FortressValkriye"]);
-            about_dialog.set_copyright(Some("Made with by ❤️ Echidna contributors"));
-            about_dialog.set_visible(true);
-        });
+                about_dialog.set_license_type(gtk::License::Mpl20);
+                about_dialog.set_program_name(Some("Echidna Code Editor"));
+                about_dialog.set_website(Some("https://gitlab.com/EchidnaHQ/Echidna"));
+                about_dialog.set_authors(&["FortressValkriye"]);
+                about_dialog.set_copyright(Some("Made with by ❤️ Echidna contributors"));
+                about_dialog.set_visible(true);
+            });
+        }
+        {
+            //app.notebook = Some(Rc::new(RefCell::new(notebook)));
+            let act_exit: SimpleAction = SimpleAction::new("exit", None);
+            app.add_action(&act_exit);
 
-        //app.notebook = Some(Rc::new(RefCell::new(notebook)));
-        let act_exit: SimpleAction = SimpleAction::new("exit", None);
-        app.add_action(&act_exit);
+            act_exit.connect_activate(clone!(@weak app =>
+                    move |_action, _value| {
+                            app.quit();
+                    }
+            ));
+        }
+        {
+            let act_about: SimpleAction = SimpleAction::new("about", None);
+            app.add_action(&act_about);
+            act_about.connect_activate(|_action, _value| {
+                let about_dialog: AboutDialog = AboutDialog::new();
 
-        act_exit.connect_activate(clone!(@weak app =>
-                move |_action, _value| {
-                        app.quit();
-                }
-        ));
+                about_dialog.set_license_type(gtk::License::Mpl20);
+                about_dialog.set_program_name(Some("Echidna Code Editor"));
+                about_dialog.set_website(Some("https://github.com/EchidnaHQ/Echidna"));
+                about_dialog.set_authors(&["FortressValkriye"]);
+                about_dialog.set_copyright(Some("Made with by ❤️ Echidna contributors"));
+                about_dialog.set_visible(true);
+            });
+        }
+        {
+            let act_report_issue = SimpleAction::new("report-issue", None);
 
-        let act_about: SimpleAction = SimpleAction::new("about", None);
-        app.add_action(&act_about);
-        act_about.connect_activate(|_action, _value| {
-            let about_dialog: AboutDialog = AboutDialog::new();
+            app.add_action(&act_report_issue);
 
-            about_dialog.set_license_type(gtk::License::Mpl20);
-            about_dialog.set_program_name(Some("Echidna Code Editor"));
-            about_dialog.set_website(Some("https://github.com/EchidnaHQ/Echidna"));
-            about_dialog.set_authors(&["FortressValkriye"]);
-            about_dialog.set_copyright(Some("Made with by ❤️ Echidna contributors"));
-            about_dialog.set_visible(true);
-        });
+            act_report_issue.connect_activate(|_action, _variant| {
+                webbrowser::open("https://github.com/EchidnaHQ/Echidna/issues/new");
+            });
+        }
+        {
+            let act_search_feature_requests = SimpleAction::new("search-feature-requests", None);
 
-        let act_report_issue = SimpleAction::new("report-issue", None);
+            app.add_action(&act_search_feature_requests);
 
-        app.add_action(&act_report_issue);
-
-        act_report_issue.connect_activate(|_action, _variant| {
-            webbrowser::open("https://github.com/EchidnaHQ/Echidna/issues/new");
-        });
-        let act_search_feature_requests = SimpleAction::new("search-feature-requests", None);
-
-        app.add_action(&act_search_feature_requests);
-
-        act_search_feature_requests.connect_activate(|_action, _variant| {
+            act_search_feature_requests.connect_activate(|_action, _variant| {
             webbrowser::open("https://github.com/EchidnaHQ/Echidna/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement");
         });
-
-        let act_window_close = SimpleAction::new("close", None);
-
-        self.add_action(&act_window_close);
+        }
         {
+            let act_window_close = SimpleAction::new("close", None);
+
+            self.add_action(&act_window_close);
             let window = self.clone();
 
             act_window_close.connect_activate(move |_action, _variant| {
                 window.close();
             });
         }
+        {
+            let action_open_file: SimpleAction = SimpleAction::new("open-file", None);
 
-        let action_open_file: SimpleAction = SimpleAction::new("open-file", None);
-
-        self.add_action(&action_open_file);
-        action_open_file.connect_activate(clone!(@weak self as window =>
-                move |_action, _variant| {
-                window.action_open_file();
-        }));
+            self.add_action(&action_open_file);
+            action_open_file.connect_activate(clone!(@weak self as window =>
+                    move |_action, _variant| {
+                    window.action_open_file();
+            }));
+        }
     }
 }
