@@ -7,7 +7,5 @@ trait SidebarImplementedEditor {
 }
 
 impl SidebarImplementedEditor for super::imp::EchidnaEditor {
-    fn setup_sidebar(){
-        
-    }
+    fn setup_sidebar() {}
 }

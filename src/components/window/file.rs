@@ -55,8 +55,10 @@ impl FileImplementedEditor for super::EchidnaWindow {
                 Self::open_file(&super::imp::EchidnaWindow::from_instance(&window).notebook, file);
 
             }
-                       dialog.destroy();
-            }));
+
+            dialog.destroy();
+
+        }));
     }
 
     fn open_file(notebook: &gtk::Notebook, file_location: gio::File) {
@@ -129,7 +131,8 @@ impl FileImplementedEditor for super::EchidnaWindow {
                         }
                     });
 
-            }
+                }
+
                 dialog.destroy();
 
             }));

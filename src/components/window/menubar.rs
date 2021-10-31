@@ -29,9 +29,9 @@ impl MenubarImplementedEditor for EchidnaWindow {
             app.add_action(&act_exit);
 
             act_exit.connect_activate(clone!(@weak app =>
-                    move |_action, _value| {
-                            app.quit();
-                    }
+                move |_action, _value| {
+                    app.quit();
+                }
             ));
         }
         {
@@ -54,9 +54,9 @@ impl MenubarImplementedEditor for EchidnaWindow {
             app.add_action(&act_exit);
 
             act_exit.connect_activate(clone!(@weak app =>
-                    move |_action, _value| {
-                            app.quit();
-                    }
+                move |_action, _value| {
+                    app.quit();
+                }
             ));
         }
         {
@@ -106,7 +106,7 @@ impl MenubarImplementedEditor for EchidnaWindow {
 
             self.add_action(&action_open_file);
             action_open_file.connect_activate(clone!(@weak self as window =>
-                    move |_action, _variant| {
+                move |_action, _variant| {
                     window.action_open_file();
             }));
         }
@@ -117,7 +117,7 @@ impl MenubarImplementedEditor for EchidnaWindow {
 
             action_save_file_as.connect_activate(clone!(@weak self as window =>
                 move |_action, _variant| {
-                window.action_save_file_as();
+                    window.action_save_file_as();
             }));
         }
     }
