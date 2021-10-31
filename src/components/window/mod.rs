@@ -8,6 +8,7 @@ mod imp;
 pub mod menubar;
 
 use glib::object::IsA;
+use gtk::subclass::prelude::*;
 
 glib::wrapper! {
     pub struct EchidnaWindow(ObjectSubclass<imp::EchidnaWindow>)
@@ -23,5 +24,9 @@ impl EchidnaWindow {
             Ok(o) => o,
             Err(e) => panic!("Error in making EchidnaApplication {}", e),
         }
+    }
+
+    pub fn to_imp(&self) -> &imp::EchidnaWindow {
+        imp::EchidnaWindow::from_instance(self)
     }
 }
