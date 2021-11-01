@@ -92,90 +92,73 @@ impl WorkspaceImplementedEditor for EchidnaEditor {
             .path()
             .expect("Could not get the file path of the file.");
         let filepath = Path::new(&filepath_raw);
-        let file_info_result =
-            file.query_info("*", gio::FileQueryInfoFlags::NONE, Some(&cancellable));
+        let info = file
+            .query_info("*", gio::FileQueryInfoFlags::NONE, Some(&cancellable))
+            .expect(format!(
+                "Could not retrieve file information for {:?}",
+                filepath
+            ));
+        let content_type = info
+            .content_type()
+            .expect(format!("Found no content type for {:?}", filepath));
+        println!(
+            "Opened {} and found its content type is {}.",
+            "file",
+            content_type.to_string()
+        );
+        let content_cancellable = Cancellable::new();
+        let content = file
+            .load_contents(Some(&content_cancellable))
+            .expect("Could not load the file contents for {:?}", filepath);
 
-        match file_info_result {
-            Ok(info) => {
-                match info.content_type() {
-                    Some(content_type) => {
-                        println!(
-                            "Opened {} and found its content type is {}.",
-                            "file",
-                            content_type.to_string()
-                        );
-                        let content_cancellable = Cancellable::new();
-                        let file_content = file.load_contents(Some(&content_cancellable));
+        let (int_vec, _byte_string) = content;
+        let workspace = serde_json::from_slice::<MonacoWorkspace>(&int_vec).expect(format!(
+            "Could not parse the workspace file of {:?}",
+            filepath
+        ));
 
-                        match file_content {
-                            Ok(content) => {
-                                let (int_vec, _byte_string) = content;
+        for folder in workspace.folders {
+            let path = RelativePath::new(&folder.path);
+            let folder = File::for_path(path.to_path(filepath));
 
-                                match serde_json::from_slice::<MonacoWorkspace>(&int_vec) {
-                                    Ok(workspace) => {
-                                        for folder in workspace.folders {
-                                            let path = RelativePath::new(&folder.path);
-
-                                            let folder = File::for_path(path.to_path(filepath));
-
-                                            // Do something with the folder, perhaps lists its child and .
-                                            self.open_folder(folder);
-                                        }
-                                    }
-                                    Err(e) => println!(
-                                        "Could not parse {:#?} because of:\n{}",
-                                        filepath, e
-                                    ),
-                                }
-                            }
-                            Err(e) => println!("Could not open {:?} because:\n{}", filepath, e),
-                        }
-                    }
-                    None => println!("It does not seem like {:?} has a type", filepath),
-                }
-            }
-            Err(e) => println!(
-                "Could not retrieve file information for {:?} because:\n{}",
-                filepath, e
-            ),
+            // Do something with the folder, perhaps lists its child and .
+            self.open_folder(folder);
         }
     }
+}
 
-    /**
-     *
-     *
-     */
-    fn recursive_add_files_into_tree_store(&self, parent_file: File, tree: &TreeStore) {
-        let child_enumerate_cancellable = Cancellable::new();
-        let child_files = parent_file.enumerate_children(
+/**
+ *
+ *
+ */
+fn recursive_add_files_into_tree_store(&self, parent_file: File, tree: &TreeStore) {
+    let child_enumerate_cancellable = Cancellable::new();
+    let child_files = parent_file
+        .enumerate_children(
             "*",
             FileQueryInfoFlags::NONE,
             Some(&child_enumerate_cancellable),
-        );
-        let filepath = &parent_file
-            .path()
-            .expect("Could not get the file path of the file.");
-        match child_files {
-            Ok(files) => {
-                for file_iter in files {
-                    match file_iter {
-                        Ok(file_info) => {
-                            let file = parent_file.child(file_info.name());
-                            let tree_iter = tree.append(None);
-                            tree.set_value(&tree_iter, 2, &file_info.name().to_str().to_value());
-
-                            if file_info.file_type() == FileType::Directory {
-                                self.recursive_add_files_into_tree_store(file, tree);
-                            }
-                        }
-                        Err(e) => println!("Could not get information on file because of:\n{}", e),
-                    }
-                }
-            }
-            Err(e) => println!(
+        )
+        .expect(
+            format!(
                 "Could not look up the children files of {:?} because:\n{:#?}",
-                filepath, e
-            ),
+                filepath
+            )
+            .as_str(),
+        );
+    let filepath = &parent_file
+        .path()
+        .expect("Could not get the file path of the file.");
+    
+        for file_iter in files {
+            let file_info = file_iter.expect();
+            let file = parent_file.child(file_info.name());
+            let tree_iter = tree.append(None);
+            tree.set_value(&tree_iter, 2, &file_info.name().to_str().to_value());
+
+            if file_info.file_type() == FileType::Directory {
+                self.recursive_add_files_into_tree_store(file, tree);
+            }
         }
     }
 

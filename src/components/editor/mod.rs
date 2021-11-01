@@ -32,44 +32,45 @@ impl EchidnaCoreEditor {
 
             let cancellable = gio::Cancellable::new();
             let filepath = file_location.path().expect("No filepath");
-            let file_info_result =
-                file_location.query_info("*", gio::FileQueryInfoFlags::NONE, Some(&cancellable));
-            match file_info_result {
-                Ok(info) => match info.content_type() {
-                    Some(content_type) => {
-                        println!(
-                            "Opened {} and found its content type is {}.",
-                            "file",
-                            content_type.to_string()
-                        );
-                        let buffer = this_imp.sourceview.buffer().downcast::<Buffer>().expect("Cannot downcast the sourceview's buffer. Maybe the sourceview's buffer is not IsA<sourceview::Buffer>.");
-                        let language_manager = LanguageManager::new();
-                        let language = language_manager.guess_language(Some(&info.name().to_str().expect("Could not open the file because its name is not supported by Unicode.")), None);
+            let info = file_location
+                .query_info("*", gio::FileQueryInfoFlags::NONE, Some(&cancellable))
+                .expect("Could not query the info for file");
 
-                        match language {
-                            Some(lang) => buffer.set_language(Some(&lang)),
-                            None => {}
+            let content_type = info
+                .content_type()
+                .expect(format!("It does not seem like {:?} has a type", filepath).as_str());
+            {
+                println!(
+                    "Opened {} and found its content type is {}.",
+                    "file",
+                    content_type.to_string()
+                );
+                let buffer = this_imp.sourceview.buffer().downcast::<Buffer>().expect("Cannot downcast the sourceview's buffer. Maybe the sourceview's buffer is not IsA<sourceview::Buffer>.");
+                let language_manager = LanguageManager::new();
+                let language = language_manager.guess_language(
+                    Some(&info.name().to_str().expect(
+                        "Could not open the file because its name is not supported by Unicode.",
+                    )),
+                    None,
+                );
+
+                match language {
+                    Some(lang) => buffer.set_language(Some(&lang)),
+                    None => {}
+                }
+
+                let file_loader: FileLoader = FileLoader::new(&buffer, &file);
+
+                file_loader.load_async(
+                    glib::Priority::default(),
+                    Some(&cancellable),
+                    |_, _| {},
+                    |result| {
+                        if result.is_err() {
+                            panic!(result.err());
                         }
-
-                        let file_loader: FileLoader = FileLoader::new(&buffer, &file);
-
-                        file_loader.load_async(
-                            glib::Priority::default(),
-                            Some(&cancellable),
-                            |_, _| {},
-                            |result| {
-                                if result.is_err() {
-                                    panic!(result.err());
-                                }
-                            },
-                        );
-                    }
-                    None => println!("It does not seem like {:?} has a type", filepath),
-                },
-                Err(e) => println!(
-                    "Could not retrieve file information for {:?} because:\n{}",
-                    filepath, e
-                ),
+                    },
+                );
             }
         }
         this
