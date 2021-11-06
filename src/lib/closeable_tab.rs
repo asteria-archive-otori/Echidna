@@ -42,7 +42,7 @@ impl ClosableTabImplementedNotebook for gtk::Notebook {
         tab_label: Option<&U>,
     ) -> u32 {
         let (tab, button) = &Self::create_closable_tab(tab_label);
-        let page = self.append_page(child, Some(tab));
+        let page = self.prepend_page(child, Some(tab));
 
         button.connect_clicked(glib::clone!(@weak self as notebook => 
             move |_| {
