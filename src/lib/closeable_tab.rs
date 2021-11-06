@@ -10,6 +10,15 @@ pub trait ClosableTabImplementedNotebook {
         child: &T,
         tab_label: Option<&U>,
     ) -> u32;
+    fn append_closable_page<
+        T: IsA<Widget>, 
+        U: IsA<Widget>
+    >(
+        &self,
+        child: &T,
+        tab_label: Option<&U>,
+    ) -> u32;
+
     fn create_closable_tab<
         U: IsA<Widget>,
 
@@ -51,5 +60,24 @@ impl ClosableTabImplementedNotebook for gtk::Notebook {
 
         page
 
+    }
+
+    fn append_closable_page<
+        T: IsA<Widget>, 
+        U: IsA<Widget>
+    >(
+        &self,
+        child: &T,
+        tab_label: Option<&U>,
+    ) -> u32 {
+        let (tab, button) = &Self::create_closable_tab(tab_label);
+        let page = self.append_page(child, Some(tab));
+
+        button.connect_clicked(glib::clone!(@weak self as notebook => 
+            move |_| {
+            notebook.remove_page(Some(page));
+        }));
+
+        page
     }
 }
