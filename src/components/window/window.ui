@@ -27,16 +27,6 @@
                 -->
               <object class="GtkNotebook" id="notebook">
                 <property name="hexpand">1</property>
-                <child>
-                  <object id="getting-started" class="GtkLabel">
-                    <property name="label">Hello from Echidna!</property>
-                  </object>
-                </child>
-                <child type="tab">
-                  <object class="GtkLabel" id="notebook-welcome">
-                    <property name="label">Welcome</property>
-                  </object>
-                </child>
               </object>
               <!-- </child>
               </object> -->

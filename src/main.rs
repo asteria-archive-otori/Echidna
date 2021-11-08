@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 mod components;
-
+pub mod lib;
 use app::EchidnaEditor;
 use components::app;
 use gtk::prelude::ApplicationExtManual;
