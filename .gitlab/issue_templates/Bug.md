@@ -35,6 +35,10 @@ Please write down the result that you found.
 
 Please attach screenshots here if there are any.
 
+## Logs
+
+Please write down logs you found here if there are any.
+
 ## Additional Notes and Information
 
 Please write down any additional notes and information you find useful. Leave blank if you don't have any.
