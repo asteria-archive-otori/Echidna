@@ -6,67 +6,71 @@
    - file, You can obtain one at https://mozilla.org/MPL/2.0/.
 -->
   <template class="EchidnaSidebar">
+    <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
     <child>
       <object class="GtkStackSidebar">
-        <property name="stack">
-          <object class="GtkStack">
-            <child>
-              <object class="GtkStackPage">
-                <!-- Explorer Tab -->
-                <property name="name">explorer</property>
-                <property name="title">Explorer</property>
-                <property name="child">
-                  <object class="GtkBox">
-                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
-                    <child>
-                      <object class="GtkTreeView" id="treeview">
-                        <property name="model">liststore1</property>
-                        <child></child>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="selection">
-                            <signal name="changed" handler="on_treeview_selection_changed" />
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </property>
-
-              </object>
-            </child>
-            <child>
-              <object class="GtkStackPage">
-                <!-- Search Tab -->
-                <property name="name">search</property>
-                <property name="title">Search</property>
-                <property name="child">
-                  <object class="GtkBox">
-                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="label">Search</property>
-                      </object>
-                    </child>
-                  </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkStackPage">
-                <!-- Extensions Tab -->
-                <property name="name">extensions</property>
-                <property name="title">Extensions</property>
-                <property name="child">
-                  <object class="GtkBox">
-                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
-                  </object>
-                </property>
-
-              </object>
-            </child>
-          </object>
-        </property>
+        <property name="stack">sidebar_stack</property>
       </object>
     </child>
+    <child>
+      <object class="GtkStack" id="sidebar_stack">
+        <property name="hhomogeneous">1</property>
+        <property name="width-request">170</property>
+        <child>
+          <object class="GtkStackPage">
+            <!-- Explorer Tab -->
+            <property name="name">explorer</property>
+            <property name="title">Explorer</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Explorer</property>
+                  </object>
+                </child>
+              </object>
+            </property>
+
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <!-- Search Tab -->
+            <property name="name">search</property>
+            <property name="title">Search</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Search</property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <!-- Extensions Tab -->
+            <property name="name">extensions</property>
+            <property name="title">Extensions</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Extensions</property>
+                  </object>
+                </child>
+              </object>
+            </property>
+
+          </object>
+        </child>
+      </object>
+    </child>
+
   </template>
 </interface>
