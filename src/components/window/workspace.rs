@@ -1,15 +1,16 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-
-use super::imp::EchidnaEditor;
+use super::EchidnaWindow;
 use gio::Cancellable;
 use gio::{File, FileQueryInfoFlags, FileType, SimpleAction};
 use glib::clone;
-use glib::subclass::types::ObjectSubclassExt;
 use glib::types::Type;
 use gtk::prelude::*;
-use gtk::{ApplicationWindow, FileChooserAction, FileChooserDialog, ResponseType, TreeStore};
+use gtk::{
+    Application, ApplicationWindow, FileChooserAction, FileChooserDialog, ResponseType, TreeStore,
+    TreeView,
+};
 use relative_path::RelativePath;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
@@ -28,7 +29,7 @@ trait WorkspaceImplementedEditor {
     fn action_open_workspace(
         &self,
         window: ApplicationWindow,
-        app: super::EchidnaEditor,
+        app: Application,
         _action: &SimpleAction,
         _variant: Option<&glib::Variant>,
     );
@@ -38,11 +39,11 @@ trait WorkspaceImplementedEditor {
     fn open_folder(&self, file: File);
 }
 
-impl WorkspaceImplementedEditor for EchidnaEditor {
+impl WorkspaceImplementedEditor for EchidnaWindow {
     fn action_open_workspace(
         &self,
         window: ApplicationWindow,
-        app: super::EchidnaEditor,
+        app: Application,
         _action: &SimpleAction,
         _variant: Option<&glib::Variant>,
     ) {
@@ -56,14 +57,14 @@ impl WorkspaceImplementedEditor for EchidnaEditor {
             ],
         );
         dialog.set_visible(true);
-        dialog.connect_response(clone!(@weak window, @weak app =>
+        dialog.connect_response(clone!(@weak self as win =>
             move |dialog, response| {
                 if response == ResponseType::Accept {
                     let file_option = dialog.file();
                     match file_option {
                         Some(file) => {
                             dialog.destroy();
-                            Self::from_instance(&app).open_workspace(file);
+                            win.open_workspace(file);
                         },
                         None => {}
                     }
@@ -125,7 +126,6 @@ impl WorkspaceImplementedEditor for EchidnaEditor {
             self.open_folder(folder);
         }
     }
-}
 
 /**
  *
