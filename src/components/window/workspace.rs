@@ -95,28 +95,22 @@ impl WorkspaceImplementedEditor for EchidnaWindow {
         let filepath = Path::new(&filepath_raw);
         let info = file
             .query_info("*", gio::FileQueryInfoFlags::NONE, Some(&cancellable))
-            .expect(format!(
-                "Could not retrieve file information for {:?}",
-                filepath
-            ));
+            .expect(format!("Could not retrieve file information for {:?}", filepath).as_str());
         let content_type = info
             .content_type()
-            .expect(format!("Found no content type for {:?}", filepath));
+            .expect(format!("Found no content type for {:?}", filepath).as_str());
         println!(
             "Opened {} and found its content type is {}.",
             "file",
             content_type.to_string()
         );
         let content_cancellable = Cancellable::new();
-        let content = file
+        let (content, _) = file
             .load_contents(Some(&content_cancellable))
-            .expect("Could not load the file contents for {:?}", filepath);
+            .expect(format!("Could not load the file contents for {:?}", filepath).as_str());
 
-        let (int_vec, _byte_string) = content;
-        let workspace = serde_json::from_slice::<MonacoWorkspace>(&int_vec).expect(format!(
-            "Could not parse the workspace file of {:?}",
-            filepath
-        ));
+        let workspace = serde_json::from_slice::<MonacoWorkspace>(&content)
+            .expect(format!("Could not parse the workspace file of {:?}", filepath).as_str());
 
         for folder in workspace.folders {
             let path = RelativePath::new(&folder.path);
