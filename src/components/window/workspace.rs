@@ -121,31 +121,28 @@ impl WorkspaceImplementedEditor for EchidnaWindow {
         }
     }
 
-/**
- *
- *
- */
-fn recursive_add_files_into_tree_store(&self, parent_file: File, tree: &TreeStore) {
-    let child_enumerate_cancellable = Cancellable::new();
-    let child_files = parent_file
-        .enumerate_children(
-            "*",
-            FileQueryInfoFlags::NONE,
-            Some(&child_enumerate_cancellable),
-        )
-        .expect(
-            format!(
-                "Could not look up the children files of {:?} because:\n{:#?}",
-                filepath
+    /**
+     *
+     *
+     */
+    fn recursive_add_files_into_tree_store(&self, parent_file: File, tree: &TreeStore) {
+        let child_enumerate_cancellable = Cancellable::new();
+
+        let child_files = parent_file
+            .enumerate_children(
+                "*",
+                FileQueryInfoFlags::NONE,
+                Some(&child_enumerate_cancellable),
             )
-            .as_str(),
-        );
-    let filepath = &parent_file
-        .path()
-        .expect("Could not get the file path of the file.");
-    
-        for file_iter in files {
-            let file_info = file_iter.expect();
+            .expect(
+                format!(
+                    "Could not look up the children files of {:?} because:",
+                    parent_file.path().expect("No path for the parent file")
+                )
+                .as_str(),
+            );
+        for file_iter in child_files {
+            let file_info = file_iter.expect("Could not get the file info");
             let file = parent_file.child(file_info.name());
             let tree_iter = tree.append(None);
             tree.set_value(&tree_iter, 2, &file_info.name().to_str().to_value());
