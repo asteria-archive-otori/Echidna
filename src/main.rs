@@ -13,3 +13,8 @@ fn main() {
 
     std::process::exit(app.run());
 }
+
+pub mod prelude {
+    pub use super::components::prelude::*;
+    pub use super::lib::prelude::*;
+}
