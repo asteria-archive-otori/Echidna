@@ -4,11 +4,12 @@
 
 use super::file::FileImplementedEditor;
 use super::EchidnaWindow;
+use crate::components::GettingStartedPage;
+use crate::prelude::*;
 use gio::{MenuModel, SimpleAction};
 use glib::clone;
 use gtk::prelude::*;
 use gtk::AboutDialog;
-
 pub trait MenubarImplementedEditor {
     fn setup_menubar(&self);
 }
@@ -116,9 +117,22 @@ impl MenubarImplementedEditor for EchidnaWindow {
             self.add_action(&action_save_file_as);
 
             action_save_file_as.connect_activate(clone!(@weak self as window =>
-                move |_action, _variant| {
-                    window.action_save_file_as();
+            move |_action, _variant| {
+                window.action_save_file_as();
             }));
+        }
+        {
+            let action_getting_started = SimpleAction::new("get-started", None);
+
+            self.add_action(&action_getting_started);
+
+            action_getting_started.connect_activate(clone!(@weak self as window =>
+                move |_action, _variant| {
+                    let page = GettingStartedPage::new();
+                    page.setup_actions(&window);
+                    window.to_imp().notebook.prepend_closable_page(&page, Some(&gtk::Label::new(Some(&"Getting Started"))));
+
+                }));
         }
     }
 }
