@@ -19,10 +19,17 @@ impl GettingStartedPage {
         glib::Object::new(&[]).expect("Failed to create 'GettingStartedPage' component.")
     }
 
-    pub fn setup_actions<P: glib::IsA<crate::components::EchidnaWindow>>(&self, window: &P)
-    where
-        P: FileImplementedEditor,
-    {
-        let imp_class = imp::GettingStartedPage::from_instance(self);
+    pub fn to_imp(&self) -> &imp::GettingStartedPage {
+        imp::GettingStartedPage::from_instance(self)
+    }
+    pub fn setup_actions(&self, window: &crate::components::EchidnaWindow) -> &Self {
+        let imp_class = self.to_imp();
+        imp_class
+            .link_open_file
+            .connect_clicked(clone!(@weak window =>
+                move |_| {
+                window.action_open_file();
+            }));
+        self
     }
 }
