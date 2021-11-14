@@ -2,9 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-use crate::lib::prelude::*;
-
 use crate::components::editor::EchidnaCoreEditor;
+use crate::lib::prelude::*;
 use gio::Cancellable;
 use glib::{clone, Priority};
 use gtk::{
@@ -16,6 +15,7 @@ pub trait FileImplementedEditor {
     fn action_open_file(&self);
     fn open_file(notebook: &gtk::Notebook, file: gio::File);
     fn action_save_file_as(&self);
+    fn action_new_file(&self);
 }
 
 impl FileImplementedEditor for super::EchidnaWindow {
@@ -138,5 +138,13 @@ impl FileImplementedEditor for super::EchidnaWindow {
                 dialog.destroy();
 
             }));
+    }
+
+    fn action_new_file(&self) {
+        let editor_page = EchidnaCoreEditor::new(None);
+
+        self.to_imp()
+            .notebook
+            .prepend_closable_page(&editor_page, Some(&gtk::Label::new(Some(&"Untitled"))));
     }
 }
