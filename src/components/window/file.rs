@@ -8,7 +8,7 @@ use crate::components::editor::EchidnaCoreEditor;
 use gio::Cancellable;
 use glib::{clone, Priority};
 use gtk::{
-    prelude::*, subclass::prelude::*, FileChooserAction, FileChooserDialog, Label, ResponseType,
+    prelude::*, subclass::prelude::*, FileChooserAction, FileChooserNative, Label, ResponseType,
 };
 use sourceview::{prelude::*, Buffer, File, FileSaver};
 
@@ -36,14 +36,12 @@ impl FileImplementedEditor for super::EchidnaWindow {
     Perhaps some of the last points should not be implemented in this function but rather in another function that keeps track of every files.
     */
     fn action_open_file(&self) {
-        let dialog: FileChooserDialog = FileChooserDialog::new(
+        let dialog = FileChooserNative::new(
             Some("Open a file"),
             Some(self),
             FileChooserAction::Open,
-            &[
-                ("Cancel", ResponseType::Cancel),
-                ("Open", ResponseType::Accept),
-            ],
+            Some("Open"),
+            Some("Cancel"),
         );
 
         dialog.set_visible(true);
@@ -81,14 +79,12 @@ impl FileImplementedEditor for super::EchidnaWindow {
     }
 
     fn action_save_file_as(&self) {
-        let dialog = FileChooserDialog::new(
+        let dialog = FileChooserNative::new(
             Some("Save File As"),
             Some(self),
             FileChooserAction::Save,
-            &[
-                ("Cancel", ResponseType::Cancel),
-                ("Save", ResponseType::Accept),
-            ],
+            Some("Open"),
+            Some("Cancel"),
         );
 
         dialog.set_current_name("untitled");
