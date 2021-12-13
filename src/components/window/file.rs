@@ -114,7 +114,7 @@ impl FileImplementedEditor for super::EchidnaWindow {
                         "Couldn't get the page of the current index. Try again."
                     ).downcast::<EchidnaCoreEditor>() {
                     Ok(res) => page = res,
-                    Err(e) => panic!(format!("We got an error when trying to downcast the current tab page into EchidnaCoreEditor:\n{}", e))
+                    Err(e) => panic!("We got an error when trying to downcast the current tab page into EchidnaCoreEditor:\n{}", e)
                 }
 
                 let buffer: Buffer = page.to_imp().sourceview.buffer().downcast().expect("Could not downcast the editor's buffer to GtkSourceBuffer.");
@@ -129,7 +129,7 @@ impl FileImplementedEditor for super::EchidnaWindow {
                     |_, _| {},
                     |result| {
                         if result.is_err() {
-                            panic!(format!("Found an error while saving the file:\n{}", result.err().expect("No error")))
+                            panic!("Found an error while saving the file:\n{}", result.err().expect("No error"))
                         }
                     });
 
