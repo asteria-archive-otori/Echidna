@@ -16,6 +16,7 @@ pub trait FileImplementedEditor {
     fn action_open_file(&self);
     fn open_file(notebook: &gtk::Notebook, file: gio::File);
     fn action_save_file_as(&self);
+    fn save_file_as(&self, file: &gio::File);
 }
 
 impl FileImplementedEditor for super::EchidnaWindow {
@@ -79,7 +80,48 @@ impl FileImplementedEditor for super::EchidnaWindow {
             ))),
         );
     }
+    fn save_file_as(&self, file: &gio::File) {
+        let window_imp = self.to_imp();
+        let page: EchidnaCoreEditor;
 
+        match window_imp.notebook
+            .nth_page(
+                Some(window_imp.notebook
+                    .current_page()
+                    .expect(
+                        "No tabs is the current tab, probably all tabs closed. No files to save"
+                    )
+                )
+            ).expect(
+                "Couldn't get the page of the current index. Try again."
+            ).downcast::<EchidnaCoreEditor>() {
+            Ok(res) => page = res,
+            Err(e) => panic!(format!("We got an error when trying to downcast the current tab page into EchidnaCoreEditor:\n{}", e))
+        }
+
+        let buffer: Buffer = page
+            .to_imp()
+            .sourceview
+            .buffer()
+            .downcast()
+            .expect("Could not downcast the editor's buffer to GtkSourceBuffer.");
+        let cancellable = Cancellable::new();
+
+        let file_saver = FileSaver::with_target(&buffer, &page.file(), file);
+        file_saver.save_async(
+            Priority::default(),
+            Some(&cancellable),
+            |_, _| {},
+            |result| {
+                if result.is_err() {
+                    panic!(format!(
+                        "Found an error while saving the file:\n{}",
+                        result.err().expect("No error")
+                    ))
+                }
+            },
+        );
+    }
     fn action_save_file_as(&self) {
         let dialog = FileChooserDialog::new(
             Some("Save File As"),
@@ -99,40 +141,7 @@ impl FileImplementedEditor for super::EchidnaWindow {
         move |dialog, response| {
             if response == ResponseType::Accept {
                 let file = dialog.file().expect("");
-                let window_imp = window.to_imp();
-                let page: EchidnaCoreEditor;
-
-                match window_imp.notebook
-                    .nth_page(
-                        Some(window_imp.notebook
-                            .current_page()
-                            .expect(
-                                "No tabs is the current tab, probably all tabs closed. No files to save"
-                            )
-                        )
-                    ).expect(
-                        "Couldn't get the page of the current index. Try again."
-                    ).downcast::<EchidnaCoreEditor>() {
-                    Ok(res) => page = res,
-                    Err(e) => panic!(format!("We got an error when trying to downcast the current tab page into EchidnaCoreEditor:\n{}", e))
-                }
-
-                let buffer: Buffer = page.to_imp().sourceview.buffer().downcast().expect("Could not downcast the editor's buffer to GtkSourceBuffer.");
-                let cancellable = Cancellable::new();
-
-                let file_saver = FileSaver::with_target(
-                    &buffer,
-                     &page.file(), &file);
-                file_saver.save_async(
-                    Priority::default(),
-                    Some(&cancellable),
-                    |_, _| {},
-                    |result| {
-                        if result.is_err() {
-                            panic!(format!("Found an error while saving the file:\n{}", result.err().expect("No error")))
-                        }
-                    });
-
+                    window.save_file_as(&file);
                 }
 
                 dialog.destroy();
