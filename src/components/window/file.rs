@@ -8,12 +8,13 @@ use glib::clone;
 use gtk::{
     prelude::*, subclass::prelude::*, FileChooserAction, FileChooserDialog, Label, ResponseType,
 };
-use sourceview::File;
+use sourceview::{File, FileExt as SourceFileExt};
 
 pub trait FileImplementedEditor {
     fn action_open_file(&self);
     fn open_file(notebook: &gtk::Notebook, file: gio::File);
     fn action_save_file_as(&self);
+    fn action_save_file(&self);
 }
 
 impl FileImplementedEditor for super::EchidnaWindow {
@@ -103,5 +104,17 @@ impl FileImplementedEditor for super::EchidnaWindow {
                 dialog.destroy();
 
             }));
+    }
+
+    fn action_save_file(&self) {
+        let page: EchidnaCoreEditor = self
+            .get_current_tab()
+            .expect("Can't find the current tab because there are no tabs.");
+        match page.file().location() {
+            Some(_) => {
+                page.save_file(None);
+            }
+            None => self.action_save_file_as(),
+        }
     }
 }

@@ -122,5 +122,16 @@ impl MenubarImplementedEditor for EchidnaWindow {
                     window.action_save_file_as();
             }));
         }
+        {
+            let action_save = SimpleAction::new("save", None);
+
+            self.add_action(&action_save);
+
+            action_save.connect_activate(clone!(@weak self as window =>
+                move |_, _| {
+                    window.action_save_file();
+                }
+            ));
+        }
     }
 }
