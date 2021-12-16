@@ -2,21 +2,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-use crate::lib::prelude::*;
-
 use crate::components::editor::EchidnaCoreEditor;
-use gio::Cancellable;
-use glib::{clone, Priority};
+use crate::lib::prelude::*;
+use glib::clone;
 use gtk::{
     prelude::*, subclass::prelude::*, FileChooserAction, FileChooserDialog, Label, ResponseType,
 };
-use sourceview::{prelude::*, Buffer, File, FileSaver};
+use sourceview::File;
 
 pub trait FileImplementedEditor {
     fn action_open_file(&self);
     fn open_file(notebook: &gtk::Notebook, file: gio::File);
     fn action_save_file_as(&self);
-    fn save_file_as(&self, file: &gio::File);
 }
 
 impl FileImplementedEditor for super::EchidnaWindow {
@@ -80,35 +77,6 @@ impl FileImplementedEditor for super::EchidnaWindow {
             ))),
         );
     }
-    fn save_file_as(&self, file: &gio::File) {
-        let window_imp = self.to_imp();
-        let page: EchidnaCoreEditor = self
-            .get_current_tab()
-            .expect("Can't find the current tab because there are no tabs.");
-
-        let buffer: Buffer = page
-            .to_imp()
-            .sourceview
-            .buffer()
-            .downcast()
-            .expect("Could not downcast the editor's buffer to GtkSourceBuffer.");
-        let cancellable = Cancellable::new();
-
-        let file_saver = FileSaver::with_target(&buffer, &page.file(), file);
-        file_saver.save_async(
-            Priority::default(),
-            Some(&cancellable),
-            |_, _| {},
-            |result| {
-                if result.is_err() {
-                    panic!(format!(
-                        "Found an error while saving the file:\n{}",
-                        result.err().expect("No error")
-                    ))
-                }
-            },
-        );
-    }
     fn action_save_file_as(&self) {
         let dialog = FileChooserDialog::new(
             Some("Save File As"),
@@ -128,8 +96,9 @@ impl FileImplementedEditor for super::EchidnaWindow {
         move |dialog, response| {
             if response == ResponseType::Accept {
                 let file = dialog.file().expect("");
-                    window.save_file_as(&file);
-                }
+                let tab: EchidnaCoreEditor = window.get_current_tab().expect("error");
+                tab.save_file(Some(&file));
+            }
 
                 dialog.destroy();
 
