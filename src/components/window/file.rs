@@ -82,22 +82,9 @@ impl FileImplementedEditor for super::EchidnaWindow {
     }
     fn save_file_as(&self, file: &gio::File) {
         let window_imp = self.to_imp();
-        let page: EchidnaCoreEditor;
-
-        match window_imp.notebook
-            .nth_page(
-                Some(window_imp.notebook
-                    .current_page()
-                    .expect(
-                        "No tabs is the current tab, probably all tabs closed. No files to save"
-                    )
-                )
-            ).expect(
-                "Couldn't get the page of the current index. Try again."
-            ).downcast::<EchidnaCoreEditor>() {
-            Ok(res) => page = res,
-            Err(e) => panic!(format!("We got an error when trying to downcast the current tab page into EchidnaCoreEditor:\n{}", e))
-        }
+        let page: EchidnaCoreEditor = self
+            .get_current_tab()
+            .expect("Can't find the current tab because there are no tabs.");
 
         let buffer: Buffer = page
             .to_imp()
