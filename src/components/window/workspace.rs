@@ -9,7 +9,7 @@ use glib::clone;
 use glib::subclass::types::ObjectSubclassExt;
 use glib::types::Type;
 use gtk::prelude::*;
-use gtk::{ApplicationWindow, FileChooserAction, FileChooserDialog, ResponseType, TreeStore};
+use gtk::{ApplicationWindow, FileChooserAction, FileChooserNative, ResponseType, TreeStore};
 use relative_path::RelativePath;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
@@ -46,14 +46,12 @@ impl WorkspaceImplementedEditor for EchidnaEditor {
         _action: &SimpleAction,
         _variant: Option<&glib::Variant>,
     ) {
-        let dialog: FileChooserDialog = FileChooserDialog::new(
+        let dialog = FileChooserNative::new(
             Some("Open a file"),
             Some(&window),
             FileChooserAction::Open,
-            &[
-                ("Cancel", ResponseType::Cancel),
-                ("Open", ResponseType::Accept),
-            ],
+            Some("Open"),
+            Some("Cancel"),
         );
         dialog.set_visible(true);
         dialog.connect_response(clone!(@weak window, @weak app =>
@@ -78,7 +76,7 @@ impl WorkspaceImplementedEditor for EchidnaEditor {
      *   
      *   Basically, this is just the same as Open Folder, but it's many folders.
      *
-     *   - Open a FileChooserDialog, set to only view .code-workspace files.
+     *   - Open a FileChooserNative, set to only view .code-workspace files.
      *   - If the user pressed cancel, destroy the dialog. If the user opened a .code-workspace file:
      *   - Get the workspace file, load and parse its content, .code-workspace files are in JSON with comments. But JSON only should be fine, for now.
      *   - Iterate over folders listed in the workspace file.
