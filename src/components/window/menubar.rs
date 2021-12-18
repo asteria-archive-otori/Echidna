@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-use super::file::FileImplementedEditor;
 use super::EchidnaWindow;
+use crate::prelude::*;
 use gio::{MenuModel, SimpleAction};
 use glib::clone;
 use gtk::prelude::*;
@@ -120,6 +120,16 @@ impl MenubarImplementedEditor for EchidnaWindow {
             action_save_file_as.connect_activate(clone!(@weak self as window =>
                 move |_action, _variant| {
                     window.action_save_file_as();
+            }));
+        }
+        {
+            let action_open_workspace = SimpleAction::new("open-workspace", None);
+
+            self.add_action(&action_open_workspace);
+
+            action_open_workspace.connect_activate(clone!(@weak self as window =>
+            move |_action, _variant| {
+                window.action_open_workspace();
             }));
         }
     }

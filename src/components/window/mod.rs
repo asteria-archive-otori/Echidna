@@ -5,7 +5,7 @@
 pub mod file;
 pub mod imp;
 pub mod menubar;
-
+pub mod workspace;
 use glib::object::IsA;
 use gtk::subclass::prelude::*;
 

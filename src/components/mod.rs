@@ -15,5 +15,5 @@ pub use tab_label::TabLabel;
 pub use window::EchidnaWindow;
 
 pub mod prelude {
-    pub use super::window::{file::*, menubar::*};
+    pub use super::window::{file::*, menubar::*, workspace::*};
 }
