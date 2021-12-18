@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+use crate::components::tab_label::TabLabel;
 use glib::IsA;
 use gtk::{prelude::*, Box, Button, Widget};
 
@@ -16,39 +17,24 @@ pub trait ClosableTabImplementedNotebook {
         child: &T,
         tab_label: Option<&U>,
     ) -> u32;
-
-    fn create_closable_tab<U: IsA<Widget>>(tab_label: Option<&U>) -> (Box, Button);
 }
 
 impl ClosableTabImplementedNotebook for gtk::Notebook {
-    fn create_closable_tab<U: IsA<Widget>>(tab_label: Option<&U>) -> (Box, Button) {
-        let tab = Box::new(gtk::Orientation::Horizontal, 5);
-        if tab_label.is_some() {
-            tab.append(tab_label.unwrap());
-        }
-
-        let button = gtk::Button::new();
-
-        button.set_icon_name("window-close-symbolic");
-        button.set_has_frame(false);
-
-        tab.append(&button);
-
-        (tab, button)
-    }
-
     fn prepend_closable_page<T: IsA<Widget>, U: IsA<Widget>>(
         &self,
         child: &T,
         tab_label: Option<&U>,
     ) -> u32 {
-        let (tab, button) = &Self::create_closable_tab(tab_label);
-        let page = self.prepend_page(child, Some(tab));
+        let tab_label_widget = TabLabel::new(tab_label);
+        let page = self.prepend_page(child, Some(&tab_label_widget));
 
-        button.connect_clicked(glib::clone!(@weak self as notebook =>
-            move |_| {
-            notebook.remove_page(Some(page));
-        }));
+        tab_label_widget
+            .to_imp()
+            .button
+            .connect_clicked(glib::clone!(@weak self as notebook =>
+                move |_| {
+                notebook.remove_page(Some(page));
+            }));
 
         page
     }
@@ -58,13 +44,16 @@ impl ClosableTabImplementedNotebook for gtk::Notebook {
         child: &T,
         tab_label: Option<&U>,
     ) -> u32 {
-        let (tab, button) = &Self::create_closable_tab(tab_label);
-        let page = self.append_page(child, Some(tab));
+        let tab_label_widget = TabLabel::new(tab_label);
+        let page = self.append_page(child, Some(&tab_label_widget));
 
-        button.connect_clicked(glib::clone!(@weak self as notebook =>
-            move |_| {
-            notebook.remove_page(Some(page));
-        }));
+        tab_label_widget
+            .to_imp()
+            .button
+            .connect_clicked(glib::clone!(@weak self as notebook =>
+                move |_| {
+                notebook.remove_page(Some(page));
+            }));
 
         page
     }

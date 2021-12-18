@@ -70,7 +70,7 @@ impl EchidnaCoreEditor {
                     |_, _| {},
                     |result| {
                         if result.is_err() {
-                            panic!(result.err());
+                            panic!("Found an error when loading the file into the text editor's buffer. {:#?}", result.err());
                         }
                     },
                 );

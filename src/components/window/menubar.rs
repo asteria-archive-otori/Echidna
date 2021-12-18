@@ -78,20 +78,20 @@ impl MenubarImplementedEditor for EchidnaWindow {
 
             app.add_action(&act_report_issue);
 
-            act_report_issue.connect_activate(|_action, _variant| {
-                webbrowser::open("https://gitlab.com/EchidnaHQ/Echidna/-/issues/new?issue");
-            });
+            act_report_issue.connect_activate(clone!(@weak self as win =>
+                move |_action, _variant| {
+                gtk::show_uri(Some(&win), "https://github.com/EchidnaHQ/Echidna/issues/new", gdk::CURRENT_TIME);
+            }));
         }
         {
             let act_search_feature_requests = SimpleAction::new("search-feature-requests", None);
 
             app.add_action(&act_search_feature_requests);
 
-            act_search_feature_requests.connect_activate(|_action, _variant| {
-                webbrowser::open(
-                    "https://gitlab.com/EchidnaHQ/Echidna/-/issues?label_name%5B%5D=feat",
-                );
-            });
+            act_search_feature_requests.connect_activate(clone!(@weak self as win =>
+                move |_action, _variant| {
+                gtk::show_uri(Some(&win), "https://github.com/EchidnaHQ/Echidna/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement", gdk::CURRENT_TIME);
+            }));
         }
         {
             let act_window_close = SimpleAction::new("close", None);
