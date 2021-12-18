@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 pub mod imp;
+use gtk::subclass::prelude::*;
 
 glib::wrapper! {
     pub struct EchidnaSidebar(ObjectSubclass<imp::EchidnaSidebar>)
@@ -13,5 +14,9 @@ glib::wrapper! {
 impl EchidnaSidebar {
     pub fn new() -> Self {
         glib::Object::new(&[]).expect("Failed to create 'EchidnaSidebar' component.")
+    }
+
+    pub fn to_imp(&self) -> &imp::EchidnaSidebar {
+        imp::EchidnaSidebar::from_instance(self)
     }
 }
