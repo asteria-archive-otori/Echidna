@@ -1,17 +1,17 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+mod open_folder;
+
+pub use open_folder::*;
+mod recursive_add_files;
 use super::EchidnaWindow;
-use async_recursion::async_recursion;
-use async_trait::async_trait;
 use core::pin::Pin;
 use futures::stream::FuturesUnordered;
-use gio::Cancellable;
-use gio::{File, FileQueryInfoFlags, FileType};
+use gio::{Cancellable, File};
 use glib::clone;
-use glib::types::Type;
-use gtk::prelude::*;
-use gtk::{FileChooserAction, FileChooserNative, ResponseType, TreeIter, TreeStore, TreeView};
+use gtk::{prelude::*, FileChooserAction, FileChooserNative, ResponseType};
 use relative_path::RelativePath;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
@@ -27,73 +27,12 @@ struct MonacoWorkspace {
     folders: Vec<MonacoFolder>,
 }
 
-/*
-Loads a folder into the tree view.
-
-- Create a new tree
-- Enumerate over child files of 'file'. (PS: In the Unix family of OS-es, directories are files too)
-*/
-
-async fn open_folder(explorer_box: &gtk::Box, file: File) {
-    let tree = TreeStore::new(&[gdk::Texture::static_type(), Type::STRING]);
-    println!("Opening folder {:?}", file.path());
-    recursive_add_files_into_tree_store(&file, &tree, None).await;
-
-    let tree_view = TreeView::new();
-
-    tree_view.set_model(Some(&tree));
-
-    explorer_box.prepend(&tree_view);
-}
-#[async_recursion(?Send)]
-async fn recursive_add_files_into_tree_store(
-    parent_file: &File,
-    tree: &TreeStore,
-    parent_iter: Option<&'async_recursion TreeIter>,
-) {
-    let child_enumerate_cancellable = Cancellable::new();
-
-    println!(
-        "Adding file {:?} and if it's a folder, with its children, to the tree store.",
-        parent_file.path()
-    );
-    let child_files = parent_file
-        .enumerate_children(
-            "*",
-            FileQueryInfoFlags::NONE,
-            Some(&child_enumerate_cancellable),
-        )
-        .expect(
-            format!(
-                "Could not look up the children files of {:?} because:",
-                parent_file.path().expect("No path for the parent file")
-            )
-            .as_str(),
-        );
-    for file_iter in child_files {
-        let file_info = file_iter.expect("Could not get the file info");
-        let file = parent_file.child(file_info.name());
-
-        println!(
-            "Found child {:?} of {:?}",
-            file_info.name(),
-            parent_file.path()
-        );
-
-        let tree_iter = tree.append(parent_iter);
-        tree.set_value(&tree_iter, 1, &file_info.name().to_str().to_value());
-        if file_info.file_type() == FileType::Directory {
-            recursive_add_files_into_tree_store(&file, tree, Some(&tree_iter)).await;
-        }
-    }
-}
-#[async_trait]
 pub trait WorkspaceImplementedEditor {
     fn action_open_workspace(&self);
 
     fn open_workspace(&self, file: File);
 }
-#[async_trait]
+
 impl WorkspaceImplementedEditor for EchidnaWindow {
     fn action_open_workspace(&self) {
         let dialog: FileChooserNative = FileChooserNative::new(
