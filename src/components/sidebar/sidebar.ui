@@ -17,18 +17,14 @@
         <property name="hhomogeneous">1</property>
         <property name="width-request">170</property>
         <child>
-          <object class="GtkStackPage">
+          <object class="GtkStackPage" id="explorer">
             <!-- Explorer Tab -->
             <property name="name">explorer</property>
             <property name="title">Explorer</property>
             <property name="child">
               <object class="GtkBox">
                 <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">Explorer</property>
-                  </object>
-                </child>
+
               </object>
             </property>
 

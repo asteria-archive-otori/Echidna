@@ -8,7 +8,10 @@ use gtk::CompositeTemplate;
 
 #[derive(Default, CompositeTemplate)]
 #[template(file = "./sidebar.ui")]
-pub struct EchidnaSidebar {}
+pub struct EchidnaSidebar {
+    #[template_child]
+    pub explorer: TemplateChild<gtk::StackPage>,
+}
 
 #[glib::object_subclass]
 impl ObjectSubclass for EchidnaSidebar {
