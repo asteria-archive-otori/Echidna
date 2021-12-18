@@ -7,10 +7,7 @@ use gio::{File, FileQueryInfoFlags, FileType, SimpleAction};
 use glib::clone;
 use glib::types::Type;
 use gtk::prelude::*;
-use gtk::{
-    Application, ApplicationWindow, FileChooserAction, FileChooserDialog, ResponseType, TreeStore,
-    TreeView,
-};
+use gtk::{ApplicationWindow, FileChooserAction, FileChooserNative, ResponseType, TreeStore};
 use relative_path::RelativePath;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
@@ -47,14 +44,12 @@ impl WorkspaceImplementedEditor for EchidnaWindow {
         _action: &SimpleAction,
         _variant: Option<&glib::Variant>,
     ) {
-        let dialog: FileChooserDialog = FileChooserDialog::new(
+        let dialog = FileChooserNative::new(
             Some("Open a file"),
             Some(&window),
             FileChooserAction::Open,
-            &[
-                ("Cancel", ResponseType::Cancel),
-                ("Open", ResponseType::Accept),
-            ],
+            Some("Open"),
+            Some("Cancel"),
         );
         dialog.set_visible(true);
         dialog.connect_response(clone!(@weak self as win =>
@@ -79,7 +74,7 @@ impl WorkspaceImplementedEditor for EchidnaWindow {
      *   
      *   Basically, this is just the same as Open Folder, but it's many folders.
      *
-     *   - Open a FileChooserDialog, set to only view .code-workspace files.
+     *   - Open a FileChooserNative, set to only view .code-workspace files.
      *   - If the user pressed cancel, destroy the dialog. If the user opened a .code-workspace file:
      *   - Get the workspace file, load and parse its content, .code-workspace files are in JSON with comments. But JSON only should be fine, for now.
      *   - Iterate over folders listed in the workspace file.
@@ -127,7 +122,6 @@ impl WorkspaceImplementedEditor for EchidnaWindow {
      */
     fn recursive_add_files_into_tree_store(&self, parent_file: File, tree: &TreeStore) {
         let child_enumerate_cancellable = Cancellable::new();
-
         let child_files = parent_file
             .enumerate_children(
                 "*",
