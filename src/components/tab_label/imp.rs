@@ -36,9 +36,9 @@ impl BuildableImpl for TabLabel {
     fn add_child(
         &self,
         buildable: &Self::Type,
-        builder: &gtk::Builder,
+        _builder: &gtk::Builder,
         child: &glib::Object,
-        type_: Option<&str>,
+        _type_: Option<&str>,
     ) {
         buildable.prepend(child.downcast_ref::<gtk::Widget>().unwrap());
     }

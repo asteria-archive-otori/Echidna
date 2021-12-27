@@ -67,7 +67,7 @@ impl FileImplementedEditor for super::EchidnaWindow {
         notebook.prepend_closable_page(
             &editor_page,
             Some(&Label::new(Some(
-                &file_location
+                file_location
                     .path()
                     .expect("The file's path is missing")
                     .file_name()

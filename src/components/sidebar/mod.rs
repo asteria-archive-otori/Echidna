@@ -15,3 +15,9 @@ impl EchidnaSidebar {
         glib::Object::new(&[]).expect("Failed to create 'EchidnaSidebar' component.")
     }
 }
+
+impl Default for EchidnaSidebar {
+    fn default() -> Self {
+        Self::new()
+    }
+}
