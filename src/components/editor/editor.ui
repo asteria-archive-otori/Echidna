@@ -15,10 +15,11 @@
                     <object class="GtkSourceView" id="sourceview">
                         <property name="vexpand">1</property>
                         <property name="hexpand">1</property>
+                        <property name="show-line-numbers">1</property>
+                        <property name="show-line-marks">1</property>
                         <property name="buffer">
                             <object class="GtkSourceBuffer"></object>
                         </property>
-
                     </object>
                 </child>
             </object>
