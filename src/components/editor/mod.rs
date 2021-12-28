@@ -120,10 +120,10 @@ impl EchidnaCoreEditor {
                             |_, _| {},
                             |result| {
                                 if result.is_err() {
-                                    panic!(format!(
+                                    panic!(
                                         "Found an error while saving the file:\n{}",
                                         result.err().expect("No error")
-                                    ))
+                                    )
                                 }
                             },
                         );
