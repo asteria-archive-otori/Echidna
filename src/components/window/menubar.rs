@@ -67,7 +67,7 @@ impl MenubarImplementedEditor for EchidnaWindow {
 
                 about_dialog.set_license_type(gtk::License::Mpl20);
                 about_dialog.set_program_name(Some("Echidna Code Editor"));
-                about_dialog.set_website(Some("https://github.com/EchidnaHQ/Echidna"));
+                about_dialog.set_website(Some("https://gitlab.com/EchidnaHQ/Echidna"));
                 about_dialog.set_authors(&["FortressValkriye"]);
                 about_dialog.set_copyright(Some("Made with by ❤️ Echidna contributors"));
                 about_dialog.set_visible(true);
@@ -78,18 +78,20 @@ impl MenubarImplementedEditor for EchidnaWindow {
 
             app.add_action(&act_report_issue);
 
-            act_report_issue.connect_activate(|_action, _variant| {
-                webbrowser::open("https://github.com/EchidnaHQ/Echidna/issues/new");
-            });
+            act_report_issue.connect_activate(clone!(@weak self as win =>
+                move |_action, _variant| {
+                gtk::show_uri(Some(&win), "https://github.com/EchidnaHQ/Echidna/issues/new", gdk::CURRENT_TIME);
+            }));
         }
         {
             let act_search_feature_requests = SimpleAction::new("search-feature-requests", None);
 
             app.add_action(&act_search_feature_requests);
 
-            act_search_feature_requests.connect_activate(|_action, _variant| {
-            webbrowser::open("https://github.com/EchidnaHQ/Echidna/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement");
-        });
+            act_search_feature_requests.connect_activate(clone!(@weak self as win =>
+                move |_action, _variant| {
+                gtk::show_uri(Some(&win), "https://github.com/EchidnaHQ/Echidna/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement", gdk::CURRENT_TIME);
+            }));
         }
         {
             let act_window_close = SimpleAction::new("close", None);
@@ -129,6 +131,17 @@ impl MenubarImplementedEditor for EchidnaWindow {
                 move |_action, _variant| {
                     window.action_new_file();
             }));
+        }
+        {
+            let action_save = SimpleAction::new("save", None);
+
+            self.add_action(&action_save);
+
+            action_save.connect_activate(clone!(@weak self as window =>
+                move |_, _| {
+                    window.action_save_file();
+                }
+            ));
         }
     }
 }
