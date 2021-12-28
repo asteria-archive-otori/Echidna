@@ -14,6 +14,7 @@ pub trait FileImplementedEditor {
     fn action_open_file(&self);
     fn open_file(notebook: &gtk::Notebook, file: gio::File);
     fn action_save_file_as(&self);
+    fn action_new_file(&self);
     fn action_save_file(&self);
 }
 
@@ -100,6 +101,14 @@ impl FileImplementedEditor for super::EchidnaWindow {
                 dialog.destroy();
 
             }));
+    }
+
+    fn action_new_file(&self) {
+        let editor_page = EchidnaCoreEditor::new(None);
+
+        self.to_imp()
+            .notebook
+            .prepend_closable_page(&editor_page, Some(&gtk::Label::new(Some(&"Untitled"))));
     }
 
     fn action_save_file(&self) {
