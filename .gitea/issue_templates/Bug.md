@@ -1,3 +1,15 @@
+---
+
+name: Bug Report
+about: Report a bug affecting Echidna Code Editor
+title: bug: 
+ref: main
+labels:
+
+- bug
+- help needed
+---
+
 ## Description
 
 Please write a clear and concise description of the issue you are getting.
