@@ -2,20 +2,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-use crate::lib::prelude::*;
-
 use crate::components::editor::EchidnaCoreEditor;
-use gio::Cancellable;
-use glib::{clone, Priority};
+use crate::lib::prelude::*;
+use glib::clone;
 use gtk::{
-    prelude::*, subclass::prelude::*, FileChooserAction, FileChooserDialog, Label, ResponseType,
+    prelude::*, subclass::prelude::*, FileChooserAction, FileChooserNative, Label, ResponseType,
 };
-use sourceview::{prelude::*, Buffer, File, FileSaver};
+use sourceview::{File, FileExt as SourceFileExt};
 
 pub trait FileImplementedEditor {
     fn action_open_file(&self);
     fn open_file(notebook: &gtk::Notebook, file: gio::File);
     fn action_save_file_as(&self);
+    fn action_new_file(&self);
+    fn action_save_file(&self);
 }
 
 impl FileImplementedEditor for super::EchidnaWindow {
@@ -36,14 +36,12 @@ impl FileImplementedEditor for super::EchidnaWindow {
     Perhaps some of the last points should not be implemented in this function but rather in another function that keeps track of every files.
     */
     fn action_open_file(&self) {
-        let dialog: FileChooserDialog = FileChooserDialog::new(
+        let dialog = FileChooserNative::new(
             Some("Open a file"),
             Some(self),
             FileChooserAction::Open,
-            &[
-                ("Cancel", ResponseType::Cancel),
-                ("Open", ResponseType::Accept),
-            ],
+            Some("Open"),
+            Some("Cancel"),
         );
 
         dialog.set_visible(true);
@@ -69,7 +67,7 @@ impl FileImplementedEditor for super::EchidnaWindow {
         notebook.prepend_closable_page(
             &editor_page,
             Some(&Label::new(Some(
-                &file_location
+                file_location
                     .path()
                     .expect("The file's path is missing")
                     .file_name()
@@ -79,16 +77,13 @@ impl FileImplementedEditor for super::EchidnaWindow {
             ))),
         );
     }
-
     fn action_save_file_as(&self) {
-        let dialog = FileChooserDialog::new(
+        let dialog = FileChooserNative::new(
             Some("Save File As"),
             Some(self),
             FileChooserAction::Save,
-            &[
-                ("Cancel", ResponseType::Cancel),
-                ("Save", ResponseType::Accept),
-            ],
+            Some("Open"),
+            Some("Cancel"),
         );
 
         dialog.set_current_name("untitled");
@@ -99,44 +94,32 @@ impl FileImplementedEditor for super::EchidnaWindow {
         move |dialog, response| {
             if response == ResponseType::Accept {
                 let file = dialog.file().expect("");
-                let window_imp = window.to_imp();
-                let page: EchidnaCoreEditor;
-
-                match window_imp.notebook
-                    .nth_page(
-                        Some(window_imp.notebook
-                            .current_page()
-                            .expect(
-                                "No tabs is the current tab, probably all tabs closed. No files to save"
-                            )
-                        )
-                    ).expect(
-                        "Couldn't get the page of the current index. Try again."
-                    ).downcast::<EchidnaCoreEditor>() {
-                    Ok(res) => page = res,
-                    Err(e) => panic!(format!("We got an error when trying to downcast the current tab page into EchidnaCoreEditor:\n{}", e))
-                }
-
-                let buffer: Buffer = page.to_imp().sourceview.buffer().downcast().expect("Could not downcast the editor's buffer to GtkSourceBuffer.");
-                let cancellable = Cancellable::new();
-
-                let file_saver = FileSaver::with_target(
-                    &buffer,
-                     &page.file(), &file);
-                file_saver.save_async(
-                    Priority::default(),
-                    Some(&cancellable),
-                    |_, _| {},
-                    |result| {
-                        if result.is_err() {
-                            panic!(format!("Found an error while saving the file:\n{}", result.err().expect("No error")))
-                        }
-                    });
-
-                }
+                let tab: EchidnaCoreEditor = window.get_current_tab().expect("error");
+                tab.save_file(Some(&file));
+            }
 
                 dialog.destroy();
 
             }));
+    }
+
+    fn action_new_file(&self) {
+        let editor_page = EchidnaCoreEditor::new(None);
+
+        self.to_imp()
+            .notebook
+            .prepend_closable_page(&editor_page, Some(&gtk::Label::new(Some(&"Untitled"))));
+    }
+
+    fn action_save_file(&self) {
+        let page: EchidnaCoreEditor = self
+            .get_current_tab()
+            .expect("Can't find the current tab because there are no tabs.");
+        match page.file().location() {
+            Some(_) => {
+                page.save_file(None);
+            }
+            None => self.action_save_file_as(),
+        }
     }
 }
