@@ -22,7 +22,7 @@ impl GettingStartedPage {
     pub fn to_imp(&self) -> &imp::GettingStartedPage {
         imp::GettingStartedPage::from_instance(self)
     }
-    pub fn setup_actions(&self, window: &crate::components::EchidnaWindow) -> &Self {
+    pub fn setup(&self, window: &crate::components::EchidnaWindow) -> &Self {
         let imp_class = self.to_imp();
         imp_class
             .link_open_file

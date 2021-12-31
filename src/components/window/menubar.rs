@@ -131,7 +131,7 @@ impl MenubarImplementedEditor for EchidnaWindow {
             action_getting_started.connect_activate(clone!(@weak self as window =>
                 move |_action, _variant| {
                     let page = GettingStartedPage::new();
-                    page.setup_actions(&window);
+                    page.setup(&window);
                     window.to_imp().notebook.prepend_closable_page(&page, Some(&gtk::Label::new(Some(&"Getting Started"))));
 
                 }));
