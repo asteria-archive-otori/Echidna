@@ -30,6 +30,14 @@ impl GettingStartedPage {
                 move |_| {
                 window.action_open_file();
             }));
+
+        imp_class
+            .link_new_file
+            .connect_clicked(clone!(@weak window =>
+                move |_| {
+                    window.action_new_file();
+            }));
+
         self
     }
 }

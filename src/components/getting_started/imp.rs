@@ -10,7 +10,7 @@ use gtk::CompositeTemplate;
 #[template(file = "./getting-started.ui")]
 pub struct GettingStartedPage {
     #[template_child]
-    pub link_new_file: TemplateChild<gtk::LinkButton>,
+    pub link_new_file: TemplateChild<gtk::Button>,
     #[template_child]
     pub link_open_file: TemplateChild<gtk::Button>,
 }
