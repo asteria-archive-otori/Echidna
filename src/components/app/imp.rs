@@ -4,9 +4,9 @@
 use super::super::window::menubar::MenubarImplementedEditor;
 use super::super::window::EchidnaWindow;
 
+use super::load_css::load_css;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-
 use gtk::Application;
 
 #[derive(Debug, Default)]
@@ -39,6 +39,8 @@ impl ApplicationImpl for EchidnaEditor {
         window.set_application(Some(app));
 
         window.present();
+
+        load_css();
     }
 }
 

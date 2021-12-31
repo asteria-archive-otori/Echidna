@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 pub mod imp;
+mod load_css;
 
 use glib::wrapper;
 

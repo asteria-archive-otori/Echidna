@@ -28,7 +28,7 @@ impl GettingStartedPage {
             .link_open_file
             .connect_clicked(clone!(@weak window =>
                 move |_| {
-                window.action_open_file();
+                    window.action_open_file();
             }));
 
         imp_class
