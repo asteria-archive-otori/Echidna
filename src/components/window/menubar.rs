@@ -4,7 +4,6 @@
 
 use super::file::FileImplementedEditor;
 use super::EchidnaWindow;
-use crate::components::GettingStartedPage;
 use crate::prelude::*;
 use gio::{MenuModel, SimpleAction};
 use glib::clone;
@@ -129,12 +128,9 @@ impl MenubarImplementedEditor for EchidnaWindow {
             self.add_action(&action_getting_started);
 
             action_getting_started.connect_activate(clone!(@weak self as window =>
-                move |_action, _variant| {
-                    let page = GettingStartedPage::new();
-                    page.setup(&window);
-                    window.to_imp().notebook.prepend_closable_page(&page, Some(&gtk::Label::new(Some(&"Getting Started"))));
-
-                }));
+            move |_action, _variant| {
+                window.open_get_started();
+            }));
         }
         {
             let action_new_file = SimpleAction::new("new-file", None);

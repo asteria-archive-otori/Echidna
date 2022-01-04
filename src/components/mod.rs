@@ -17,5 +17,6 @@ pub use tab_label::TabLabel;
 pub use window::EchidnaWindow;
 
 pub mod prelude {
+    pub use super::getting_started::GetStartedWindow;
     pub use super::window::{file::*, menubar::*};
 }

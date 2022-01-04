@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 pub mod imp;
-use crate::components::prelude::*;
+use crate::prelude::*;
 use glib::clone;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
@@ -39,5 +39,19 @@ impl GettingStartedPage {
             }));
 
         self
+    }
+}
+
+pub trait GetStartedWindow {
+    fn open_get_started(&self);
+}
+
+impl GetStartedWindow for crate::components::EchidnaWindow {
+    fn open_get_started(&self) {
+        let page = GettingStartedPage::new();
+        page.setup(&self);
+        self.to_imp()
+            .notebook
+            .prepend_closable_page(&page, Some(&gtk::Label::new(Some(&"Getting Started"))));
     }
 }
