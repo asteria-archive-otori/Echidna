@@ -11,11 +11,11 @@ use gtk::{
 use sourceview::{File, FileExt as SourceFileExt};
 
 pub trait FileImplementedEditor {
-    fn action_open_file(&self);
+    fn action_open_file(&self) -> Result<(), String>;
     fn open_file(notebook: &gtk::Notebook, file: gio::File);
-    fn action_save_file_as(&self);
+    fn action_save_file_as(&self) -> Result<(), String>;
     fn action_new_file(&self);
-    fn action_save_file(&self);
+    fn action_save_file(&self) -> Result<(), String>;
 }
 
 impl FileImplementedEditor for super::EchidnaWindow {
@@ -35,30 +35,44 @@ impl FileImplementedEditor for super::EchidnaWindow {
 
     Perhaps some of the last points should not be implemented in this function but rather in another function that keeps track of every files.
     */
-    fn action_open_file(&self) {
-        let dialog = FileChooserNative::new(
-            Some("Open a file"),
-            Some(self),
-            FileChooserAction::Open,
-            Some("Open"),
-            Some("Cancel"),
-        );
+    fn action_open_file(&self) -> Result<(), String> {
+        /*
+           Borrows self.to_imp()'s dialog Vector mutably, create a new dialog , and push that dialog into the vector.
 
-        dialog.set_visible(true);
+           This is required because we own the dialog and thus the dialog will be destroyed when this function has completed.
+        */
+        match self.to_imp().dialogs.try_borrow_mut() {
+            Ok(mut dialogs) => {
+                let dialog = gtk::FileChooserNative::new(
+                    Some("Open File"),
+                    Some(self),
+                    gtk::FileChooserAction::Open,
+                    Some("Open"),
+                    Some("Cancel"),
+                );
+                let dialog_clone = dialog.clone();
+                // The upcast() function moves the dialog variable, so we need to get a reference to the dialog trough dialog_clone
+                dialogs.push(dialog.upcast::<gtk::NativeDialog>());
 
-        // TODO: Somehow inserts self to this function.
-        // This function sets the callback function as 'static, which for some reasons ban cloning self into it. Idk why.
-        dialog.connect_response(clone!( @weak self as window, =>
-        move |dialog, response| {
-            if response == ResponseType::Accept {
-                let file = dialog.file().expect("");
-                Self::open_file(&super::imp::EchidnaWindow::from_instance(&window).notebook, file);
+                dialog_clone.connect_response(clone!( @weak self as window, =>
+                move |dialog, response| {
 
+                    if response == ResponseType::Accept {
+                        let file = dialog.file().expect("");
+                        Self::open_file(&super::imp::EchidnaWindow::from_instance(&window).notebook, file);
+
+                    } else {
+                        println!("{:?}", response);
+                    }
+                    dialog.destroy();
+
+                }));
+                dialog_clone.show();
+
+                Ok(())
             }
-
-            dialog.destroy();
-
-        }));
+            Err(e) => Err(format!("{:#?}", e)),
+        }
     }
 
     fn open_file(notebook: &gtk::Notebook, file_location: gio::File) {
@@ -77,30 +91,47 @@ impl FileImplementedEditor for super::EchidnaWindow {
             ))),
         );
     }
-    fn action_save_file_as(&self) {
-        let dialog = FileChooserNative::new(
-            Some("Save File As"),
-            Some(self),
-            FileChooserAction::Save,
-            Some("Open"),
-            Some("Cancel"),
-        );
+    fn action_save_file_as(&self) -> Result<(), String> {
+        /*
+           Borrows self.to_imp()'s dialog Vector mutably, create a new dialog , and push that dialog into the vector.
 
-        dialog.set_current_name("untitled");
+           This is required because we own the dialog and thus the dialog will be destroyed when this function has completed.
+        */
 
-        dialog.show();
+        match self.to_imp().dialogs.try_borrow_mut() {
+            Ok(mut dialogs) => {
+                let dialog = FileChooserNative::new(
+                    Some("Save File As"),
+                    gtk::NONE_WINDOW,
+                    FileChooserAction::Save,
+                    Some("_Save"),
+                    Some("_Cancel"),
+                );
 
-        dialog.connect_response(clone!( @weak self as window, =>
-        move |dialog, response| {
-            if response == ResponseType::Accept {
-                let file = dialog.file().expect("");
-                let tab: EchidnaCoreEditor = window.get_current_tab().expect("error");
-                tab.save_file(Some(&file));
+                let dialog_clone = dialog.clone();
+                // The upcast() function moves the dialog variable, so we need to get a reference to the dialog trough dialog_clone
+                dialogs.push(dialog.upcast::<gtk::NativeDialog>());
+
+                dialog_clone.connect_response(clone!( @weak self as window, =>
+                move |dialog, response| {
+                    if response == ResponseType::Accept {
+                        let file = dialog.file().expect("No file in response");
+                        let tab: EchidnaCoreEditor = window.get_current_tab().expect("error");
+                        match tab.save_file(Some(&file)) {
+                            Ok(_) => {},
+                            Err(e) => eprintln!("{}", e)
+                        };
+                    }
+
+                        dialog.destroy();
+
+                    }));
+                dialog_clone.show();
+
+                Ok(())
             }
-
-                dialog.destroy();
-
-            }));
+            Err(e) => Err(format!("{:#?}", e)),
+        }
     }
 
     fn action_new_file(&self) {
@@ -111,15 +142,19 @@ impl FileImplementedEditor for super::EchidnaWindow {
             .prepend_closable_page(&editor_page, Some(&gtk::Label::new(Some(&"Untitled"))));
     }
 
-    fn action_save_file(&self) {
-        let page: EchidnaCoreEditor = self
-            .get_current_tab()
-            .expect("Can't find the current tab because there are no tabs.");
-        match page.file().location() {
-            Some(_) => {
-                page.save_file(None);
+    fn action_save_file(&self) -> Result<(), String> {
+        match self.get_current_tab() {
+            Ok(page) => {
+                let page: EchidnaCoreEditor = page;
+                match page.file().location() {
+                    Some(_) => match page.save_file(None) {
+                        Ok(_) => Ok(()),
+                        Err(e) => Err(String::from(e)),
+                    },
+                    None => self.action_save_file_as(),
+                }
             }
-            None => self.action_save_file_as(),
+            Err(e) => Err(String::from(e)),
         }
     }
 }
