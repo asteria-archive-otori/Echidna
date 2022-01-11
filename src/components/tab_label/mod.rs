@@ -17,8 +17,9 @@ impl TabLabel {
     pub fn new<U: IsA<gtk::Widget>>(tab_label: Option<&U>) -> Self {
         let this: Self = glib::Object::new(&[]).expect("Failed to create 'TabLabel' component.");
 
-        if tab_label.is_some() {
-            this.prepend(tab_label.unwrap());
+        match tab_label {
+            Some(tab_label) => this.prepend(tab_label),
+            None => {}
         }
         this
     }

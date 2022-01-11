@@ -20,3 +20,9 @@ impl EchidnaSidebar {
         imp::EchidnaSidebar::from_instance(self)
     }
 }
+
+impl Default for EchidnaSidebar {
+    fn default() -> Self {
+        Self::new()
+    }
+}

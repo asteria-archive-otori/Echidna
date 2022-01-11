@@ -6,7 +6,7 @@ pub mod file;
 pub mod imp;
 pub mod menubar;
 pub mod workspace;
-use glib::object::IsA;
+use glib::object::{Cast, IsA};
 use gtk::subclass::prelude::*;
 
 glib::wrapper! {
@@ -27,5 +27,26 @@ impl EchidnaWindow {
 
     pub fn to_imp(&self) -> &imp::EchidnaWindow {
         imp::EchidnaWindow::from_instance(self)
+    }
+
+    pub fn get_current_tab<A: IsA<gtk::Widget>>(&self) -> Result<A, &str> {
+        let window_imp = self.to_imp();
+        let nth = window_imp.notebook.current_page();
+
+        match nth {
+            None => Err("No tabs are currently opened, maybe there are no tabs."),
+            Some(nth) => {
+                let page = window_imp
+                    .notebook
+                    .nth_page(Some(nth))
+                    .expect("Couldn't get the page of the current index.");
+
+                match page.downcast::<A>()
+                {
+                    Ok(page) => Ok(page),
+                    Err(e) => Err("Cannot downcast to type parameter A. Maybe it's not in the type you are looking for."),
+                }
+            }
+        }
     }
 }

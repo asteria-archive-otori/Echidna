@@ -1,3 +1,15 @@
+---
+
+name: Feature Request
+about: Request a new feature or support that can be implemented into Echidna.
+title: "feat: "
+ref: main
+labels:
+
+- enhancement
+
+---
+
 ## Description
 
 Please write a clear and concise description of the issue you are getting.
