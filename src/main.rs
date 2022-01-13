@@ -8,7 +8,8 @@ use app::EchidnaEditor;
 use components::app;
 use gtk::prelude::ApplicationExtManual;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let app = EchidnaEditor::new("land.echidna.editor");
 
     std::process::exit(app.run());
