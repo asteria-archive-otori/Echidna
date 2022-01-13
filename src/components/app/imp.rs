@@ -38,7 +38,7 @@ impl ApplicationImpl for EchidnaEditor {
         window.setup_menubar();
         window.set_application(Some(app));
 
-        window.present();
+        window.show();
     }
 }
 

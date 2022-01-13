@@ -5,6 +5,7 @@
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::CompositeTemplate;
+use std::cell::RefCell;
 
 #[derive(Debug, Default, CompositeTemplate)]
 #[template(file = "./window.ui")]
@@ -13,6 +14,7 @@ pub struct EchidnaWindow {
     pub notebook: TemplateChild<gtk::Notebook>,
     #[template_child]
     pub sidebar: TemplateChild<super::super::sidebar::EchidnaSidebar>,
+    pub dialogs: RefCell<Vec<gtk::NativeDialog>>,
 }
 
 #[glib::object_subclass]
