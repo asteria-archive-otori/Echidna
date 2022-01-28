@@ -8,7 +8,7 @@ use glib::clone;
 use gtk::{
     prelude::*, subclass::prelude::*, FileChooserAction, FileChooserNative, Label, ResponseType,
 };
-use sourceview::{File, FileExt as SourceFileExt};
+use sourceview::{prelude::FileExt as SourceFileExt, File};
 
 pub trait FileImplementedEditor {
     fn action_open_file(&self) -> Result<(), String>;

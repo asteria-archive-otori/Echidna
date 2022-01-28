@@ -7,7 +7,8 @@ use gio::Cancellable;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use sourceview::{
-    prelude::*, Buffer, FileExt as SourceFileExt, FileLoader, FileSaver, LanguageManager,
+    prelude::{FileExt as SourceViewExt, *},
+    Buffer, FileLoader, FileSaver, LanguageManager,
 };
 
 glib::wrapper! {
