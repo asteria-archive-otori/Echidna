@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+use std::error::Error;
+
 use crate::components::editor::EchidnaCoreEditor;
 use crate::lib::prelude::*;
 use glib::clone;
@@ -11,11 +13,11 @@ use gtk::{
 use sourceview::{prelude::FileExt as SourceFileExt, File};
 
 pub trait FileImplementedEditor {
-    fn action_open_file(&self) -> Result<(), String>;
-    fn open_file(notebook: &gtk::Notebook, file: gio::File);
-    fn action_save_file_as(&self) -> Result<(), String>;
-    fn action_new_file(&self);
-    fn action_save_file(&self) -> Result<(), String>;
+    fn action_open_file(&self) -> Result<(), Box<dyn Error>>;
+    fn open_file(notebook: &gtk::Notebook, file: gio::File) -> Result<(), Box<dyn Error>>;
+    fn action_save_file_as(&self) -> Result<(), Box<dyn Error>>;
+    fn action_new_file(&self) -> Result<u32, glib::BoolError>;
+    fn action_save_file(&self) -> Result<(), Box<dyn Error>>;
 }
 
 impl FileImplementedEditor for super::EchidnaWindow {
@@ -35,7 +37,7 @@ impl FileImplementedEditor for super::EchidnaWindow {
 
     Perhaps some of the last points should not be implemented in this function but rather in another function that keeps track of every files.
     */
-    fn action_open_file(&self) -> Result<(), String> {
+    fn action_open_file(&self) -> Result<(), Box<dyn Error>> {
         /*
            Borrows self.to_imp()'s dialog Vector mutably, create a new dialog , and push that dialog into the vector.
 
@@ -71,27 +73,34 @@ impl FileImplementedEditor for super::EchidnaWindow {
 
                 Ok(())
             }
-            Err(e) => Err(format!("{:#?}", e)),
+            Err(e) => Err(Box::new(e)),
         }
     }
 
-    fn open_file(notebook: &gtk::Notebook, file_location: gio::File) {
+    fn open_file(notebook: &gtk::Notebook, file_location: gio::File) -> Result<(), Box<dyn Error>> {
         let file = File::builder().location(&file_location).build();
         let editor_page = EchidnaCoreEditor::new(Some(file));
-        notebook.prepend_closable_page(
-            &editor_page,
-            Some(&Label::new(Some(
-                file_location
-                    .path()
-                    .expect("The file's path is missing")
-                    .file_name()
-                    .expect("Could not get the file name, as it ends with ..")
-                    .to_str()
-                    .expect("Could not parse the file name, as it is not a valid Unicode."),
-            ))),
-        );
+        match editor_page {
+            Ok(editor_page) => {
+                notebook.prepend_closable_page(
+                    &editor_page,
+                    Some(&Label::new(Some(
+                        file_location
+                            .path()
+                            .expect("The file's path is missing")
+                            .file_name()
+                            .expect("Could not get the file name, as it ends with ..")
+                            .to_str()
+                            .expect("Could not parse the file name, as it is not a valid Unicode."),
+                    ))),
+                );
+
+                Ok(())
+            }
+            Err(e) => Err(Box::new(e)),
+        }
     }
-    fn action_save_file_as(&self) -> Result<(), String> {
+    fn action_save_file_as(&self) -> Result<(), Box<dyn Error>> {
         /*
            Borrows self.to_imp()'s dialog Vector mutably, create a new dialog , and push that dialog into the vector.
 
@@ -130,31 +139,33 @@ impl FileImplementedEditor for super::EchidnaWindow {
 
                 Ok(())
             }
-            Err(e) => Err(format!("{:#?}", e)),
+            Err(e) => Err(Box::new(e)),
         }
     }
 
-    fn action_new_file(&self) {
-        let editor_page = EchidnaCoreEditor::new(None);
-
-        self.to_imp()
-            .notebook
-            .prepend_closable_page(&editor_page, Some(&gtk::Label::new(Some(&"Untitled"))));
+    fn action_new_file(&self) -> Result<u32, glib::BoolError> {
+        match EchidnaCoreEditor::new(None) {
+            Ok(editor) => Ok(self
+                .to_imp()
+                .notebook
+                .prepend_closable_page(&editor, Some(&gtk::Label::new(Some(&"Untitled"))))),
+            Err(e) => Err(e),
+        }
     }
 
-    fn action_save_file(&self) -> Result<(), String> {
+    fn action_save_file(&self) -> Result<(), Box<dyn Error>> {
         match self.get_current_tab() {
             Ok(page) => {
                 let page: EchidnaCoreEditor = page;
                 match page.file().location() {
                     Some(_) => match page.save_file(None) {
                         Ok(_) => Ok(()),
-                        Err(e) => Err(String::from(e)),
+                        Err(e) => Err(e),
                     },
                     None => self.action_save_file_as(),
                 }
             }
-            Err(e) => Err(String::from(e)),
+            Err(e) => Err(e),
         }
     }
 }

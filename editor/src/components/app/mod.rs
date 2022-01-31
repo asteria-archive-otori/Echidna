@@ -4,9 +4,7 @@
 
 pub mod imp;
 
-use glib::wrapper;
-
-wrapper! {
+glib::wrapper! {
     pub struct EchidnaEditor(ObjectSubclass<imp::EchidnaEditor>)
         @extends gio::Application, gtk::Application,
         @implements gio::ActionGroup, gio::ActionMap;
@@ -15,20 +13,15 @@ wrapper! {
 
 impl Default for EchidnaEditor {
     fn default() -> Self {
-        Self::new("land.echidna.editor")
+        Self::new("land.echidna.editor").expect("Can't create EchidnaEditor object")
     }
 }
 
 impl EchidnaEditor {
-    pub fn new(app_id: &'static str) -> Self {
-        let object = glib::Object::new(&[
+    pub fn new(app_id: &'static str) -> Result<Self, glib::BoolError> {
+        glib::Object::new(&[
             ("application-id", &app_id),
             ("flags", &gio::ApplicationFlags::empty()),
-        ]);
-
-        match object {
-            Ok(o) => o,
-            Err(e) => panic!("Error in making EchidnaApplication {}", e),
-        }
+        ])
     }
 }

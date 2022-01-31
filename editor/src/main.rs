@@ -9,7 +9,7 @@ use components::app;
 use gtk::prelude::ApplicationExtManual;
 
 fn main() {
-    let app = EchidnaEditor::new("land.echidna.editor");
+    let app = EchidnaEditor::default();
 
     std::process::exit(app.run());
 }
