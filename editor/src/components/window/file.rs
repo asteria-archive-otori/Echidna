@@ -82,7 +82,7 @@ impl FileImplementedEditor for super::EchidnaWindow {
         let editor_page = EchidnaCoreEditor::new(Some(file));
         match editor_page {
             Ok(editor_page) => {
-                notebook.prepend_closable_page(
+                let nth = notebook.prepend_closable_page(
                     &editor_page,
                     Some(&Label::new(Some(
                         file_location
@@ -94,6 +94,8 @@ impl FileImplementedEditor for super::EchidnaWindow {
                             .expect("Could not parse the file name, as it is not a valid Unicode."),
                     ))),
                 );
+
+                notebook.set_current_page(Some(nth));
 
                 Ok(())
             }
@@ -145,10 +147,15 @@ impl FileImplementedEditor for super::EchidnaWindow {
 
     fn action_new_file(&self) -> Result<u32, glib::BoolError> {
         match EchidnaCoreEditor::new(None) {
-            Ok(editor) => Ok(self
-                .to_imp()
-                .notebook
-                .prepend_closable_page(&editor, Some(&gtk::Label::new(Some(&"Untitled"))))),
+            Ok(editor) => {
+                let notebook = &self.to_imp().notebook;
+                let nth = notebook
+                    .prepend_closable_page(&editor, Some(&gtk::Label::new(Some(&"Untitled"))));
+
+                notebook.set_current_page(Some(nth));
+
+                Ok(nth)
+            }
             Err(e) => Err(e),
         }
     }
