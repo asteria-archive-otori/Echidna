@@ -5,7 +5,7 @@
 pub mod file;
 pub mod imp;
 pub mod menubar;
-
+use crate::prelude::*;
 use glib::object::{Cast, IsA};
 use gtk::subclass::prelude::*;
 use std::{error::Error, fmt};

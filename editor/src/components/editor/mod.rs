@@ -3,15 +3,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 pub mod imp;
-use std::{error::Error, fmt};
-
+use crate::prelude::*;
 use gio::Cancellable;
-use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use sourceview::{
-    prelude::{FileExt as SourceViewExt, *},
-    Buffer, FileLoader, FileSaver, LanguageManager,
-};
+use sourceview::{prelude::*, Buffer, FileLoader, FileSaver, LanguageManager};
+use std::{error::Error, fmt};
 
 glib::wrapper! {
     pub struct EchidnaCoreEditor(ObjectSubclass<imp::EchidnaCoreEditor>)
@@ -31,12 +27,8 @@ impl EchidnaCoreEditor {
 
                 match file {
                     Some(file) => {
-                        let file_location = file
-                            .location()
-                            .expect("file is required to have a location");
-
-                        this.set_property("file", &file)
-                            .expect("Could not set the 'file' property of EchidnaCoreEditor");
+                        let file_location = file.location();
+                        this.set_property("file", &file);
 
                         let cancellable = gio::Cancellable::new();
                         let filepath = file_location.path().expect("No filepath");
@@ -72,13 +64,13 @@ impl EchidnaCoreEditor {
                             file_loader.load_async(
                             glib::Priority::default(),
                             Some(&cancellable),
-                            |_, _| {},
+
                             |result| {
                                 if result.is_err() {
                                     panic!("Found an error when loading the file into the text editor's buffer. {:#?}", result.err());
                                 }
                             },
-                        );
+                            );
                         }
                     }
                     None => {}
@@ -93,8 +85,8 @@ impl EchidnaCoreEditor {
         imp::EchidnaCoreEditor::from_instance(self)
     }
 
-    pub fn file(&self) -> sourceview::File {
-        self.property("file").expect("Could not get property 'file' of EchidnaCoreEditor").get::<sourceview::File>().expect("Could not get property 'file' of EchidnaCoreEditor because its type is not IsA<sourceview::File>")
+    pub fn file(&self) -> Option<sourceview::File> {
+        self.property::<Option<sourceview::File>>("file")
     }
 
     pub fn save_file(&self, save_as: Option<&gio::File>) -> Result<(), Box<dyn Error>> {
@@ -102,55 +94,38 @@ impl EchidnaCoreEditor {
         let buffer = self.to_imp().sourceview.buffer().downcast::<Buffer>();
 
         match buffer {
-            Ok(buffer) => {
-                let cancellable = Cancellable::new();
-                let mut file_saver: Option<FileSaver> = None;
-                let result: Result<(), Box<dyn Error>> = match save_as {
-                    Some(file) => {
-                        file_saver = Some(FileSaver::with_target(&buffer, &self.file(), file));
-                        Ok(())
-                    }
-                    None => match self.file().location() {
-                        Some(_) => {
-                            file_saver = Some(FileSaver::new(&buffer, &self.file()));
+            Ok(buffer) => match self.file() {
+                Some(file) => {
+                    let cancellable = Cancellable::new();
+
+                    let file_saver: Option<FileSaver> = match save_as {
+                        Some(save_as_file) => {
+                            Some(FileSaver::with_target(&buffer, &file, save_as_file))
+                        }
+                        None => Some(FileSaver::new(&buffer, &file)),
+                    };
+
+                    match file_saver {
+                        Some(file_saver) => {
+                            file_saver.save_async(
+                                glib::Priority::default(),
+                                Some(&cancellable),
+                                |result| {
+                                    if result.is_err() {
+                                        panic!(
+                                            "Found an error while saving the file:\n{}",
+                                            result.err().expect("No error")
+                                        )
+                                    }
+                                },
+                            );
                             Ok(())
                         }
-                        None => {
-                            #[derive(Debug)]
-                            struct Error {}
-
-                            impl fmt::Display for Error {
-                                fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                                    write!(f, "The file location must exist. Please do \"Save As\"")
-                                }
-                            }
-
-                            impl std::error::Error for Error {}
-                            Err(Box::new(Error {}))
-                        }
-                    },
-                };
-
-                match result {
-                    Err(result) => Err(result),
-                    Ok(_) => {
-                        file_saver.unwrap().save_async(
-                            glib::Priority::default(),
-                            Some(&cancellable),
-                            |_, _| {},
-                            |result| {
-                                if result.is_err() {
-                                    panic!(
-                                        "Found an error while saving the file:\n{}",
-                                        result.err().expect("No error")
-                                    )
-                                }
-                            },
-                        );
-                        Ok(())
+                        None => todo!(),
                     }
                 }
-            }
+                None => todo!(),
+            },
             Err(_) => {
                 #[derive(Debug)]
                 struct Error {}

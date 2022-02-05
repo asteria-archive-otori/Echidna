@@ -2,15 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+use crate::components::editor::EchidnaCoreEditor;
+use crate::prelude::*;
 use std::error::Error;
 
-use crate::components::editor::EchidnaCoreEditor;
-use crate::lib::prelude::*;
 use glib::clone;
-use gtk::{
-    prelude::*, subclass::prelude::*, FileChooserAction, FileChooserNative, Label, ResponseType,
-};
-use sourceview::{prelude::FileExt as SourceFileExt, File};
+use gtk::{subclass::prelude::*, FileChooserAction, FileChooserNative, Label, ResponseType};
+use sourceview::{prelude::*, File};
 
 pub trait FileImplementedEditor {
     fn action_open_file(&self) -> Result<(), Box<dyn Error>>;
@@ -113,7 +111,7 @@ impl FileImplementedEditor for super::EchidnaWindow {
             Ok(mut dialogs) => {
                 let dialog = FileChooserNative::new(
                     Some("Save File As"),
-                    gtk::NONE_WINDOW,
+                    gtk::Window::NONE,
                     FileChooserAction::Save,
                     Some("_Save"),
                     Some("_Cancel"),
@@ -164,11 +162,15 @@ impl FileImplementedEditor for super::EchidnaWindow {
         match self.get_current_tab() {
             Ok(page) => {
                 let page: EchidnaCoreEditor = page;
-                match page.file().location() {
-                    Some(_) => match page.save_file(None) {
-                        Ok(_) => Ok(()),
-                        Err(e) => Err(e),
-                    },
+                match page.file() {
+                    Some(file) => {
+                        let location = file.location();
+                        match page.save_file(None) {
+                            Ok(_) => Ok(()),
+                            Err(e) => Err(e),
+                        }
+                    }
+
                     None => self.action_save_file_as(),
                 }
             }
