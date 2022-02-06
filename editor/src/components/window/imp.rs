@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 use crate::prelude::*;
-use gtk::prelude::*;
+pub use adw::subclass::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::CompositeTemplate;
 use std::cell::RefCell;
@@ -11,7 +11,7 @@ use std::cell::RefCell;
 #[template(file = "./window.ui")]
 pub struct EchidnaWindow {
     #[template_child]
-    pub notebook: TemplateChild<gtk::Notebook>,
+    pub tab_bar: TemplateChild<adw::TabBar>,
     #[template_child]
     pub sidebar: TemplateChild<super::super::sidebar::EchidnaSidebar>,
     pub dialogs: RefCell<Vec<gtk::NativeDialog>>,
@@ -21,7 +21,7 @@ pub struct EchidnaWindow {
 impl ObjectSubclass for EchidnaWindow {
     const NAME: &'static str = "EchidnaWindow";
     type Type = super::EchidnaWindow;
-    type ParentType = gtk::ApplicationWindow;
+    type ParentType = adw::ApplicationWindow;
 
     fn class_init(class: &mut Self::Class) {
         Self::bind_template(class);
@@ -39,5 +39,7 @@ impl WidgetImpl for EchidnaWindow {}
 impl WindowImpl for EchidnaWindow {}
 
 impl ApplicationWindowImpl for EchidnaWindow {}
+
+impl AdwApplicationWindowImpl for EchidnaWindow {}
 
 impl BuildableImpl for EchidnaWindow {}
