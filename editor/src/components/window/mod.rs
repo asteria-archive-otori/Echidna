@@ -6,8 +6,10 @@ pub mod file;
 pub mod imp;
 pub mod menubar;
 pub mod workspace;
+use crate::prelude::*;
 use glib::object::{Cast, IsA};
 use gtk::subclass::prelude::*;
+use std::{error::Error, fmt};
 
 glib::wrapper! {
     pub struct EchidnaWindow(ObjectSubclass<imp::EchidnaWindow>)
@@ -29,22 +31,49 @@ impl EchidnaWindow {
         imp::EchidnaWindow::from_instance(self)
     }
 
-    pub fn get_current_tab<A: IsA<gtk::Widget>>(&self) -> Result<A, &str> {
+    pub fn get_current_tab<A: IsA<gtk::Widget>>(&self) -> Result<A, Box<dyn Error>> {
         let window_imp = self.to_imp();
         let nth = window_imp.notebook.current_page();
 
         match nth {
-            None => Err("No tabs are currently opened, maybe there are no tabs."),
+            None => {
+                #[derive(Debug)]
+                struct Error {}
+
+                impl fmt::Display for Error {
+                    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                        write!(f, "No tabs are currently opened, maybe there are no tabs.")
+                    }
+                }
+
+                impl std::error::Error for Error {}
+
+                Err(Box::new(Error {}))
+            }
             Some(nth) => {
                 let page = window_imp
                     .notebook
                     .nth_page(Some(nth))
                     .expect("Couldn't get the page of the current index.");
 
-                match page.downcast::<A>()
-                {
+                match page.downcast::<A>() {
                     Ok(page) => Ok(page),
-                    Err(e) => Err("Cannot downcast to type parameter A. Maybe it's not in the type you are looking for."),
+                    Err(widget) => {
+                        #[derive(Debug)]
+                        struct Error {
+                            widget: gtk::Widget,
+                        }
+
+                        impl std::error::Error for Error {}
+
+                        impl fmt::Display for Error {
+                            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                                write!(f, "Cannot downcast {:#?} to type parameter A. Maybe it's not in the type you are looking for.", self.widget)
+                            }
+                        }
+
+                        Err(Box::new(Error { widget }))
+                    }
                 }
             }
         }

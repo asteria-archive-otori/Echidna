@@ -5,6 +5,7 @@
 pub mod imp;
 use gtk::subclass::prelude::*;
 
+use crate::prelude::*;
 glib::wrapper! {
     pub struct EchidnaSidebar(ObjectSubclass<imp::EchidnaSidebar>)
     @extends gtk::Box, gtk::Widget,

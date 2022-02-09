@@ -4,6 +4,7 @@
 
 use super::super::window::menubar::MenubarImplementedEditor;
 use super::super::window::EchidnaWindow;
+use crate::prelude::*;
 
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
@@ -21,13 +22,6 @@ impl ObjectSubclass for EchidnaEditor {
     const NAME: &'static str = "EchidnaEditorApplication";
     type Type = super::EchidnaEditor;
     type ParentType = Application;
-
-    fn new() -> Self {
-        Self {
-            name: "Echidna Code Editor",
-            app_id: "land.echidna.editor",
-        }
-    }
 }
 
 impl ObjectImpl for EchidnaEditor {}

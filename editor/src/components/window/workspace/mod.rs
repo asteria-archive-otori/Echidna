@@ -3,11 +3,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 mod open_folder;
-
 use super::EchidnaWindow;
+use crate::prelude::*;
 use gio::{Cancellable, File};
 use glib::{clone, Type};
-use gtk::{prelude::*, ResponseType, TreePath, TreeStore, TreeView};
+use gtk::{ResponseType, TreePath, TreeStore, TreeView};
 use open_folder::open_folder;
 use relative_path::RelativePath;
 use serde::{Deserialize, Serialize};

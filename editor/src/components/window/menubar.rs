@@ -6,7 +6,6 @@ use super::EchidnaWindow;
 use crate::prelude::*;
 use gio::{MenuModel, SimpleAction};
 use glib::clone;
-use gtk::prelude::*;
 use gtk::AboutDialog;
 
 pub trait MenubarImplementedEditor {

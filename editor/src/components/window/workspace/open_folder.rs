@@ -3,9 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 use super::{WorkspaceConnectionType, WorkspaceOpenMessage};
-
+use crate::prelude::*;
 use gio::{Cancellable, File, FileQueryInfoFlags, FileType};
-use gtk::prelude::*;
 
 fn to_duplicate_option_string(option_string: &Option<String>) -> Option<String> {
     match option_string {
