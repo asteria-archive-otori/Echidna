@@ -11,6 +11,8 @@ use gtk::CompositeTemplate;
 pub struct EchidnaSidebar {
     #[template_child]
     pub explorer: TemplateChild<gtk::StackPage>,
+    #[template_child]
+    pub tree: TemplateChild<gtk::TreeView>,
 }
 
 #[glib::object_subclass]

@@ -21,7 +21,7 @@ pub async fn open_folder(
     let child_enumerate_cancellable = Cancellable::new();
     let parent_path = parent_file.path().expect("No path for the parent file");
     println!(
-        "Adding file {:?} and if it's a folder, with its children, to the tree store.",
+        "SERVER: Adding file {:?} and if it's a folder, with its children, to the tree store.",
         parent_path
     );
     let child_files = parent_file
@@ -40,7 +40,11 @@ pub async fn open_folder(
     for file_iter in child_files {
         let info = file_iter.expect("Could not get the file info");
 
-        println!("Found child {:?} of {:?}", info.name(), parent_file.path());
+        println!(
+            "SERVER: Found child {:?} of {:?}",
+            info.name(),
+            parent_file.path()
+        );
         match tx.send(WorkspaceOpenMessage {
             connection_type: WorkspaceConnectionType::AttachFile,
             parent: parent_path.clone(),
@@ -49,7 +53,7 @@ pub async fn open_folder(
         }) {
             Ok(_) => {}
             Err(err) => {
-                eprintln!("Cannot send message to the main thread as it has been disconnected. Message: {:#?}", err);
+                eprintln!("SERVER: Cannot send message to the main thread as it has been disconnected. Message: {:#?}", err);
             }
         };
         // let tree_iter = tree.append(parent_iter);
@@ -65,7 +69,7 @@ pub async fn open_folder(
             }) {
                 Ok(_) => {}
                 Err(err) => {
-                    eprintln!("Cannot send message to the main thread as it has been disconnected. Message: {:#?}", err);
+                    eprintln!("SERVER: Cannot send message to the main thread as it has been disconnected. Message: {:#?}", err);
                 }
             }
         }

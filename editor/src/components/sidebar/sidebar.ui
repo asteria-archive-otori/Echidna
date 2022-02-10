@@ -5,6 +5,7 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at https://mozilla.org/MPL/2.0/.
 -->
+
   <template class="EchidnaSidebar">
     <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
     <child>
@@ -24,7 +25,28 @@
             <property name="child">
               <object class="GtkBox">
                 <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
-
+                <child>
+                  <object class="GtkTreeView" id="tree">
+                    <child>
+                      <object class="GtkTreeViewColumn" id="test-column">
+                        <property name="title">File</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="text-renderer" />
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <property name="model">
+                      <object class="GtkTreeStore" id="file_tree_store">
+                        <columns>
+                          <column type="gchararray" />
+                        </columns>
+                      </object>
+                    </property>
+                  </object>
+                </child>
               </object>
             </property>
 

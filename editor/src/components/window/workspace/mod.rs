@@ -135,24 +135,19 @@ impl WorkspaceImplementedEditor for EchidnaWindow {
 
         let workspace = serde_json::from_slice::<MonacoWorkspace>(&content)
             .expect(format!("Could not parse the workspace file of {:?}", filepath).as_str());
-        let explorer_box: &gtk::Box = &self
-            .to_imp()
-            .sidebar
-            .to_imp()
-            .explorer
-            .child()
-            .downcast()
-            .expect("Could not downcast the Explorer activity tab's child widget to GtkBox.");
-        let tree_view = TreeView::new();
+
+        let tree_view = &self.to_imp().sidebar.to_imp().tree;
 
         // TODO: Implement file icons
-        let tree = TreeStore::new(&[/*gdk::Texture::static_type(), */ Type::STRING]);
-        tree_view.set_model(Some(&tree));
+        let tree: TreeStore = tree_view
+            .model()
+            .expect("No model in tree view")
+            .downcast()
+            .expect("Cannot downcast to GtkTreeStore");
 
         // glib::MainContext is like std::mpsc, but its receivers don't block the current thread.
         let (tx, rx) = glib::MainContext::channel::<WorkspaceOpenMessage>(glib::PRIORITY_DEFAULT);
 
-        explorer_box.prepend(&tree_view);
         rx.attach(
             None,
             clone!(@strong tx =>
@@ -184,7 +179,7 @@ impl WorkspaceImplementedEditor for EchidnaWindow {
 
                         match message.child.to_str() {
                             Some(name) => {
-                                println!("Adding {:?}", &name);
+                                println!("CLIENT: Adding {:?}", &name);
                                 tree.set(&iter, &[(0, &name)]);
                             },
                             None => eprintln!("Name is not Unicode")
@@ -221,7 +216,10 @@ impl WorkspaceImplementedEditor for EchidnaWindow {
 
                         // Borrows message.parent_path to be moved into the async closure.
                         let parent_path = message.parent_path;
-
+                        println!(
+                            "CLIENT: Adding file {:?} and if it's a folder, with its children, to the tree store.",
+                            parent_path
+                        );
                         #[allow(unused_braces)]
                         tokio::spawn(clone!(@strong tx =>
                             async move { open_folder(file, tx.clone(), parent_path).await }));
@@ -232,6 +230,11 @@ impl WorkspaceImplementedEditor for EchidnaWindow {
         );
 
         for folder in workspace.folders {
+            println!(
+                "CLIENT: Adding file {:?} and if it's a folder, with its children, to the tree store.",
+                &folder.path
+            );
+
             #[allow(unused_braces)]
             tokio::spawn(clone!(@strong tx, @strong filepath =>
                 async move { open_root_folder(&folder, &filepath, tx.clone()).await }));
