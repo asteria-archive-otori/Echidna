@@ -2,10 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-use glib::{ParamFlags, ParamSpec, Value};
-use gtk::prelude::*;
-use gtk::subclass::prelude::*;
-use gtk::CompositeTemplate;
+use crate::prelude::*;
+use glib::{ParamFlags, ParamSpec, ParamSpecObject, Value};
+
+use gtk::{subclass::prelude::*, CompositeTemplate};
 use once_cell::sync::Lazy;
 use std::cell::RefCell;
 
@@ -16,7 +16,7 @@ pub struct EchidnaCoreEditor {
     pub minimap: TemplateChild<sourceview::Map>,
     #[template_child]
     pub sourceview: TemplateChild<sourceview::View>,
-    pub file: RefCell<sourceview::File>,
+    pub file: RefCell<Option<sourceview::File>>,
 }
 
 #[glib::object_subclass]
@@ -37,7 +37,7 @@ impl ObjectSubclass for EchidnaCoreEditor {
 impl ObjectImpl for EchidnaCoreEditor {
     fn properties() -> &'static [ParamSpec] {
         static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
-            vec![ParamSpec::new_object(
+            vec![ParamSpecObject::new(
                 "file",
                 "file",
                 "the file of the editor",
@@ -52,9 +52,8 @@ impl ObjectImpl for EchidnaCoreEditor {
     fn set_property(&self, _obj: &Self::Type, _id: usize, value: &Value, spec: &ParamSpec) {
         match spec.name() {
             "file" => {
-                let file: sourceview::File = value
-                    .get()
-                    .expect("The file needs to be a sourceview::File");
+                let file: Option<sourceview::File> =
+                    value.get().expect("The file needs to be sourceview::File");
                 self.file.replace(file);
             }
             _ => unimplemented!(),

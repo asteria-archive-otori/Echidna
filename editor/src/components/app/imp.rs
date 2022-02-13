@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 use super::super::window::menubar::MenubarImplementedEditor;
 use super::super::window::EchidnaWindow;
+use crate::prelude::*;
 
 use super::load_css::load_css;
 use gtk::prelude::*;
@@ -20,13 +21,6 @@ impl ObjectSubclass for EchidnaEditor {
     const NAME: &'static str = "EchidnaEditorApplication";
     type Type = super::EchidnaEditor;
     type ParentType = Application;
-
-    fn new() -> Self {
-        Self {
-            name: "Echidna Code Editor",
-            app_id: "land.echidna.editor",
-        }
-    }
 }
 
 impl ObjectImpl for EchidnaEditor {}
@@ -38,9 +32,8 @@ impl ApplicationImpl for EchidnaEditor {
         window.setup_menubar();
         window.set_application(Some(app));
 
-        window.present();
-
         load_css();
+        window.show();
     }
 }
 
