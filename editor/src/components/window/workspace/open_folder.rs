@@ -24,6 +24,7 @@ pub async fn open_folder(
         "SERVER: Adding file {:?} and if it's a folder, with its children, to the tree store.",
         parent_path
     );
+
     let child_files = parent_file
         .enumerate_children(
             "*",

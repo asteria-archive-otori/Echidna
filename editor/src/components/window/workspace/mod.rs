@@ -6,8 +6,8 @@ mod open_folder;
 use super::EchidnaWindow;
 use crate::prelude::*;
 use gio::{Cancellable, File};
-use glib::{clone, Type};
-use gtk::{ResponseType, TreePath, TreeStore, TreeView};
+use glib::clone;
+use gtk::{ResponseType, TreePath, TreeStore};
 use open_folder::open_folder;
 use relative_path::RelativePath;
 use serde::{Deserialize, Serialize};
@@ -30,6 +30,7 @@ pub struct WorkspaceOpenMessage {
     child: PathBuf,
 }
 
+#[derive(PartialEq)]
 enum WorkspaceConnectionType {
     AttachFile,
     AttachFolder,
@@ -39,22 +40,6 @@ pub trait WorkspaceImplementedEditor {
     fn action_open_workspace(&self) -> Result<(), String>;
 
     fn open_workspace(&self, file: File);
-}
-
-async fn open_root_folder(
-    folder_path: &MonacoFolder,
-    filepath: &PathBuf,
-    tx: glib::Sender<WorkspaceOpenMessage>,
-) {
-    let path = RelativePath::new(&folder_path.path);
-    let folder = File::for_path(path.to_path(filepath.parent().expect(
-        "Could not get the parent of 'filepath'. 'filepath' terminates in a root or prefix.",
-    )));
-
-    println!("Pushing {:?} into the futures for opening.", folder.path());
-
-    // Do something with the folder, perhaps lists its child and .
-    open_folder(folder.clone(), tx, None).await;
 }
 
 impl WorkspaceImplementedEditor for EchidnaWindow {
@@ -114,27 +99,42 @@ impl WorkspaceImplementedEditor for EchidnaWindow {
     fn open_workspace(&self, file: File) {
         let cancellable = Cancellable::new();
 
-        let filepath = file
+        let workspace_config = file
             .path()
             .expect("Could not get the file path of the file.");
         let info = file
             .query_info("*", gio::FileQueryInfoFlags::NONE, Some(&cancellable))
-            .expect(format!("Could not retrieve file information for {:?}", filepath).as_str());
+            .expect(
+                format!(
+                    "Could not retrieve file information for {:?}",
+                    workspace_config
+                )
+                .as_str(),
+            );
         let content_type = info
             .content_type()
-            .expect(format!("Found no content type for {:?}", filepath).as_str());
+            .expect(format!("Found no content type for {:?}", workspace_config).as_str());
         println!(
             "Opened {} and found its content type is {}.",
             "file",
             content_type.to_string()
         );
         let content_cancellable = Cancellable::new();
-        let (content, _) = file
-            .load_contents(Some(&content_cancellable))
-            .expect(format!("Could not load the file contents for {:?}", filepath).as_str());
+        let (content, _) = file.load_contents(Some(&content_cancellable)).expect(
+            format!(
+                "Could not load the file contents for {:?}",
+                workspace_config
+            )
+            .as_str(),
+        );
 
-        let workspace = serde_json::from_slice::<MonacoWorkspace>(&content)
-            .expect(format!("Could not parse the workspace file of {:?}", filepath).as_str());
+        let workspace = serde_json::from_slice::<MonacoWorkspace>(&content).expect(
+            format!(
+                "Could not parse the workspace file of {:?}",
+                workspace_config
+            )
+            .as_str(),
+        );
 
         let tree_view = &self.to_imp().sidebar.to_imp().tree;
 
@@ -150,94 +150,101 @@ impl WorkspaceImplementedEditor for EchidnaWindow {
 
         rx.attach(
             None,
-            clone!(@strong tx =>
+            clone!(@strong tx, @strong tree =>
                 move |message| {
-                match message.connection_type {
-                    WorkspaceConnectionType::AttachFile => {
+                    let file = File::for_path(&message.parent.join(&message.child));
 
-                        // TODO: Attach a file into the TreeStore
+                    let parent_iter = match &message.parent_path {
+                        Some(parent_path) => {
+                            println!("{parent_path}");
 
-                        let parent_iter = match message.parent_path {
-                            Some(parent_path) => {
-                                match TreePath::from_string(&parent_path) {
-                                    Some(tree_path) => {
-
-                                        tree.iter(&tree_path)
-                                    },
-                                    None => {
-                                        eprintln!("The processing of {:?}/{:?} does not have a valid iter. Attaching as root.", 
-                                                    message.parent, message.child);
-                                        None
-                                    }
-                                }
-
-                            },
-                            None => None
-                        };
-
-                        let iter = tree.append(parent_iter.as_ref());
-
-                        match message.child.to_str() {
-                            Some(name) => {
-                                println!("CLIENT: Adding {:?}", &name);
-                                tree.set(&iter, &[(0, &name)]);
-                            },
-                            None => eprintln!("Name is not Unicode")
-                        };
-                    }
-                    WorkspaceConnectionType::AttachFolder => {
-                        let file = File::for_path(&message.parent.join(&message.child));
-                        // TODO: Attach a folder into the TreeStore
+                            match &TreePath::from_string(parent_path) {
+                                Some(parent_path) => {
+                                 tree.iter(&parent_path)
+                                },
+                                None => None
+                            }
 
 
-                        let parent_iter = match &message.parent_path {
-                            Some(parent_path) => {
+                        },
+                        None => None
+                    };
 
-                                match &TreePath::from_string(parent_path) {
-                                    Some(parent_path) => {
-                                     tree.iter(&parent_path)
-                                    },
-                                    None => None
-                                }
 
-                            },
-                            None => None
-                        };
+                    match parent_iter {
+                        Some(iter) => {let path = tree.path(&iter).to_str();
+                        println!("{parent_iter:?} with {path:?}");
+                        },
+                        None => {}
+                    };
 
-                        let iter = tree.append(parent_iter.as_ref());
+                    let iter = tree.append(parent_iter.as_ref());
 
-                        match message.child.to_str() {
-                            Some(name) => {
-                                println!("Adding {:?}", &name);
-                                tree.set(&iter, &[(0, &name)]);
-                            },
-                            None => eprintln!("Name is not Unicode")
-                        };
+                    match message.child.to_str() {
+                        Some(name) => {
+                            println!("Adding {:?}", &name);
+                            tree.set(&iter, &[(0, &name)]);
+                            println!(
+                                "CLIENT: Adding file {:?} and if it's a folder, with its children, to the tree store.",
+                                &name
+                            );
+                        },
+                        None => eprintln!("Name is not Unicode")
+                    };
+                if message.connection_type == WorkspaceConnectionType::AttachFolder  {
 
-                        // Borrows message.parent_path to be moved into the async closure.
-                        let parent_path = message.parent_path;
-                        println!(
-                            "CLIENT: Adding file {:?} and if it's a folder, with its children, to the tree store.",
-                            parent_path
-                        );
+                        let parent_path = tree.path(&iter).to_str().expect("No iter in tree");
+
                         #[allow(unused_braces)]
                         tokio::spawn(clone!(@strong tx =>
-                            async move { open_folder(file, tx.clone(), parent_path).await }));
-                    }
+                            async move { open_folder(file, tx.clone(), Some(parent_path.to_string())).await }));
+
                 };
                 Continue(true)
             }),
         );
 
+        let parent = workspace_config.parent().expect("Can't retrieve the parent of the workspace configuration. Seems that the configuration is in the root (in Unix/MacOS) or the drive (Windows).");
         for folder in workspace.folders {
             println!(
                 "CLIENT: Adding file {:?} and if it's a folder, with its children, to the tree store.",
                 &folder.path
             );
 
+            let path = RelativePath::new(&folder.path).to_path(&workspace_config.parent().expect("Can't retrieve the parent of the workspace configuration. Seems that the configuration is in the root (in Unix/MacOS) or the drive (Windows)."));
+            let folder = File::for_path(&path);
+            let iter = tree.append(None);
+            let iter_path = match tree.path(&iter).to_str() {
+                Some(path) => Some(path.to_string()),
+                None => {
+                    eprintln!("Path is invalid for {path:?}");
+
+                    None
+                }
+            };
+            tree.set(
+                &iter,
+                &[(
+                    0,
+                    &path
+                        .file_name()
+                        .expect(&format!(
+                            "CLIENT: path {path:?} {:?} ends with .. parent {parent:?}",
+                            &folder.path()
+                        ))
+                        .to_str()
+                        .expect("CLIENT: No unicode in filename"),
+                )],
+            );
+
+            println!("CLIENT: Pushing {path:?} into the futures for opening.");
+
             #[allow(unused_braces)]
-            tokio::spawn(clone!(@strong tx, @strong filepath =>
-                async move { open_root_folder(&folder, &filepath, tx.clone()).await }));
+            tokio::spawn(clone!(@strong tx =>
+            async move {
+                // Do something with the folder, perhaps lists its child and .
+                open_folder(folder.clone(), tx, iter_path).await;
+            }));
         }
     }
 }
