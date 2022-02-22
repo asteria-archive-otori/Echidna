@@ -5,7 +5,7 @@
 use crate::components::tab_label::TabLabel;
 use crate::prelude::*;
 use glib::IsA;
-use gtk::{prelude::*, Widget};
+use gtk::Widget;
 
 pub trait ClosableTabImplementedNotebook {
     fn prepend_closable_page<T: IsA<Widget>, U: IsA<Widget>>(

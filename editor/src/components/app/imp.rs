@@ -5,7 +5,6 @@ use super::super::window::menubar::MenubarImplementedEditor;
 use super::super::window::EchidnaWindow;
 use crate::prelude::*;
 
-use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 
 use gtk::Application;
