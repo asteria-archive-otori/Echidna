@@ -15,8 +15,12 @@ pub mod lib;
 use app::EchidnaEditor;
 use components::app;
 use gtk::prelude::ApplicationExtManual;
+use prelude::*;
 
 fn main() {
+    // Register and include resources
+    gio::resources_register_include!("echidna.gresource").expect("Failed to register resources.");
+
     let app = EchidnaEditor::default();
 
     std::process::exit(app.run());
