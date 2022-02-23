@@ -4,7 +4,7 @@
 
 use crate::components::editor::EchidnaCoreEditor;
 use crate::prelude::*;
-use std::error::Error;
+use std::{error::Error, fmt};
 
 use glib::clone;
 use gtk::{subclass::prelude::*, FileChooserAction, FileChooserNative, Label, ResponseType};
@@ -12,9 +12,13 @@ use sourceview::{prelude::*, File};
 
 pub trait FileImplementedEditor {
     fn action_open_file(&self) -> Result<(), Box<dyn Error>>;
-    fn open_file(tab_bar: &adw::TabBar, file: gio::File) -> Result<(), Box<dyn Error>>;
+    fn open_file(
+        tab_bar: &adw::TabBar,
+        file_location: gio::File,
+        app: Option<&adw::Application>,
+    ) -> Result<(), Box<dyn Error>>;
     fn action_save_file_as(&self) -> Result<(), Box<dyn Error>>;
-    fn action_new_file(&self) -> Result<adw::TabPage, glib::BoolError>;
+    fn action_new_file(&self) -> Result<adw::TabPage, Box<dyn Error>>;
     fn action_save_file(&self) -> Result<(), Box<dyn Error>>;
 }
 
@@ -59,7 +63,14 @@ impl FileImplementedEditor for super::EchidnaWindow {
 
                     if response == ResponseType::Accept {
                         let file = dialog.file().expect("");
-                        Self::open_file(&super::imp::EchidnaWindow::from_instance(&window).tab_bar, file);
+                        Self::open_file(
+                            &super::imp::EchidnaWindow::from_instance(&window).tab_bar, file,
+                            Some(
+                                &window.application().expect("No application in window")
+                                    .downcast::<adw::Application>()
+                                    .expect("Application is not AdwApplication"),
+                            ),
+                        );
 
                     } else {
                         println!("{:?}", response);
@@ -75,9 +86,13 @@ impl FileImplementedEditor for super::EchidnaWindow {
         }
     }
 
-    fn open_file(tab_bar: &adw::TabBar, file_location: gio::File) -> Result<(), Box<dyn Error>> {
+    fn open_file(
+        tab_bar: &adw::TabBar,
+        file_location: gio::File,
+        app: Option<&adw::Application>,
+    ) -> Result<(), Box<dyn Error>> {
         let file = File::builder().location(&file_location).build();
-        let editor_page = EchidnaCoreEditor::new(Some(file));
+        let editor_page = EchidnaCoreEditor::new(Some(file), app);
         match editor_page {
             Ok(editor_page) => {
                 let view = tab_bar.view().expect("No view in tab bar");
@@ -142,8 +157,17 @@ impl FileImplementedEditor for super::EchidnaWindow {
         }
     }
 
-    fn action_new_file(&self) -> Result<adw::TabPage, glib::BoolError> {
-        match EchidnaCoreEditor::new(None) {
+    fn action_new_file(&self) -> Result<adw::TabPage, Box<dyn Error>> {
+        match EchidnaCoreEditor::new(
+            None,
+            Some(
+                &self
+                    .application()
+                    .expect("No application in window")
+                    .downcast::<adw::Application>()
+                    .expect("Application is not AdwApplication"),
+            ),
+        ) {
             Ok(editor) => {
                 let tab_bar = &self.to_imp().tab_bar;
                 let view = tab_bar.view().expect("No view in tab bar");
@@ -153,7 +177,7 @@ impl FileImplementedEditor for super::EchidnaWindow {
 
                 Ok(page)
             }
-            Err(e) => Err(e),
+            Err(e) => Err(Box::new(e)),
         }
     }
 

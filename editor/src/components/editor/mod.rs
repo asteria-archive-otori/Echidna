@@ -5,7 +5,7 @@
 pub mod imp;
 use crate::prelude::*;
 use gio::Cancellable;
-use gtk::subclass::prelude::*;
+use gtk::{glib::clone, subclass::prelude::*};
 use sourceview::{prelude::*, Buffer, FileLoader, FileSaver, LanguageManager};
 use std::{error::Error, fmt};
 
@@ -14,9 +14,20 @@ glib::wrapper! {
     @extends gtk::Box, gtk::Widget,
     @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Orientable;
 }
-
+fn set_scheme(buffer: &sourceview::Buffer, is_dark: bool) {
+    let style_manager = sourceview::StyleSchemeManager::default();
+    // Set the scheme to Adwaita by default.
+    let default_scheme = match is_dark {
+        true => "Adwaita-dark",
+        false => "Adwaita",
+    };
+    buffer.set_style_scheme(style_manager.scheme(default_scheme).as_ref());
+}
 impl EchidnaCoreEditor {
-    pub fn new(file: Option<sourceview::File>) -> Result<Self, glib::BoolError> {
+    pub fn new(
+        file: Option<sourceview::File>,
+        app: Option<&adw::Application>,
+    ) -> Result<Self, glib::BoolError> {
         let this: Result<Self, glib::BoolError> = glib::Object::new(&[]);
 
         match this {
@@ -46,6 +57,15 @@ impl EchidnaCoreEditor {
                                 content_type.to_string()
                             );
                             let buffer = this_imp.sourceview.buffer().downcast::<Buffer>().expect("Cannot downcast the sourceview's buffer. Maybe the sourceview's buffer is not IsA<sourceview::Buffer>.");
+
+                            if app.is_some() {
+                                let manager = app.unwrap().style_manager();
+                                set_scheme(&buffer, manager.is_dark());
+                                manager.connect_dark_notify(clone!(@weak buffer =>
+                                    move |manager|{
+                                    set_scheme(&buffer, manager.is_dark());
+                                }));
+                            }
                             let language_manager = LanguageManager::new();
                             let language = language_manager.guess_language(
                                 Some(&info.name().to_str().expect(
