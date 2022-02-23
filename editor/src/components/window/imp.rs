@@ -8,7 +8,7 @@ use gtk::CompositeTemplate;
 use std::cell::RefCell;
 
 #[derive(Debug, Default, CompositeTemplate)]
-#[template(file = "./window.ui")]
+#[template(resource = "/io/fortressia/Echidna/window.ui")]
 pub struct EchidnaWindow {
     #[template_child]
     pub tab_bar: TemplateChild<adw::TabBar>,

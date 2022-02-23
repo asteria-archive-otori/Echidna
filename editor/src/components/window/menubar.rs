@@ -17,7 +17,7 @@ impl MenubarImplementedEditor for EchidnaWindow {
         let app = self
             .application()
             .expect("self does not have an application set.");
-        let menubuilder = gtk::Builder::from_string(include_str!("./menu.ui"));
+        let menubuilder = gtk::Builder::from_resource("/io/fortressia/echidna/menu.ui");
         let menubar: MenuModel = menubuilder
             .object("menu")
             .expect("Could not get object 'menu' from builder.");

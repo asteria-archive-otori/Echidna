@@ -90,7 +90,6 @@ impl EchidnaCoreEditor {
     }
 
     pub fn save_file(&self, save_as: Option<&gio::File>) -> Result<(), Box<dyn Error>> {
-        let window_imp = self.to_imp();
         let buffer = self.to_imp().sourceview.buffer().downcast::<Buffer>();
 
         match buffer {
