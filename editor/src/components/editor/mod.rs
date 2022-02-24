@@ -35,7 +35,7 @@ impl EchidnaCoreEditor {
                 let this_imp = this.to_imp();
                 // Without cloning it, for some reasons the Rust compiler complains about &this.to_imp().sourceview not being IsA<sourceview::View>
                 this_imp.minimap.set_view(&this_imp.sourceview.clone());
-
+                let buffer = this_imp.sourceview.buffer().downcast::<Buffer>().expect("Cannot downcast the sourceview's buffer. Maybe the sourceview's buffer is not IsA<sourceview::Buffer>.");
                 match file {
                     Some(file) => {
                         let file_location = file.location();
@@ -56,16 +56,7 @@ impl EchidnaCoreEditor {
                                 "file",
                                 content_type.to_string()
                             );
-                            let buffer = this_imp.sourceview.buffer().downcast::<Buffer>().expect("Cannot downcast the sourceview's buffer. Maybe the sourceview's buffer is not IsA<sourceview::Buffer>.");
 
-                            if app.is_some() {
-                                let manager = app.unwrap().style_manager();
-                                set_scheme(&buffer, manager.is_dark());
-                                manager.connect_dark_notify(clone!(@weak buffer =>
-                                    move |manager|{
-                                    set_scheme(&buffer, manager.is_dark());
-                                }));
-                            }
                             let language_manager = LanguageManager::new();
                             let language = language_manager.guess_language(
                                 Some(&info.name().to_str().expect(
@@ -94,6 +85,15 @@ impl EchidnaCoreEditor {
                         }
                     }
                     None => {}
+                }
+
+                if app.is_some() {
+                    let manager = app.unwrap().style_manager();
+                    set_scheme(&buffer, manager.is_dark());
+                    manager.connect_dark_notify(clone!(@weak buffer =>
+                        move |manager|{
+                        set_scheme(&buffer, manager.is_dark());
+                    }));
                 }
                 Ok(this)
             }
