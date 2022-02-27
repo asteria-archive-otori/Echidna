@@ -8,9 +8,19 @@
   <template class="EchidnaSidebar">
     <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
     <child>
-      <object class="GtkStackSidebar">
-        <property name="stack">sidebar_stack</property>
+      <object class="GtkBox">
+        <style>
+          <class name="activitybar"/>
+        </style>
+        <child>
+          <object class="GtkStackSwitcher">
+            <property name="stack">sidebar_stack</property>
+            <property name="orientation">vertical</property>
+            <property name="valign">GTK_ALIGN_START</property>
+          </object>
+        </child>
       </object>
+
     </child>
     <child>
       <object class="GtkStack" id="sidebar_stack">
@@ -20,7 +30,7 @@
           <object class="GtkStackPage">
             <!-- Explorer Tab -->
             <property name="name">explorer</property>
-            <property name="title">Explorer</property>
+            <property name="icon-name">folder-documents-symbolic</property>
             <property name="child">
               <object class="GtkBox">
                 <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
@@ -38,7 +48,7 @@
           <object class="GtkStackPage">
             <!-- Search Tab -->
             <property name="name">search</property>
-            <property name="title">Search</property>
+            <property name="icon-name">system-search-symbolic</property>
             <property name="child">
               <object class="GtkBox">
                 <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
@@ -55,7 +65,7 @@
           <object class="GtkStackPage">
             <!-- Extensions Tab -->
             <property name="name">extensions</property>
-            <property name="title">Extensions</property>
+            <property name="icon-name">application-x-addon-symbolic</property>
             <property name="child">
               <object class="GtkBox">
                 <property name="orientation">GTK_ORIENTATION_VERTICAL</property>

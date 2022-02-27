@@ -1,0 +1,9 @@
+stackswitcher .image-button {
+	min-width: 3rem;
+	min-height: 3rem;
+	-gtk-icon-size: 2rem;
+}
+
+.activitybar {
+	border-right: 0.1rem solid @borders;
+}
