@@ -8,7 +8,9 @@ use gtk::CompositeTemplate;
 
 #[derive(Default, CompositeTemplate)]
 #[template(resource = "/io/fortressia/Echidna/sidebar.ui")]
-pub struct EchidnaSidebar {}
+pub struct EchidnaSidebar {
+    pub profile_button: TemplateChild<gtk::MenuButton>,
+}
 
 #[glib::object_subclass]
 impl ObjectSubclass for EchidnaSidebar {

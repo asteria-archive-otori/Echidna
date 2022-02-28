@@ -18,12 +18,10 @@ glib::wrapper! {
 
 impl EchidnaWindow {
     pub fn new<P: IsA<gtk::Application>>(application: &P) -> Self {
-        let object = glib::Object::new(&[("application", &application)]);
+        let win: Self =
+            glib::Object::new(&[("application", &application)]).expect("can't make window");
 
-        match object {
-            Ok(o) => o,
-            Err(e) => panic!("Error in making EchidnaApplication {}", e),
-        }
+        win
     }
 
     pub fn to_imp(&self) -> &imp::EchidnaWindow {

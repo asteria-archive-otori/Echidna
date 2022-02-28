@@ -9,8 +9,9 @@
     <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
     <child>
       <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <style>
-          <class name="activitybar"/>
+          <class name="activitybar" />
         </style>
         <child>
           <object class="GtkStackSwitcher">
@@ -19,67 +20,137 @@
             <property name="valign">GTK_ALIGN_START</property>
           </object>
         </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="valign">GTK_ALIGN_END</property>
+            <property name="vexpand">1</property>
+            <child>
+              <object class="GtkMenuButton" id="profile-button">
+                <child>
+                  <object class="AdwAvatar" id="avatar">
+                    <property name="show-initials">1</property>
+                  </object>
+                </child>
+                <property name="direction">GTK_ARROW_LEFT</property>
+                <!-- For some reasons I had to put the popover here, which sucks because this file is 
+                     overcrowded already but the following error comes out when trying to split it:
+
+                     thread 'main' panicked at 'assertion failed: !self.ptr.is_null()', /home/nefomemes/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk4-0.4.6/src/subclass/widget.rs:1310:13
+                    -->
+                <property name="popover">
+                  <object class="GtkPopover" id="user-popover">
+
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="AdwAvatar" id="popover-avatar">
+                            <property name="show-initials">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                          
+                            <property name="vexpand">1</property>
+                            <property name="hexpand">1</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label">User</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton">
+                            <property name="hexpand">1</property>
+                            <property name="icon-name">avatar-default-symbolic</property>
+                            <property name="label">View Profile</property>
+                          </object>
+                        </child>
+                      </object>
+
+                    </child>
+
+
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">emblem-system-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
 
     </child>
     <child>
-      <object class="GtkStack" id="sidebar_stack">
-        <property name="hhomogeneous">1</property>
-        <property name="width-request">170</property>
-        <child>
-          <object class="GtkStackPage">
-            <!-- Explorer Tab -->
-            <property name="name">explorer</property>
-            <property name="icon-name">folder-documents-symbolic</property>
-            <property name="child">
-              <object class="GtkBox">
-                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">Explorer</property>
-                  </object>
-                </child>
-              </object>
-            </property>
+      <object class="GtkOverlay" id="stack_box">
 
-          </object>
-        </child>
         <child>
-          <object class="GtkStackPage">
-            <!-- Search Tab -->
-            <property name="name">search</property>
-            <property name="icon-name">system-search-symbolic</property>
-            <property name="child">
-              <object class="GtkBox">
-                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">Search</property>
+          <object class="GtkStack" id="sidebar_stack">
+            <property name="hhomogeneous">1</property>
+            <property name="width-request">170</property>
+            <child>
+              <object class="GtkStackPage">
+                <!-- Explorer Tab -->
+                <property name="name">explorer</property>
+                <property name="icon-name">folder-documents-symbolic</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">Explorer</property>
+                      </object>
+                    </child>
                   </object>
-                </child>
-              </object>
-            </property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkStackPage">
-            <!-- Extensions Tab -->
-            <property name="name">extensions</property>
-            <property name="icon-name">application-x-addon-symbolic</property>
-            <property name="child">
-              <object class="GtkBox">
-                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">Extensions</property>
-                  </object>
-                </child>
-              </object>
-            </property>
+                </property>
 
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <!-- Search Tab -->
+                <property name="name">search</property>
+                <property name="icon-name">system-search-symbolic</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">Search</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <!-- Extensions Tab -->
+                <property name="name">extensions</property>
+                <property name="icon-name">application-x-addon-symbolic</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">Extensions</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+
+              </object>
+            </child>
           </object>
         </child>
       </object>
+
     </child>
 
   </template>

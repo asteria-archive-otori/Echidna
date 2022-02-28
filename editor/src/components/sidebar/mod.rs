@@ -3,6 +3,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 pub mod imp;
+
+use gtk::subclass::prelude::ObjectSubclassExt;
+
 use crate::prelude::*;
 glib::wrapper! {
     pub struct EchidnaSidebar(ObjectSubclass<imp::EchidnaSidebar>)
