@@ -1,3 +1,4 @@
+use crate::prelude::*;
 use glib::subclass::prelude::*;
 
 pub trait IsSubclassImplOf<A: glib::IsA<glib::Object>> {

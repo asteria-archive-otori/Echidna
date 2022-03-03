@@ -1,14 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-
-use gtk::prelude::*;
+use crate::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::CompositeTemplate;
 use std::cell::RefCell;
 
 #[derive(Debug, Default, CompositeTemplate)]
-#[template(file = "./window.ui")]
+#[template(resource = "/io/fortressia/Echidna/window.ui")]
 pub struct EchidnaWindow {
     #[template_child]
     pub notebook: TemplateChild<gtk::Notebook>,

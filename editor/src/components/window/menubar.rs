@@ -1,12 +1,11 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-
 use super::file::FileImplementedEditor;
 use super::EchidnaWindow;
+use crate::prelude::*;
 use gio::{MenuModel, SimpleAction};
 use glib::clone;
-use gtk::prelude::*;
 use gtk::AboutDialog;
 
 pub trait MenubarImplementedEditor {
@@ -18,7 +17,7 @@ impl MenubarImplementedEditor for EchidnaWindow {
         let app = self
             .application()
             .expect("self does not have an application set.");
-        let menubuilder = gtk::Builder::from_string(include_str!("./menu.ui"));
+        let menubuilder = gtk::Builder::from_resource("/io/fortressia/Echidna/menu.ui");
         let menubar: MenuModel = menubuilder
             .object("menu")
             .expect("Could not get object 'menu' from builder.");
