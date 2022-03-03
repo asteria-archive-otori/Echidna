@@ -38,6 +38,7 @@ To start, you'll need the following dependencies available in the environment:
 Echidna Code is not optimized to run on systems that don't have the latest system libraries (Arch user here). You might not even able to compile it on those systems, just like a friend of mine:
 
 ![](https://codeberg.org/EchidnaHQ/echidna/attachments/300f2211-e19d-4cc4-90f3-80d8b0c6587d)
+
 *See issue [#40](https://codeberg.org/EchidnaHQ/echidna/issues/40). Credit to [eramne](https://twitter.com/eramne2).*
 
 If you went into these problems, you need to install the packages either from source or from Arch Linux, and tell pkg-config to use them instead of your system libraries.
@@ -64,4 +65,4 @@ I'm interested to port GDK to Android and the Web (without the current state of 
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed in the [`LICENSE`](./LICENSE) file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-*Credits to [Dogehouse](https://github.com/benawad/dogehouse) for the README template*
+*Credits to [Dogehouse](https://github.com/benawad/dogehouse) for the README template.*
