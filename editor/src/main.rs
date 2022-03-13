@@ -5,10 +5,14 @@ pub mod prelude {
     pub use super::components::prelude::*;
     pub use super::lib::prelude::*;
     pub use adw::prelude::*;
+
     pub use gtk::gdk;
     pub use gtk::gio;
     pub use gtk::glib;
     pub use gtk::prelude::*;
+
+    pub use adw::subclass::prelude::*;
+    pub use gtk::subclass::prelude::*;
 }
 
 mod components;

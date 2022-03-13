@@ -5,7 +5,7 @@
 use crate::prelude::*;
 use glib::{ParamFlags, ParamSpec, ParamSpecObject, Value};
 
-use gtk::{subclass::prelude::*, CompositeTemplate};
+use gtk::CompositeTemplate;
 use once_cell::sync::Lazy;
 use std::cell::RefCell;
 

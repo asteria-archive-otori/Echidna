@@ -4,10 +4,10 @@
 
 use crate::components::editor::EchidnaCoreEditor;
 use crate::prelude::*;
-use std::{error::Error, fmt};
+use std::error::Error;
 
 use glib::clone;
-use gtk::{subclass::prelude::*, FileChooserAction, FileChooserNative, Label, ResponseType};
+use gtk::{FileChooserAction, FileChooserNative, ResponseType};
 use sourceview::{prelude::*, File};
 
 pub trait FileImplementedEditor {
