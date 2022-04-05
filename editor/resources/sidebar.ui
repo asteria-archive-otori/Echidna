@@ -78,7 +78,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="settings_button"> 
                 <property name="icon-name">emblem-system-symbolic</property>
               </object>
             </child>
