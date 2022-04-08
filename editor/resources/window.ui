@@ -3,7 +3,7 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
 <interface>
-  <requires lib="gtk" version="4.0" />
+  <requires lib="gtk" version="4.0"/>
   <template class="EchidnaWindow">
     <property name="title">Echidna Code Editor</property>
     <property name="default-width">800</property>
@@ -12,35 +12,55 @@
       <object class="GtkBox" id="echidna-root">
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkBox" id="bars-box">
-            <property name="vexpand">1</property>
+          <object class="AdwHeaderBar"></object>
+        </child>
+        <child>
+          <object class="GtkBox" id="main-ui">
+            <property name="orientation">vertical</property>
             <child>
-              <object class="EchidnaSidebar" id="sidebar"></object>
-            </child>
-            <child>
-              <placeholder />
-            </child>
-            <child>
-              <!-- <object class="GtkGrid" id="editor-tabs">
+              <object class="GtkBox" id="bars-box">
+                <property name="vexpand">1</property>
+                <child>
+                  <object class="EchidnaSidebar" id="sidebar"></object>
+                </child>
+                <child>
+                  <placeholder />
+                </child>
+                <child>
+                  <!-- <object class="GtkGrid" id="editor-tabs">
                 <property name="hexpand">1</property>
                 <child>
                 -->
-              <object class="GtkNotebook" id="notebook">
-                <property name="hexpand">1</property>
-              </object>
-              <!-- </child>
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="AdwTabBar" id="tab_bar">
+                        <property name="hexpand">1</property>
+                        <property name="view">tab_view</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwTabView" id="tab_view">
+                        <property name="vexpand">1</property>
+                      </object>
+                    </child>
+                  </object>
+
+                </child>
+                <!-- </child>
               </object> -->
+              </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkStatusbar" id="status-bar">
-            <property name="margin-start">10</property>
-            <property name="margin-end">10</property>
-            <property name="margin-start">10</property>
-            <property name="margin-end">10</property>
-            <property name="margin-top">6</property>
-            <property name="margin-bottom">6</property>
+            <child>
+              <object class="GtkStatusbar" id="status-bar">
+                <property name="margin-start">10</property>
+                <property name="margin-end">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-end">10</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">6</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
