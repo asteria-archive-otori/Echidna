@@ -6,7 +6,7 @@ use gtk::subclass::prelude::*;
 use gtk::CompositeTemplate;
 
 #[derive(Default, CompositeTemplate)]
-#[template(file = "./tab-label.ui")]
+#[template(resource = "/io/fortressia/Echidna/tab-label.ui")]
 pub struct TabLabel {
     #[template_child]
     pub button: TemplateChild<gtk::Button>,

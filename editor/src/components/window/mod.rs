@@ -37,9 +37,11 @@ impl EchidnaWindow {
 
     pub fn get_current_tab<A: IsA<gtk::Widget>>(&self) -> Result<A, Box<dyn Error>> {
         let window_imp = self.to_imp();
-        let nth = window_imp.notebook.current_page();
+        let tab_bar = &window_imp.tab_bar;
+        let view = tab_bar.view().expect("No view in tab barr");
+        let page = view.selected_page();
 
-        match nth {
+        match page {
             None => {
                 #[derive(Debug)]
                 struct Error {}
@@ -54,32 +56,25 @@ impl EchidnaWindow {
 
                 Err(Box::new(Error {}))
             }
-            Some(nth) => {
-                let page = window_imp
-                    .notebook
-                    .nth_page(Some(nth))
-                    .expect("Couldn't get the page of the current index.");
-
-                match page.downcast::<A>() {
-                    Ok(page) => Ok(page),
-                    Err(widget) => {
-                        #[derive(Debug)]
-                        struct Error {
-                            widget: gtk::Widget,
-                        }
-
-                        impl std::error::Error for Error {}
-
-                        impl fmt::Display for Error {
-                            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                                write!(f, "Cannot downcast {:#?} to type parameter A. Maybe it's not in the type you are looking for.", self.widget)
-                            }
-                        }
-
-                        Err(Box::new(Error { widget }))
+            Some(page) => match page.child().downcast::<A>() {
+                Ok(page) => Ok(page),
+                Err(widget) => {
+                    #[derive(Debug)]
+                    struct Error {
+                        widget: gtk::Widget,
                     }
+
+                    impl std::error::Error for Error {}
+
+                    impl fmt::Display for Error {
+                        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                            write!(f, "Cannot downcast {:#?} to type parameter A. Maybe it's not in the type you are looking for.", self.widget)
+                        }
+                    }
+
+                    Err(Box::new(Error { widget }))
                 }
-            }
+            },
         }
     }
 }
