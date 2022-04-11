@@ -23,11 +23,6 @@ impl EchidnaWindow {
         let window: Self = glib::Object::new(&[("application", &application)])
             .expect("Error in making EchidnaWindow");
 
-        window.connect_show(glib::clone!(@weak window =>
-            move |_| {
-                window.open_get_started();
-        }));
-
         window
     }
 

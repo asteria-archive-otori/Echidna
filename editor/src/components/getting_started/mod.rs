@@ -8,6 +8,8 @@ use glib::clone;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 
+use super::EchidnaWindow;
+
 glib::wrapper! {
     pub struct GettingStartedPage(ObjectSubclass<imp::GettingStartedPage>)
     @extends gtk::Box, gtk::Widget,
@@ -39,19 +41,5 @@ impl GettingStartedPage {
             }));
 
         self
-    }
-}
-
-pub trait GetStartedWindow {
-    fn open_get_started(&self);
-}
-
-impl GetStartedWindow for crate::components::EchidnaWindow {
-    fn open_get_started(&self) {
-        let page = GettingStartedPage::new();
-        page.setup(&self);
-        self.to_imp()
-            .notebook
-            .prepend_closable_page(&page, Some(&gtk::Label::new(Some(&"Getting Started"))));
     }
 }

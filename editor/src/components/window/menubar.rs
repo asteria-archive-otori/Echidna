@@ -121,16 +121,6 @@ impl MenubarImplementedEditor for EchidnaWindow {
             }));
         }
         {
-            let action_getting_started = SimpleAction::new("get-started", None);
-
-            self.add_action(&action_getting_started);
-
-            action_getting_started.connect_activate(clone!(@weak self as window =>
-            move |_action, _variant| {
-                window.open_get_started();
-            }));
-        }
-        {
             let action_new_file = SimpleAction::new("new-file", None);
 
             self.add_action(&action_new_file);
