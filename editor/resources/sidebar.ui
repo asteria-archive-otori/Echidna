@@ -13,64 +13,61 @@
       </object>
     </child>
     <child>
-      <object class="GtkStack" id="sidebar_stack">
-        <property name="hhomogeneous">1</property>
-        <property name="width-request">170</property>
+      <object class="GtkScrolledWindow">
         <child>
-          <object class="GtkStackPage">
-            <!-- Explorer Tab -->
-            <property name="name">explorer</property>
-            <property name="title">Explorer</property>
-            <property name="child">
-              <object class="GtkBox">
-                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">Explorer</property>
+          <object class="GtkStack" id="sidebar_stack">
+            <property name="hhomogeneous">1</property>
+            <property name="width-request">170</property>
+            <child>
+              <object class="GtkStackPage">
+                <!-- Explorer Tab -->
+                <property name="name">explorer</property>
+                <property name="title">Explorer</property>
+                <property name="child">
+                  <object class="GtkBox" id="explorer_page">
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                   </object>
-                </child>
+                </property>
               </object>
-            </property>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <!-- Search Tab -->
+                <property name="name">search</property>
+                <property name="title">Search</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">Search</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <!-- Extensions Tab -->
+                <property name="name">extensions</property>
+                <property name="title">Extensions</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">Extensions</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
 
-          </object>
-        </child>
-        <child>
-          <object class="GtkStackPage">
-            <!-- Search Tab -->
-            <property name="name">search</property>
-            <property name="title">Search</property>
-            <property name="child">
-              <object class="GtkBox">
-                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">Search</property>
-                  </object>
-                </child>
               </object>
-            </property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkStackPage">
-            <!-- Extensions Tab -->
-            <property name="name">extensions</property>
-            <property name="title">Extensions</property>
-            <property name="child">
-              <object class="GtkBox">
-                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label">Extensions</property>
-                  </object>
-                </child>
-              </object>
-            </property>
-
+            </child>
           </object>
         </child>
       </object>
     </child>
-
   </template>
 </interface>

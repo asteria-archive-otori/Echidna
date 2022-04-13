@@ -142,5 +142,16 @@ impl MenubarImplementedEditor for EchidnaWindow {
                 }
             ));
         }
+        {
+            let action = SimpleAction::new("open-folder", None);
+
+            self.add_action(&action);
+
+            action.connect_activate(clone!(@weak self as window =>
+                move |_, _| {
+                    window.action_open_folder();
+                }
+            ));
+        }
     }
 }

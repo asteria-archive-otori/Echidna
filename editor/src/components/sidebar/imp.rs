@@ -7,7 +7,10 @@ use gtk::CompositeTemplate;
 
 #[derive(Default, CompositeTemplate)]
 #[template(resource = "/io/fortressia/Echidna/sidebar.ui")]
-pub struct EchidnaSidebar {}
+pub struct EchidnaSidebar {
+    #[template_child]
+    pub explorer_page: TemplateChild<gtk::Box>,
+}
 
 #[glib::object_subclass]
 impl ObjectSubclass for EchidnaSidebar {

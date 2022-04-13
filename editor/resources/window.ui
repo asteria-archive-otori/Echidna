@@ -3,7 +3,7 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
 <interface>
-  <requires lib="gtk" version="4.0"/>
+  <requires lib="gtk" version="4.0" />
   <template class="EchidnaWindow">
     <property name="title">Echidna Code Editor</property>
     <property name="default-width">800</property>
@@ -12,7 +12,45 @@
       <object class="GtkBox" id="echidna-root">
         <property name="orientation">vertical</property>
         <child>
-          <object class="AdwHeaderBar"></object>
+          <object class="AdwHeaderBar">
+            <child>
+              <object class="AdwSplitButton" id="split_button">
+                <property name="label">Open</property>
+                <property name="tooltip-text">Open a file or folder</property>
+                <property name="menu-model">
+                  <menu>
+                    <section>
+                      <item>
+                        <attribute name="action">win.open-new-window</attribute>
+                        <attribute name="label">Open in a new window</attribute>
+                      </item>
+                      <item>
+                        <attribute name="label">Open an empty window</attribute>
+                        <attribute name="action">app.new-window</attribute>
+                        <attribute></attribute>
+                      </item>
+                    </section>
+                  </menu>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwSplitButton" id="new-file">
+                <property name="icon-name">tab-new-symbolic</property>
+                <property name="tooltip-text">Create a new file</property>
+                <property name="menu-model">
+                  <menu>
+                    <section>
+                      <item>
+                        <attribute name="label">New Folder</attribute>
+                        <attribute name="action">win.new-folder</attribute>
+                      </item>
+                    </section>
+                  </menu>
+                </property>
+              </object>
+            </child>
+          </object>
         </child>
         <child>
           <object class="GtkBox" id="main-ui">

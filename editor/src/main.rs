@@ -21,7 +21,8 @@ pub mod lib;
 use gtk::prelude::ApplicationExtManual;
 use prelude::*;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     // Register and include resources
     gio::resources_register_include!("echidna.gresource").expect("Failed to register resources.");
 

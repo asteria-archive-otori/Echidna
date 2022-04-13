@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="GtkListItem">
+        <property name="child">
+            <object class="GtkExpander">
+                <binding name="list-row">
+                    <lookup name="item">GtkListItem</lookup>
+                </binding>
+                <child>
+                    <object class="GtkLabel">
+                        <binding name="label">
+                            <lookup name="file_name">
+                                <lookup name="item">GtkListItem</lookup>
+                            </lookup>
+                        </binding>
+                    </object>
+                </child>
+            </object>
+        </property>
+    </template>
+</interface>

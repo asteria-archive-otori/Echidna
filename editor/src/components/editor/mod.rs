@@ -5,7 +5,7 @@
 pub mod imp;
 use crate::prelude::*;
 use gio::Cancellable;
-use gtk::{glib::clone, subclass::prelude::*};
+use gtk::glib::clone;
 use sourceview::{prelude::*, Buffer, FileLoader, FileSaver, LanguageManager};
 use std::{error::Error, fmt};
 

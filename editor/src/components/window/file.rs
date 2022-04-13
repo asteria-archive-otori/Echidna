@@ -2,13 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-use crate::components::editor::EchidnaCoreEditor;
+use crate::components::{editor::EchidnaCoreEditor, WorkspaceView};
 use crate::prelude::*;
 use std::error::Error;
 
 use glib::clone;
+use gtk::gio::File;
 use gtk::{FileChooserAction, FileChooserNative, ResponseType};
-use sourceview::{prelude::*, File};
+use sourceview::prelude::*;
 
 pub trait FileImplementedEditor {
     fn action_open_file(&self) -> Result<(), Box<dyn Error>>;
@@ -20,6 +21,9 @@ pub trait FileImplementedEditor {
     fn action_save_file_as(&self) -> Result<(), Box<dyn Error>>;
     fn action_new_file(&self) -> Result<adw::TabPage, Box<dyn Error>>;
     fn action_save_file(&self) -> Result<(), Box<dyn Error>>;
+
+    fn action_open_folder(&self) -> Result<(), Box<dyn Error>>;
+    fn open_folder(&self, file: File) -> Result<(), Box<dyn Error>>;
 }
 
 impl FileImplementedEditor for super::EchidnaWindow {
@@ -91,7 +95,7 @@ impl FileImplementedEditor for super::EchidnaWindow {
         file_location: gio::File,
         app: Option<&adw::Application>,
     ) -> Result<(), Box<dyn Error>> {
-        let file = File::builder().location(&file_location).build();
+        let file = sourceview::File::builder().location(&file_location).build();
         let editor_page = EchidnaCoreEditor::new(Some(file), app);
         match editor_page {
             Ok(editor_page) => {
@@ -199,5 +203,59 @@ impl FileImplementedEditor for super::EchidnaWindow {
             }
             Err(e) => Err(e),
         }
+    }
+
+    fn action_open_folder(&self) -> Result<(), Box<dyn Error>> {
+        /*
+           Borrows self.to_imp()'s dialog Vector mutably, create a new dialog , and push that dialog into the vector.
+
+           This is required because we own the dialog and thus the dialog will be destroyed when this function has completed.
+        */
+        match self.to_imp().dialogs.try_borrow_mut() {
+            Ok(mut dialogs) => {
+                let dialog = gtk::FileChooserNative::new(
+                    Some("Open File"),
+                    Some(self),
+                    gtk::FileChooserAction::SelectFolder,
+                    Some("Open"),
+                    Some("Cancel"),
+                );
+                let dialog_clone = dialog.clone();
+                // The upcast() function moves the dialog variable, so we need to get a reference to the dialog trough dialog_clone
+                dialogs.push(dialog.upcast::<gtk::NativeDialog>());
+
+                dialog_clone.connect_response(clone!( @weak self as window, =>
+                move |dialog, response| {
+
+                    if response == ResponseType::Accept {
+                        match dialog.file() {
+                            Some(file) => window.open_folder(file),
+                            None => { Ok(()) }
+                        };
+
+
+
+                    } else {
+                        println!("{:?}", response);
+                    }
+                    dialog.destroy();
+
+                }));
+                dialog_clone.show();
+
+                Ok(())
+            }
+            Err(e) => Err(Box::new(e)),
+        }
+    }
+
+    fn open_folder(&self, file: gio::File) -> Result<(), Box<dyn Error>> {
+        let view = WorkspaceView::new();
+        let path = file.path().unwrap();
+        view.model().add_folder(path)?;
+
+        self.to_imp().sidebar.to_imp().explorer_page.prepend(&view);
+
+        Ok(())
     }
 }

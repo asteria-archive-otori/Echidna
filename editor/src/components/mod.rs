@@ -7,8 +7,11 @@ pub mod sidebar;
 // pub mod tab_label;
 pub mod window;
 
+pub mod workspace;
 pub use editor::EchidnaCoreEditor;
 pub use sidebar::EchidnaSidebar;
+pub use workspace::model::WorkspaceModel;
+pub use workspace::view::WorkspaceView;
 // pub use tab_label::TabLabel;
 pub use window::EchidnaWindow;
 

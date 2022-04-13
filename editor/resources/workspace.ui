@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+
+    <template class="EchWorkspaceView" parent="AdwBin">
+        <child>
+            <object class="GtkListView" id="view">
+                <property name="factory">
+                    <object class="GtkBuilderListItemFactory">
+                        <property name="resource">/io/fortressia/Echidna/workspace-factory.ui</property>
+                    </object>
+                </property>
+                <property name="model">
+
+                    <object class="GtkMultiSelection">
+                        <property name="model">
+                        <!--    <object class="GtkFilterListModel">
+                             <property name="model">-->
+                                <object class="EchWorkspaceModel" id="model"></object>
+
+                              <!--  </property>
+                            </object>-->
+                        </property>
+                    </object>
+
+
+                </property>
+            </object>
+        </child>
+    </template>
+</interface>
