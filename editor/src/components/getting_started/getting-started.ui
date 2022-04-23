@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at https://mozilla.org/MPL/2.0/.
+-->
+<interface>
+    <requires lib="gtk+" version="4.5.0" />
+    <template class="GettingStartedPage">
+        <style>
+            <class name="getstarted"/>
+        </style>
+        <property name="margin-top">40</property>
+        <property name="margin-bottom">40</property>
+        <property name="margin-start">40</property>
+        <property name="margin-end">40</property>
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+        <child>
+            <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                <property name="margin-bottom">40</property>
+                <child>
+                    <object class="GtkLabel">
+                        <property name="label">Echidna Code</property>
+                        <property name="css-name">h1</property>
+                        <property name="halign">GTK_ALIGN_START</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkLabel">
+                        <property name="label">Code editing. Remastered.</property>
+                        <property name="halign">GTK_ALIGN_START</property>
+                        <property name="css-name">h3</property>
+                    </object>
+                </child>
+
+            </object>
+        </child>
+
+        <child>
+            <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <child>
+                    <object class="GtkBox">
+                        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+
+                        <child>
+                            <object class="GtkLabel">
+                                <property name="label">Start</property>
+                                <property name="css-name">h5</property>
+                                <property name="halign">GTK_ALIGN_START</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkBox">
+                                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                                <child>
+                                    <object class="GtkButton" id="link_new_file">
+                                        <child>
+                                            <object class="GtkLabel">
+                                                <property name="label">New File</property>
+                                                <attributes>
+                                                    <attribute name="underline" value="PANGO_UNDERLINE_SINGLE" />
+                                                </attributes>
+                                                <property name="halign">GTK_ALIGN_START</property>
+                                            </object>
+                                        </child>
+
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkButton" id="link_open_file">
+                                        <property name="has-frame">0</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="icon-name">text-x-generic-symbolic</property>
+                                        <child>
+                                            <object class="GtkLabel">
+                                                <property name="label">Open File</property>
+                                                <attributes>
+                                                    <attribute name="underline" value="PANGO_UNDERLINE_SINGLE" />
+                                                </attributes>
+                                                <property name="halign">GTK_ALIGN_START</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkButton" id="link_open_folder">
+                                        <property name="has-frame">0</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="icon-name">folder-symbolic</property>
+                                        <child>
+                                            <object class="GtkLabel">
+                                                <property name="label">Open Folder</property>
+                                                <attributes>
+                                                    <attribute name="underline" value="PANGO_UNDERLINE_SINGLE" />
+                                                </attributes>
+
+                                                <property name="halign">GTK_ALIGN_START</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkButton" id="link_clone_git_repo">
+                                        <property name="has-frame">0</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="icon-name">folder-new-symbolic</property>
+                                        <child>
+                                            <object class="GtkLabel">
+                                                <property name="label">Clone Git Repository</property>
+                                                <attributes>
+                                                    <attribute name="underline" value="PANGO_UNDERLINE_SINGLE" />
+                                                </attributes>
+                                                <property name="halign">GTK_ALIGN_START</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+
+                            </object>
+
+                        </child>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkBox"></object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>
