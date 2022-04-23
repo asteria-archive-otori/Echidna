@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="EchVerticalTabBar">
+        <child>
+            <object class="GtkListView" id="list_view">
+                <property name="factory">
+                    <object class="GtkBuilderListItemFactory">
+                        <property name="resource">/com/fortressia/Libchidna/vtb-factory.ui</property>
+                        
+                    </object>
+                </property>
+            </object>
+        </child>
+    </template>
+</interface>

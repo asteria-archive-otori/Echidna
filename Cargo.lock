@@ -59,6 +59,7 @@ version = "0.1.0"
 dependencies = [
  "gtk4",
  "libadwaita",
+ "libchidna",
  "once_cell",
  "relative-path",
  "serde",
@@ -432,6 +433,15 @@ name = "libc"
 version = "0.2.119"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1bf2e165bb3457c8e098ea76f3e3bc9db55f87aa90d52d0e6be741470916aaa4"
+
+[[package]]
+name = "libchidna"
+version = "0.1.0"
+dependencies = [
+ "gtk4",
+ "libadwaita",
+ "once_cell",
+]
 
 [[package]]
 name = "memoffset"

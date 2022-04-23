@@ -20,7 +20,7 @@ use prelude::*;
 fn main() {
     // Register and include resources
     gio::resources_register_include!("echidna.gresource").expect("Failed to register resources.");
-
+    libchidna::init();
     let app = adw::Application::new(
         Some("io.fortressia.Echidna"),
         gio::ApplicationFlags::FLAGS_NONE,
