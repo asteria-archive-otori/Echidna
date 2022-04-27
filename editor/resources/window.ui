@@ -3,7 +3,7 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
 <interface>
-  <requires lib="gtk" version="4.0" />
+  <requires lib="gtk" version="4.0"/>
   <template class="EchidnaWindow">
     <property name="title">Echidna Code Editor</property>
     <property name="default-width">800</property>
@@ -31,40 +31,20 @@
                 <property name="hexpand">1</property>
                 <child>
                 -->
-                  <object class="GtkStack" id="editor_stack">
-            
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkStackPage">
-                        <property name="name">editor</property>
-                        <property name="child">
-                          <object class="GtkBox">
-                            <property name="orientation">vertical</property>
-                            <child>
-                              <object class="AdwTabBar" id="tab_bar">
-                                <property name="hexpand">1</property>
-                                <property name="view">tab_view</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="AdwTabView" id="tab_view">
-                                <property name="vexpand">1</property>
-                              </object>
-                            </child>
-                          </object>
-                        </property>
+                      <object class="AdwTabBar" id="tab_bar">
+                        <property name="hexpand">1</property>
+                        <property name="view">tab_view</property>
                       </object>
-
                     </child>
                     <child>
-                      <object class="GtkStackPage">
-                        <property name="name">getting-started</property>
-                        <property name="child">
-                          <object class="GettingStartedPage" id="getting_started"></object>
-                        </property>
+                      <object class="AdwTabView" id="tab_view">
+                        <property name="vexpand">1</property>
                       </object>
                     </child>
                   </object>
-
 
                 </child>
                 <!-- </child>

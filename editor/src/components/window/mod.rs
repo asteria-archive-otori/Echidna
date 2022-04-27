@@ -5,10 +5,8 @@
 pub mod file;
 pub mod imp;
 pub mod menubar;
-
 use crate::prelude::*;
 use glib::object::{Cast, IsA};
-use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use std::{error::Error, fmt};
 
@@ -20,10 +18,12 @@ glib::wrapper! {
 
 impl EchidnaWindow {
     pub fn new<P: IsA<gtk::Application>>(application: &P) -> Self {
-        let window: Self = glib::Object::new(&[("application", &application)])
-            .expect("Error in making EchidnaWindow");
+        let object = glib::Object::new(&[("application", &application)]);
 
-        window
+        match object {
+            Ok(o) => o,
+            Err(e) => panic!("Error in making EchidnaApplication {}", e),
+        }
     }
 
     pub fn to_imp(&self) -> &imp::EchidnaWindow {
