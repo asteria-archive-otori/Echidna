@@ -6,6 +6,5 @@
         <file compressed="true" preprocess="xml-stripblanks">editor.ui</file>
         <file compressed="true" preprocess="xml-stripblanks">tab-label.ui</file>
         <file compressed="true" preprocess="xml-stripblanks">menu.ui</file>
-        <file>style.css</file>
     </gresource>
 </gresources>

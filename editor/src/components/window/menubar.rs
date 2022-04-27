@@ -7,6 +7,7 @@ use crate::prelude::*;
 use gio::{MenuModel, SimpleAction};
 use glib::clone;
 use gtk::AboutDialog;
+
 pub trait MenubarImplementedEditor {
     fn setup_menubar(&self);
 }
@@ -116,8 +117,8 @@ impl MenubarImplementedEditor for EchidnaWindow {
             self.add_action(&action_save_file_as);
 
             action_save_file_as.connect_activate(clone!(@weak self as window =>
-            move |_action, _variant| {
-                window.action_save_file_as();
+                move |_action, _variant| {
+                    window.action_save_file_as();
             }));
         }
         {

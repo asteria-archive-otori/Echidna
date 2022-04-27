@@ -141,7 +141,7 @@
             <section>
                 <item>
                     <attribute name="label">Get Started</attribute>
-                    <attribute name="action">win.get-started</attribute>
+                    <attribute name="action">window.get-started</attribute>
                 </item>
                 <item>
                     <attribute name="label">Show All Commands</attribute>
