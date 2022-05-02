@@ -1,29 +1,39 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-use crate::prelude::*;
+ * tab_view, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * Copyright 2022 to Echidna Code contributors. All Rights Reserved
+ *
+ * List of authors:
+ * Nefo Fortressia <nefothingy@hotmail.com>
+ *
+ */
 
-use adw::TabView;
-use gtk::glib::{ParamFlags, ParamSpec, ParamSpecObject, Value};
-use gtk::subclass::prelude::*;
-use gtk::CompositeTemplate;
-use libchidna::vertical_tab_bar::VerticalTabBar;
+use crate::internal::prelude::*;
+use adw::{subclass::prelude::*, TabView};
+use gtk::ListView;
+use gtk::{
+    glib::{ParamFlags, ParamSpec, ParamSpecObject, Value},
+    subclass::prelude::*,
+    CompositeTemplate,
+};
 use once_cell::sync::Lazy;
 use std::cell::RefCell;
 
+use super::model::VerticalBarModel;
 #[derive(Default, CompositeTemplate)]
-#[template(resource = "/io/fortressia/Echidna/sidebar.ui")]
-pub struct EchidnaSidebar {
-    #[template_child]
-    vtb_bin: TemplateChild<gtk::Box>,
+#[template(resource = "/com/fortressia/Libchidna/vtb.ui")]
+pub struct VerticalTabBar {
     tab_view: RefCell<TabView>,
+    #[template_child]
+    list_view: TemplateChild<ListView>,
 }
 
 #[glib::object_subclass]
-impl ObjectSubclass for EchidnaSidebar {
-    const NAME: &'static str = "EchidnaSidebar";
-    type Type = super::EchidnaSidebar;
-    type ParentType = gtk::Box;
+impl ObjectSubclass for VerticalTabBar {
+    const NAME: &'static str = "EchVerticalTabBar";
+    type Type = super::VerticalTabBar;
+    type ParentType = adw::Bin;
 
     fn class_init(klass: &mut Self::Class) {
         Self::bind_template(klass);
@@ -34,10 +44,10 @@ impl ObjectSubclass for EchidnaSidebar {
     }
 }
 
-impl ObjectImpl for EchidnaSidebar {
-    fn constructed(&self, _obj: &Self::Type) {
-        self.vtb_bin
-            .append(&VerticalTabBar::new(&self.tab_view.borrow().clone()));
+impl ObjectImpl for VerticalTabBar {
+    fn constructed(&self, obj: &Self::Type) {
+        self.list_view
+            .set_model(Some(&VerticalBarModel::new(&obj.tab_view())));
     }
 
     fn properties() -> &'static [ParamSpec] {
@@ -71,5 +81,7 @@ impl ObjectImpl for EchidnaSidebar {
         }
     }
 }
-impl WidgetImpl for EchidnaSidebar {}
-impl BoxImpl for EchidnaSidebar {}
+
+impl WidgetImpl for VerticalTabBar {}
+
+impl BinImpl for VerticalTabBar {}

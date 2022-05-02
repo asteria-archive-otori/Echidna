@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="GtkListItem">
+        <property name="child">
+            <object class="GtkTreeExpander" id="expander">
+                <binding name="list-row">
+                    <lookup name="item">GtkListItem</lookup>
+                </binding>
+                <property name="child">
+                    <object class="GtkBox">
+                      
+                        <child>
+                            <object class="GtkLabel">
+                                <binding name="label">
+                                    <lookup name="title">
+                                        <lookup name="item">expander</lookup>
+                                    </lookup>
+                                </binding>
+                            </object>
+                        </child>
+
+                    </object>
+
+                </property>
+            </object>
+
+        </property>
+
+    </template>
+</interface>

@@ -21,7 +21,9 @@
               <object class="GtkBox" id="bars-box">
                 <property name="vexpand">1</property>
                 <child>
-                  <object class="EchidnaSidebar" id="sidebar"></object>
+                  <object class="EchidnaSidebar" id="sidebar">
+                    <property name="tab-view">tab-view</property>
+                  </object>
                 </child>
                 <child>
                   <placeholder />

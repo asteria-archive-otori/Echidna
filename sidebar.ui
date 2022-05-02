@@ -25,23 +25,7 @@
               <object class="GtkBox">
                 <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                 <child>
-                  <object class="GtkBox" id="vtb_bin">
-                    <property name="orientation">vertical</property>
-                    <style>
-                      <class name="sidebar-tab"/>
-                    </style>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="label" translatable="yes">Open Tabs</property>
-                        <style>
-                          <class name="heading"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                     
-                    </child>
-                  </object>
+                  
                 </child>
               </object>
             </property>
