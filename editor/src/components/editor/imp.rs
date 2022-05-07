@@ -10,7 +10,7 @@ use once_cell::sync::Lazy;
 use std::cell::RefCell;
 
 #[derive(Default, CompositeTemplate)]
-#[template(resource = "/io/fortressia/Echidna/editor.ui")]
+#[template(resource = "/io/fortressia/Echidna/components/editor/editor.ui")]
 pub struct EchidnaCoreEditor {
     #[template_child]
     pub minimap: TemplateChild<sourceview::Map>,

@@ -17,7 +17,8 @@ impl MenubarImplementedEditor for EchidnaWindow {
         let app = self
             .application()
             .expect("self does not have an application set.");
-        let menubuilder = gtk::Builder::from_resource("/io/fortressia/Echidna/menu.ui");
+        let menubuilder =
+            gtk::Builder::from_resource("/io/fortressia/Echidna/components/window/menu.ui");
         let menubar: MenuModel = menubuilder
             .object("menu")
             .expect("Could not get object 'menu' from builder.");
@@ -79,7 +80,7 @@ impl MenubarImplementedEditor for EchidnaWindow {
 
             act_report_issue.connect_activate(clone!(@weak self as win =>
                 move |_action, _variant| {
-                gtk::show_uri(Some(&win), "https://github.com/EchidnaHQ/Echidna/issues/new", gdk::CURRENT_TIME);
+                gtk::show_uri(Some(&win), "https://github.com/EchidnaHQ/Echidna/components/issues/new", gdk::CURRENT_TIME);
             }));
         }
         {
@@ -89,7 +90,7 @@ impl MenubarImplementedEditor for EchidnaWindow {
 
             act_search_feature_requests.connect_activate(clone!(@weak self as win =>
                 move |_action, _variant| {
-                gtk::show_uri(Some(&win), "https://github.com/EchidnaHQ/Echidna/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement", gdk::CURRENT_TIME);
+                gtk::show_uri(Some(&win), "https://github.com/EchidnaHQ/Echidna/components/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement", gdk::CURRENT_TIME);
             }));
         }
         {
