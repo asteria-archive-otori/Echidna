@@ -3,4 +3,7 @@ editor/src/config.rs
 /subprojects/*
 build
 !/subprojects/*.wrap
+# Flatpak
+.flatpak-builder
+build-dir
 
