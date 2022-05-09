@@ -1,2 +1,6 @@
 target
-src/config.rs
+editor/src/config.rs
+/subprojects/*
+build
+!/subprojects/*.wrap
+
