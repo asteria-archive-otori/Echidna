@@ -10,12 +10,6 @@ i18n = import('i18n')
 gnome = import('gnome')
 
 
-cargo_sources = files(
-  'Cargo.toml',
-  '../Cargo.lock',
-  '../Cargo.toml'
-)
-
 subdir('data')
 subdir('src')
 subdir('po')
