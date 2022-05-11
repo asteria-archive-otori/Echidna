@@ -13,12 +13,12 @@ if [ $BUILDTYPE = "release" ]
 then
     echo "RELEASE MODE"
     cargo build --manifest-path \
-        "$MESON_SOURCE_ROOT"/../Cargo.toml --release && \
+        "$MESON_SOURCE_ROOT"/editor/Cargo.toml --release && \
         cp "$CARGO_TARGET_DIR"/release/"$APP_BIN" "$OUTPUT"
 else
     echo "DEBUG MODE"
     cargo build --manifest-path \
-        "$MESON_SOURCE_ROOT"/../Cargo.toml && \
+        "$MESON_SOURCE_ROOT"/editor/Cargo.toml && \
         cp "$CARGO_TARGET_DIR"/debug/"$APP_BIN" "$OUTPUT"
 fi
 

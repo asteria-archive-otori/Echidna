@@ -23,13 +23,13 @@ configure_file(
 # Copy the config.rs output to the source directory.
 run_command(
   'cp',
-  join_paths(meson.project_build_root(), 'src', 'config.rs'),
-  join_paths(meson.project_source_root(), 'src', 'config.rs'),
+  join_paths(meson.project_build_root(), 'editor', 'src', 'config.rs'),
+  join_paths(meson.project_source_root(), 'editor', 'src', 'config.rs'),
   check: true
 )
 
 
-cargo_script = find_program(join_paths(meson.project_source_root(), 'build-aux/cargo.sh'))
+cargo_script = find_program(join_paths(meson.project_source_root(), 'editor', 'build-aux', 'cargo.sh'))
 cargo_release = custom_target(
   'cargo-build',
   build_by_default: true,
