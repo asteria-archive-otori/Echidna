@@ -9,6 +9,12 @@ i18n = import('i18n')
 
 gnome = import('gnome')
 
+dependency('gtk4')
+dependency('libadwaita-1')
+dependency('gio-2.0', version: '>=2.66')
+dependency('glib-2.0', version: '>=2.66')
+dependency('gtksourceview-5')
+
 
 subdir('data')
 subdir('src')
