@@ -6,4 +6,5 @@ build
 # Flatpak
 .flatpak-builder
 build-dir
-
+_build
+.flatpak
