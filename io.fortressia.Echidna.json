@@ -22,7 +22,8 @@
         ],
         "env" : {
             "RUST_BACKTRACE" : "1",
-            "RUST_LOG" : "echidna=debug"
+            "RUST_LOG" : "echidna=debug",
+            "CARGO_HOME":"~/.cargo"
         }
     },
     "cleanup" : [
