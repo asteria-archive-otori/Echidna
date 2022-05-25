@@ -30,7 +30,7 @@ We're still not ready to launch Echy yet so there are no pre-built packages yet!
 You can however build from the cute source code! See the [Build from Source](./README#building-from-source) section.
 ## Building from source
 
-The sections relevant are [Dependencies](#dependencies) and [Compiling](#compiling). On Windows, you need also see [](#building-in-windows).
+The sections relevant are [Dependencies](#dependencies) and [Compiling](#compiling). On Windows, you need also see [Building in Windows](#building-in-windows).
 
 If you're on Linux, just jump to [Building with Flatpak in Linux](#building-with-flatpak-in-linux). 
 Unless if you're looking to repackage Echidna. <3
@@ -73,14 +73,11 @@ On Linux, Echidna Code is generally not intended for use on a native distro. It'
 
 ### Building with Flatpak in Linux
 
+Firstly, install [Flatpak](https://flatpak.org/setup/) and [Flatpak Builder](https://docs.flatpak.org/en/latest/first-build.html).
 
 The official docs of Flatpak isn't great if you're looking to use it for development purposes, as many default parameters aren't suited for development purposes. 
 
-You should just stick to these two lovely angels: [GNOME Builder]() and [the Flatpak extension for Visual Studio Code](https://open-vsx.org/vscode/item?itemName=bilelmoussaoui.flatpak-vscode).
-
-
-
-To install, simply run the following command:
+You should just stick to these two lovely angels: [GNOME Builder](https://flathub.org/apps/details/org.gnome.Builder) and [the Flatpak extension for Visual Studio Code](https://open-vsx.org/vscode/item?itemName=bilelmoussaoui.flatpak-vscode). 
 
 ## FAQ
 
