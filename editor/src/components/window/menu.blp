@@ -1,0 +1,201 @@
+using Gtk 4.0;
+
+menu menu {
+    submenu {
+        label: _("File");
+
+        section {
+            item {
+                label: _("New File");
+                action: "win.new-file";
+            }
+              item {
+                label: _("New Window");
+                action: "app.new-window";
+            }
+        }
+
+        section {
+            item {
+                label: _("Open File");
+                action: "win.open-file";
+            }
+
+            item {
+                label: _("Open Folder in a New Window");
+                action: "win.open-folder";
+            }
+
+            item {
+                label: _("Open Workspace");
+                action: "win.open-workspace";
+            }
+        }
+        
+        section {
+            item {
+                label: _("Add Folder to This Window");
+                action: "win.add-folder-to-workspace";
+
+            }
+
+            item {
+                label: _("Save the Open Folders list As");
+                action: "win.save-workspace";
+            }
+
+            item {
+                label: _("Duplicate This Open Folders List");
+                action: "win.duplicate-workspace";
+            }
+        }
+
+        section {
+
+            item {
+                label: _("Save Current Tab");
+                action: "win.save";
+            }
+            
+            item {
+                label: _("Save Current Tab As");
+                action: "win.save-as";
+            }
+
+            item {
+                label: _("Save All");
+                action: "win.save-all";
+
+            }
+        }
+    }
+    submenu {
+
+        label: _("Edit");
+
+            section {
+
+                item {
+                    label: _("Undo");
+                    action: "win.undo";
+                }
+
+                item {
+                    label: _("Redo");
+                    action: "win.redo";
+
+                }
+            }
+            section {
+                item {
+                    label: _("Cut");
+                    action: "win.cut";
+
+                }
+            }
+        }
+    submenu {
+        label: _("Selection");
+
+        section {
+            item {
+                label: _("Select All");
+                action: "win.select-all";
+
+            }
+        }
+        
+    }
+        submenu {
+            label: _("View");
+
+            section {
+                item {
+                    label: _("Open Command Palette");
+
+                }
+            }
+        }
+        submenu {
+            label: _("Go");
+            
+            section {
+                item {
+                    label: _("Switch Editor");
+                    action: "win.switch-editor";
+
+                }
+            }
+        }
+    submenu {
+        label: _("Run");
+            
+            section {
+                item {
+                    label: _("Start Debugging");
+                    action: "win.start-debugging";
+
+                }
+            }
+        }
+
+    submenu {
+        label: _("Terminal");
+
+            section {
+                item {
+                    label: _("New Terminal");
+                    action: "win.new-terminal";
+
+                }
+            }
+        }
+        
+    submenu {
+        label: _("Help");
+            section {
+                item {
+                    label: _("Get Started");
+                    action: "window.get-started";
+
+                }
+                item {
+                    label: _("Show All Commands");
+                    action: "win.show-all-commands";
+
+                }
+                item {
+                    label: _("Documentation");
+                    action: "app.open-docs";
+
+                }
+            }
+            section {
+                item {
+                    label: _("View License");
+                    action: "app.view-license";
+
+                }
+            }
+            section {
+                item {
+                    label: _("Search Feature Requests");
+                    action: "app.search-feature-requests";
+
+                }
+                item {
+                    label: _("Report Issue");
+                    action: "app.report-issue";
+
+                }
+            }
+            section {
+                item {
+                    label: _("About");
+                    action: "app.about";
+
+                }
+            }
+        }
+
+}
