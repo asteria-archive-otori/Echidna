@@ -3,7 +3,8 @@ gnome = import('gnome')
 
 blueprints = custom_target('blueprints',
   input: files(
-    join_paths('components', 'editor', 'editor.blp')
+    join_paths('components', 'editor', 'editor.blp'),
+    join_paths('components', 'sidebar', 'sidebar.blp')
   ),
   output: '.',
   command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],
