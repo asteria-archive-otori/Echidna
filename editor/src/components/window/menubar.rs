@@ -62,16 +62,19 @@ impl MenubarImplementedEditor for EchidnaWindow {
         {
             let act_about: SimpleAction = SimpleAction::new("about", None);
             app.add_action(&act_about);
-            act_about.connect_activate(|_action, _value| {
-                let about_dialog: AboutDialog = AboutDialog::new();
-
-                about_dialog.set_license_type(gtk::License::Mpl20);
-                about_dialog.set_program_name(Some("Echidna Code Editor"));
-                about_dialog.set_website(Some("https://gitlab.com/EchidnaHQ/Echidna"));
-                about_dialog.set_authors(&["FortressValkriye"]);
-                about_dialog.set_copyright(Some("Made with by ❤️ Echidna contributors"));
-                about_dialog.set_visible(true);
-            });
+            act_about.connect_activate(clone!(@weak app => 
+                move |_action, _value| {
+                AboutDialog::builder()
+                .license_type(gtk::License::Mpl20)
+                .program_name("Echidna Code")
+                .website("https://github.com/EchidnaHQ/Echidna")
+                .authors(vec!["Nefo Fortressia".to_string()])
+                .copyright("Made with by ❤️ Echidna contributors")
+                .logo_icon_name(&app.application_id().unwrap())
+                .version(crate::config::VERSION)
+                .visible(true)
+                .build();
+            }));
         }
         {
             let act_report_issue = SimpleAction::new("report-issue", None);
