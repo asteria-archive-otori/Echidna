@@ -1,7 +1,7 @@
 #!/bin/sh
 
 export MESON_BUILD_ROOT="$1"
-export CARGO_HOME="$MESON_BUILD_ROOT/.cargo"
+export CARGO_HOME="$MESON_BUILD_ROOT/cargo-home"
 export MESON_SOURCE_ROOT="$2"
 export CARGO_TARGET_DIR="$MESON_BUILD_ROOT"/target
 export OUTPUT="$3"
