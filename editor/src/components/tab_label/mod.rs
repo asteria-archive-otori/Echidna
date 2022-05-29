@@ -18,7 +18,7 @@ impl TabLabel {
         let this: Self = glib::Object::new(&[]).expect("Failed to create 'TabLabel' component.");
 
         if let Some(tl) = tab_label {
-            this.prepend(tab_label);
+            this.prepend(tl);
         }
         
         this
