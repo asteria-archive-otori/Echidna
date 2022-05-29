@@ -17,13 +17,14 @@ impl TabLabel {
     pub fn new<U: IsA<gtk::Widget>>(tab_label: Option<&U>) -> Self {
         let this: Self = glib::Object::new(&[]).expect("Failed to create 'TabLabel' component.");
 
-        match tab_label {
-            Some(tab_label) => this.prepend(tab_label),
-            None => {}
+        if let Some(tl) = tab_label {
+            this.prepend(tab_label);
         }
+        
         this
     }
 
+    #[inline]
     pub fn to_imp(&self) -> &imp::TabLabel {
         imp::TabLabel::from_instance(self)
     }
