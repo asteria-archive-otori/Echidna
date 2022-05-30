@@ -4,7 +4,7 @@
 
 use crate::components::editor::EchidnaCoreEditor;
 use crate::prelude::*;
-use std::{error::Error, fmt};
+use std::error::Error;
 
 use glib::clone;
 use gtk::{subclass::prelude::*, FileChooserAction, FileChooserNative, Label, ResponseType};
