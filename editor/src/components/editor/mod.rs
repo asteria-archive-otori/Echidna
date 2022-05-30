@@ -83,7 +83,7 @@ impl EchidnaCoreEditor {
         }
 
         if let Some(a) = app {
-            let manager = a.unwrap().style_manager();
+            let manager = a.style_manager();
             set_scheme(&buffer, manager.is_dark());
             manager.connect_dark_notify(clone!(@weak buffer =>
                 move |manager|{
