@@ -184,7 +184,7 @@ impl FileImplementedEditor for super::EchidnaWindow {
     fn action_save_file(&self) -> Result<(), Box<dyn Error>> {
         let page: EchidnaCoreEditor = self.get_current_tab()?;
         match page.file() {
-            Some(_) => page.save_file(page.location()),
+            Some(_) => page.save_file(file.location()),
             None => self.action_save_file_as(),
         }
     }
