@@ -1,0 +1,19 @@
+{
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true,
+        "**/.hg/store/**": true,
+        ".flatpak/**": true,
+        "_build/**": true
+    },
+    "mesonbuild.configureOnOpen": false,
+    "mesonbuild.buildFolder": "_build",
+    
+    "rust-analyzer.runnables.cargoExtraArgs": [
+        "--target-dir=_build/src"
+    ],
+    "rust-analyzer.files.excludeDirs": [
+        ".flatpak"
+    ]
+}

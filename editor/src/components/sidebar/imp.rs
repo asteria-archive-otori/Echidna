@@ -7,7 +7,7 @@ use gtk::subclass::prelude::*;
 use gtk::CompositeTemplate;
 
 #[derive(Default, CompositeTemplate)]
-#[template(resource = "/io/fortressia/Echidna/sidebar.ui")]
+#[template(resource = "/io/fortressia/Echidna/components/sidebar/sidebar.ui")]
 pub struct EchidnaSidebar {}
 
 #[glib::object_subclass]

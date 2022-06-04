@@ -30,7 +30,11 @@ We use the standard [Commitlint](https://github.com/conventional-changelog/commi
 At the moment, we don't use any commit scopes yet for Echidna, mainly because that hasn't been thought, hehe.
 
 # PGP Signing
-To ensure that your commits are really from *you*, you're required to sign your commits with PGP signatures. If you're new to PGP, GitHub made [a tutorial on making a PGP key with GnuPG](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key) and [one on how to use it in your commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits), so do the instructions there and add the PGP public key to your Codeberg account, senpai!
+
+
+It's recommended that you sign your commits with GPG or SSH, for the lovely Verified badge on your commits!
+
+If you're new to PGP, GitHub made [a tutorial on making a PGP key with GnuPG](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key) and [one on how to use it in your commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits).
 
 # Licensing
 By sending your code for addition in Echidna Code, you agree with the [Developer Certificate of Origin](./DCO.txt) and the [Mozilla Public License version 2](./LICENSE) licensing.

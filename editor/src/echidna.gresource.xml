@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/io/fortressia/Echidna/">
+        <file compressed="true" preprocess="xml-stripblanks">components/window/window.ui</file>
+        <file compressed="true" preprocess="xml-stripblanks">components/sidebar/sidebar.ui</file>
+        <file compressed="true" preprocess="xml-stripblanks">components/editor/editor.ui</file>
+        <file compressed="true" preprocess="xml-stripblanks">components/tab_label/tab-label.ui</file>
+        <file compressed="true" preprocess="xml-stripblanks">components/window/menu.ui</file>
+    </gresource>
+</gresources>
