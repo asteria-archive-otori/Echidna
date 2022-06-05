@@ -1,6 +1,7 @@
 pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
 gnome = import('gnome')
 
+
 blueprints = custom_target('blueprints',
   input: files(
     join_paths('components', 'editor', 'editor.blp'),
@@ -17,7 +18,9 @@ gnome.compile_resources('echidna',
   gresource_bundle: true,
   install: true,
   install_dir: pkgdatadir,
+
   dependencies: blueprints,
+
 )
 
 conf = configuration_data()

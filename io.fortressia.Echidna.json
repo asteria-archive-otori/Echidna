@@ -17,13 +17,13 @@
     "build-options" : {
         "append-path" : "/usr/lib/sdk/rust-stable/bin",
         "build-args" : [
-            "--share=network",
-            "--filesystem=~/.cargo:rw"
+
+            "--share=network"
         ],
         "env" : {
             "RUST_BACKTRACE" : "1",
-            "RUST_LOG" : "echidna=debug",
-            "CARGO_HOME":"~/.cargo"
+            "RUST_LOG" : "echidna=debug"
+
         }
     },
     "cleanup" : [

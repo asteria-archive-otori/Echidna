@@ -9,9 +9,7 @@
     },
     "mesonbuild.configureOnOpen": false,
     "mesonbuild.buildFolder": "_build",
-    "mesonbuild.mesonPath": "./.flatpak/meson.sh",
-    "rust-analyzer.server.path": "./.flatpak/rust-analyzer.sh",
-    "rust-analyzer.runnables.overrideCargo": "./.flatpak/cargo.sh",
+
     "rust-analyzer.runnables.cargoExtraArgs": [
         "--target-dir=_build/src"
     ],

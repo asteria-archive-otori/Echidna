@@ -1,7 +1,9 @@
 #!/bin/sh
 
 export MESON_BUILD_ROOT="$1"
-CARGO_HOME="~/.cargo"
+
+export CARGO_HOME="$MESON_BUILD_ROOT/cargo-home"
+
 export MESON_SOURCE_ROOT="$2"
 export CARGO_TARGET_DIR="$MESON_BUILD_ROOT"/target
 export OUTPUT="$3"
@@ -16,6 +18,7 @@ then
         "$MESON_SOURCE_ROOT"/editor/Cargo.toml --release && \
         cp "$CARGO_TARGET_DIR"/release/"$APP_BIN" "$OUTPUT"
 else
+
     echo "DEBUG MODE"
     cargo build --manifest-path \
         "$MESON_SOURCE_ROOT"/editor/Cargo.toml && \
