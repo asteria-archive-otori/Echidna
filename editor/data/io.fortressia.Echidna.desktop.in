@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Echidna Code
+Exec=echidna
+Icon=io.Echidna.Fortressia
+Terminal=false
+Type=Application
+Categories=GTK;Technology
+StartupNotify=true

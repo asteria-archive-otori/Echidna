@@ -19,10 +19,12 @@ impl ObjectSubclass for EchidnaSidebar {
     type Type = super::EchidnaSidebar;
     type ParentType = gtk::Box;
 
+    #[inline]
     fn class_init(klass: &mut Self::Class) {
         Self::bind_template(klass);
     }
 
+    #[inline]
     fn instance_init(obj: &glib::subclass::InitializingObject<Self>) {
         obj.init_template();
     }

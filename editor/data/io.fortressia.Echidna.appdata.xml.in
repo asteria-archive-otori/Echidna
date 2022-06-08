@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2022 Nefo Fortressia -->
+<component type="desktop">
+	<id>io.fortressia.Echidna</id>
+	<metadata_license>CC0-1.0</metadata_license>
+	<project_license>MPL-2.0</project_license>
+	<description>
+	<p>A cross-platform code editor that's designed to be user-friendly.</p>  
+
+	<p>Designed for the GNOME desktop. Works on all systems.</p>
+	</description>
+	<provides>
+		<binary>echidna</binary>
+	</provides>
+
+	<url type="homepage">https://github.com/EchidnaHQ/Echidna</url>
+	<developer_name>Nefo Fortressia</developer_name>
+</component>

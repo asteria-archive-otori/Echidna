@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<schemalist>
-    <schema path="/io/fortressia/Echidna" id="io/fortressia/Echidna">
-    </schema>
-
+<schemalist gettext-domain="echidna">
+	<schema id="com.fortressia.Echidna" path="/com/fortressia/Echidna/">
+	</schema>
 </schemalist>

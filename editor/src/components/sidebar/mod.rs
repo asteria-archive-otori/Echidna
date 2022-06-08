@@ -23,6 +23,7 @@ impl EchidnaSidebar {
 }
 
 impl Default for EchidnaSidebar {
+    #[inline]
     fn default() -> Self {
         Self::new()
     }
