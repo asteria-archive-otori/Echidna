@@ -6,5 +6,8 @@
         <file compressed="true" preprocess="xml-stripblanks">components/editor/editor.ui</file>
         <file compressed="true" preprocess="xml-stripblanks">components/tab_label/tab-label.ui</file>
         <file compressed="true" preprocess="xml-stripblanks">components/window/menu.ui</file>
+        <file compressed="true" preprocess="xml-stripblanks">components/window/preferences.ui</file>
+        <file>style.css</file>
+
     </gresource>
 </gresources>

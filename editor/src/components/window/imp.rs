@@ -41,7 +41,7 @@ impl ObjectImpl for EchidnaWindow {
 
         self.sidebar.to_imp().settings_button.connect_clicked(clone!(@weak view, @weak settings =>
             move |_| {
-                let builder = gtk::Builder::from_resource("/io/fortressia/Echidna/preferences.ui");
+                let builder = gtk::Builder::from_resource("/io/fortressia/Echidna/components/window/preferences.ui");
 
                let pwin: adw::PreferencesWindow = builder.object("window").expect("no window");
                adw_gschema_auto::from_gsettings(&settings);

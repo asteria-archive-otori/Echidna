@@ -1,0 +1,9 @@
+.activitybar button {
+	min-width: 2rem;
+	min-height: 3rem;
+	-gtk-icon-size: 2rem;
+}
+
+.activitybar {
+	border-right: 0.1rem solid @borders;
+}
