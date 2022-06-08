@@ -4,7 +4,7 @@
 
 use crate::components::editor::EchidnaCoreEditor;
 use crate::prelude::*;
-use std::{error::Error, fmt};
+use std::error::Error;
 
 use glib::clone;
 use gtk::{subclass::prelude::*, FileChooserAction, FileChooserNative, Label, ResponseType};
@@ -182,22 +182,10 @@ impl FileImplementedEditor for super::EchidnaWindow {
     }
 
     fn action_save_file(&self) -> Result<(), Box<dyn Error>> {
-        match self.get_current_tab() {
-            Ok(page) => {
-                let page: EchidnaCoreEditor = page;
-                match page.file() {
-                    Some(file) => {
-                        let location = file.location();
-                        match page.save_file(None) {
-                            Ok(_) => Ok(()),
-                            Err(e) => Err(e),
-                        }
-                    }
-
-                    None => self.action_save_file_as(),
-                }
-            }
-            Err(e) => Err(e),
+        let page: EchidnaCoreEditor = self.get_current_tab()?;
+        match page.file() {
+            Some(file) => page.save_file(Some(&file.location())),
+            None => self.action_save_file_as(),
         }
     }
 }

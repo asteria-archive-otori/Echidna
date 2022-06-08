@@ -57,13 +57,9 @@ impl WorkspaceImplementedEditor for EchidnaEditor {
         dialog.connect_response(clone!(@weak window, @weak app =>
             move |dialog, response| {
                 if response == ResponseType::Accept {
-                    let file_option = dialog.file();
-                    match file_option {
-                        Some(file) => {
-                            dialog.destroy();
-                            Self::from_instance(&app).open_workspace(file);
-                        },
-                        None => {}
+                    if let Some(file) = dialog.file() {
+                        dialog.destroy();
+                        Self::from_instance(&app).open_workspace(file);
                     }
                 } else if response == ResponseType::Cancel {
                     dialog.destroy();
