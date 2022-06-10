@@ -45,17 +45,17 @@
           "type": "git",
           "path": ".",
           "url": "https://github.com/fortressia/Echidna"
-        },
+        }
+      ]
+    },
+    {
+      "name": "blueprint-compiler",
+      "buildsystem": "meson",
+      "sources": [
         {
-          "name": "blueprint-compiler",
-          "buildsystem": "meson",
-          "sources": [
-            {
-              "type": "git",
-              "url": "https://gitlab.gnome.org/jwestman/blueprint-compiler",
-              "branch": "main"
-            }
-          ]
+          "type": "git",
+          "url": "https://gitlab.gnome.org/jwestman/blueprint-compiler",
+          "branch": "main"
         }
       ]
     }
