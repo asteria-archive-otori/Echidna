@@ -8,6 +8,21 @@ gnome.compile_resources('echidna',
   install_dir: pkgdatadir,
 )
 
+
+rust_sources = [
+  'main.rs',
+  'config.rs.in',
+  'components/editor/imp.rs',
+  'components/editor/mod.rs',
+  'components/sidebar/imp.rs',
+  'components/sidebar/mod.rs',
+  'components/window/file.rs',
+   'components/window/imp.rs',
+   'components/window/mod.rs',
+   'components/window/menubar.rs',
+   'components/window/sidebar.rs',
+]
+
 conf = configuration_data()
 conf.set_quoted('VERSION', meson.project_version())
 conf.set_quoted('GETTEXT_PACKAGE', 'echidna')
@@ -33,6 +48,7 @@ cargo_script = find_program(join_paths(meson.project_source_root(), 'editor', 'b
 cargo_release = custom_target(
   'cargo-build',
   build_by_default: true,
+  input: rust_sources,
   output: meson.project_name(),
   console: true,
   install: true,
