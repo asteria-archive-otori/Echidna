@@ -53,8 +53,7 @@ impl ObjectImpl for EchidnaCoreEditor {
            
            if let Some(f) = obj.file() {
                let file_location = f.location();
-               obj.set_property("file", &f);
-   
+            
                let cancellable = gio::Cancellable::new();
                let filepath = file_location.path().expect("No filepath");
                let info = file_location
@@ -119,8 +118,8 @@ impl ObjectImpl for EchidnaCoreEditor {
                 ParamFlags::READWRITE,
             ),
             ParamSpecObject::new(
-                "file",
-                "file",
+                "app",
+                "app",
                 "the application",
                 adw::Application::static_type(),
                 ParamFlags::READWRITE

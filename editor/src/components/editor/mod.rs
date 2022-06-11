@@ -6,8 +6,8 @@ pub mod imp;
 use crate::prelude::*;
 use adw::Application;
 use gio::Cancellable;
-use gtk::{glib::clone, subclass::prelude::*};
-use sourceview::{prelude::*, Buffer, FileLoader, FileSaver, LanguageManager};
+use gtk::{ subclass::prelude::*};
+use sourceview::{ Buffer, FileSaver};
 use std::{error::Error, fmt};
 
 glib::wrapper! {
@@ -18,21 +18,21 @@ glib::wrapper! {
 
 impl EchidnaCoreEditor {
     pub fn new(
-        file: &Option<sourceview::File>,
-        app: &Option<Application>,
+        file: Option<&sourceview::File>,
+        app: Option<&Application>,
     ) -> Result<Self, glib::BoolError> {
-       glib::Object::new(&[("file", file), ("app", app)])
+       glib::Object::new(&[("file", &file), ("app", &app)])
      
     }
     pub fn app(&self) -> Option<Application> {
-        self.property::<Option<Application>>("file")
+        self.property("app")
     }
     pub fn to_imp(&self) -> &imp::EchidnaCoreEditor {
         imp::EchidnaCoreEditor::from_instance(self)
     }
 
     pub fn file(&self) -> Option<sourceview::File> {
-        self.property::<Option<sourceview::File>>("file")
+        self.property("file")
     }
 
     pub fn save_file(&self, save_as: Option<&gio::File>) -> Result<(), Box<dyn Error>> {
