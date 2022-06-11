@@ -9,7 +9,7 @@
     },
     "mesonbuild.configureOnOpen": false,
     "mesonbuild.buildFolder": "_build",
-    
+
     "rust-analyzer.runnables.cargoExtraArgs": [
         "--target-dir=_build/src"
     ],

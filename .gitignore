@@ -8,3 +8,8 @@ build
 build-dir
 _build
 .flatpak
+
+
+/subprojects/blueprint-compiler
+
+

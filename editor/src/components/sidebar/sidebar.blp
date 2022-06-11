@@ -1,0 +1,51 @@
+using Gtk 4.0;
+
+template EchidnaSidebar : Gtk.Box {
+    orientation: horizontal;
+
+    Gtk.StackSidebar {
+        stack: sidebar_stack;
+    }
+
+    Gtk.Stack sidebar_stack {
+        hhomogeneous: true;
+        width-request: 170;
+
+        Gtk.StackPage {
+            name: "explorer";
+            title: _("Explorer");
+            child: Gtk.Box {
+                orientation: vertical;
+
+                Gtk.Label {
+                    label: _("Explorer");
+                }
+            };
+        }
+
+        Gtk.StackPage {
+            name: "search";
+            title: _("Search");
+            child: Gtk.Box {
+                orientation: vertical;
+
+                Gtk.Label {
+                    label: _("Search");
+                }
+            };
+        }
+
+        Gtk.StackPage {
+            name: "extensions";
+            title: _("Extensions");
+
+            child: Gtk.Box {
+                orientation: vertical;
+
+                Gtk.Label {
+                    label: _("Extensions");
+                }
+            };
+        }
+    }
+}

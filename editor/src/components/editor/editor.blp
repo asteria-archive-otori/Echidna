@@ -1,0 +1,22 @@
+using Gtk 4.0;
+using GtkSource 5;
+template EchidnaCoreEditor : Gtk.Box  {
+    vexpand: true;
+    hexpand: true;
+    orientation: horizontal;
+    
+    Gtk.ScrolledWindow {
+        GtkSource.View sourceview {
+            vexpand: true;
+            hexpand: true;
+            show-line-numbers: true;
+            show-line-marks: true;
+            buffer: GtkSource.Buffer {
+
+            };
+        }
+    }
+    GtkSource.Map minimap {
+        view: sourceview;
+    }
+}
