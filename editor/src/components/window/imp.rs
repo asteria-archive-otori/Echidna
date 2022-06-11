@@ -6,6 +6,7 @@ pub use adw::subclass::prelude::*;
 use gtk::glib::clone;
 use gtk::subclass::prelude::*;
 use gtk::CompositeTemplate;
+use gtk::Inhibit;
 use std::cell::RefCell;
 
 #[derive(Debug, Default, CompositeTemplate)]
@@ -54,7 +55,13 @@ impl ObjectImpl for EchidnaWindow {
 
 impl WidgetImpl for EchidnaWindow {}
 
-impl WindowImpl for EchidnaWindow {}
+impl WindowImpl for EchidnaWindow {
+    fn close_request(&self, window: &Self::Type) -> Inhibit {
+        println!("window ref count: {} ", window.ref_count());
+
+        Inhibit(true)
+    }
+}
 
 impl ApplicationWindowImpl for EchidnaWindow {}
 
