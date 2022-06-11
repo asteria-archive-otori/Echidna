@@ -60,6 +60,7 @@ $ meson compile
 
 ### Building in Windows
 I haven't tested Echidna Code in Windows yet, but if you want to build this in Windows, you can either build the dependencies from source with [Gvsbuild](https://github.com/wingtk/gvsbuild), or get the fluffyy pre-built binary happiness from [fluffy-prebuilt-happiness](https://github.com/EchidnaHQ/fluffy-prebuilt-happiness/).
+
 To use Visual Studio in Meson, use this instead of the one in [Compiling](#Compiling).
 
 ```
