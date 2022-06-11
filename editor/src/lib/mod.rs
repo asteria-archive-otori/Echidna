@@ -4,7 +4,8 @@
 
 // We're using libadwaita now, no need for a custom closeable_tab
 // pub mod closeable_tab;
-
+pub mod file_chooser;
 pub mod prelude {
     //    pub use super::closeable_tab::*;
+    
 }
