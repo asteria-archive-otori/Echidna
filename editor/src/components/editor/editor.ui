@@ -28,6 +28,7 @@
         <child>
             <object class="GtkSourceMap" id="minimap">
                 <property name="vexpand">1</property>
+                <property name="view">sourceview</property>
             </object>
 
         </child>

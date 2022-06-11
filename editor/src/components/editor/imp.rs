@@ -47,8 +47,7 @@ impl ObjectSubclass for EchidnaCoreEditor {
 impl ObjectImpl for EchidnaCoreEditor {
 
     fn constructed(&self, obj: &Self::Type) {
-           // Without cloning it, for some reasons the Rust compiler complains about &obj.to_imp().sourceview not being IsA<sourceview::View>
-           self.minimap.set_view(&self.sourceview.clone());
+
            let buffer = self.sourceview.buffer().downcast::<Buffer>().expect("Cannot downcast the sourceview's buffer. Maybe the sourceview's buffer is not IsA<sourceview::Buffer>.");
            
            if let Some(f) = obj.file() {
@@ -104,6 +103,8 @@ impl ObjectImpl for EchidnaCoreEditor {
                    move |manager|{
                    set_scheme(&buffer, manager.is_dark());
                }));
+           } else {
+              
            }
            
            
