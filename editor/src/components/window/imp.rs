@@ -1,18 +1,17 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+ * tab-view, You can obtain one at https://mozilla.org/MPL/2.0/. */
 use crate::prelude::*;
 pub use adw::subclass::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::CompositeTemplate;
 use std::cell::RefCell;
-
+use adw::TabView;
 #[derive(Debug, Default, CompositeTemplate)]
 #[template(resource = "/io/fortressia/Echidna/components/window/window.ui")]
 pub struct EchidnaWindow {
     #[template_child]
-    pub tab_bar: TemplateChild<adw::TabBar>,
-   
+    pub tab_view: TemplateChild<adw::TabView>,
     pub dialogs: RefCell<Vec<gtk::NativeDialog>>,
     #[template_child]
     open_button: TemplateChild<gtk::Button>,
@@ -35,8 +34,33 @@ impl ObjectSubclass for EchidnaWindow {
     }
 }
 
-impl ObjectImpl for EchidnaWindow {}
 
+impl ObjectImpl for EchidnaWindow {
+    fn properties() -> &'static [ParamSpec] {
+        static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
+            vec![ParamSpecObject::new(
+                "tab-view",
+                "tab-view",
+                "the tab-view of the editor",
+                TabView::static_type(),
+                ParamFlags::READABLE,
+            ),
+  
+            ]
+        });
+
+        PROPERTIES.as_ref()
+    }
+
+
+
+    fn property(&self, _obj: &Self::Type, _id: usize, spec: &ParamSpec) -> Value {
+        match spec.name() {
+            "tab-view" => self.tab_view.to_value(),
+            _ => unimplemented!(),
+        }
+    }
+}
 impl WidgetImpl for EchidnaWindow {}
 
 impl WindowImpl for EchidnaWindow {}

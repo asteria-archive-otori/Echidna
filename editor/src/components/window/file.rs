@@ -60,17 +60,17 @@ impl FileImplementedEditor for super::EchidnaWindow {
 
                 dialog_clone.connect_response(clone!( @weak self as window, =>
                 move |dialog, response| {
+                    
 
                     if response == ResponseType::Accept {
-                        let file = dialog.file().expect("");
                         Self::open_file(
-                            &super::imp::EchidnaWindow::from_instance(&window).tab_bar, file,
-                            Some(
-                                &window.application().expect("No application in window")
-                                    .downcast::<adw::Application>()
-                                    .expect("Application is not AdwApplication"),
-                            ),
-                        );
+                        &window.tab_view(), dialog.file().unwrap(),
+                        Some(
+                            &window.application().expect("No application in window")
+                                .downcast::<adw::Application>()
+                                .expect("Application is not AdwApplication"),
+                        ),
+                    );
 
                     } else {
                         println!("{:?}", response);
@@ -85,9 +85,9 @@ impl FileImplementedEditor for super::EchidnaWindow {
             Err(e) => Err(Box::new(e)),
         }
     }
-
+    
     fn open_file(
-        tab_bar: &adw::TabBar,
+        view: &adw::TabView,
         file_location: gio::File,
         app: Option<&adw::Application>,
     ) -> Result<(), Box<dyn Error>> {
@@ -95,8 +95,7 @@ impl FileImplementedEditor for super::EchidnaWindow {
         let editor_page = EchidnaCoreEditor::new(Some(file), app);
         match editor_page {
             Ok(editor_page) => {
-                let view = tab_bar.view().expect("No view in tab bar");
-
+          
                 let page = view.prepend(&editor_page);
                 page.set_title(
                     file_location
@@ -169,8 +168,7 @@ impl FileImplementedEditor for super::EchidnaWindow {
             ),
         ) {
             Ok(editor) => {
-                let tab_bar = &self.to_imp().tab_bar;
-                let view = tab_bar.view().expect("No view in tab bar");
+                let view = &self.tab_view();
                 let page = view.prepend(&editor);
 
                 view.set_selected_page(&page);
