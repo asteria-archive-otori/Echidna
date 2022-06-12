@@ -5,7 +5,6 @@ gnome = import('gnome')
 blueprints = custom_target('blueprints',
   input: files(
     join_paths('components', 'editor', 'editor.blp'),
-    join_paths('components', 'sidebar', 'sidebar.blp'),
     join_paths('components', 'window', 'window.blp'),
     join_paths('components', 'window', 'menu.blp'),
     join_paths('components', 'workspace', 'workspace.blp')
