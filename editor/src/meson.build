@@ -29,13 +29,11 @@ rust_sources = [
   'config.rs.in',
   'components/editor/imp.rs',
   'components/editor/mod.rs',
-  'components/sidebar/imp.rs',
-  'components/sidebar/mod.rs',
   'components/window/file.rs',
    'components/window/imp.rs',
    'components/window/mod.rs',
    'components/window/menubar.rs',
-   'components/window/sidebar.rs',
+   'components/workspace/mod.rs'
 ]
 
 conf = configuration_data()
