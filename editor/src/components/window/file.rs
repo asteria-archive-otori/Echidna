@@ -41,7 +41,7 @@ impl super::EchidnaWindow {
                     let file = dialog.file().unwrap();
 
                     Self::open_file(
-                        &super::imp::EchidnaWindow::from_instance(&window).tab_bar, file,
+                        &window.tab_view(), file,
                         Some(
                             &window.application().expect("No application in window")
                                 .downcast::<adw::Application>()
@@ -58,7 +58,7 @@ impl super::EchidnaWindow {
     }
 
     pub fn open_file(
-        tab_bar: &adw::TabBar,
+        view: &adw::TabView,
         file_location: gio::File,
         app: Option<&adw::Application>,
     ) -> Result<(), Box<dyn Error>> {
@@ -66,8 +66,7 @@ impl super::EchidnaWindow {
         let editor_page = EchidnaCoreEditor::new(Some(&file), app);
         match editor_page {
             Ok(editor_page) => {
-                let view = tab_bar.view().expect("No view in tab bar");
-
+          
                 let page = view.prepend(&editor_page);
                 page.set_title(
                     file_location
@@ -117,8 +116,7 @@ impl super::EchidnaWindow {
             ),
         ) {
             Ok(editor) => {
-                let tab_bar = &self.to_imp().tab_bar;
-                let view = tab_bar.view().expect("No view in tab bar");
+                let view = &self.tab_view();
                 let page = view.prepend(&editor);
 
                 view.set_selected_page(&page);

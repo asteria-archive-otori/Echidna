@@ -7,7 +7,7 @@ use crate::prelude::*;
 use adw::Application;
 use gio::Cancellable;
 use gtk::{ subclass::prelude::*};
-use sourceview::{ Buffer, FileSaver};
+use sourceview::{ Buffer, FileSaver, View};
 use std::{error::Error, fmt};
 
 glib::wrapper! {
@@ -27,16 +27,17 @@ impl EchidnaCoreEditor {
     pub fn app(&self) -> Option<Application> {
         self.property("app")
     }
-    pub fn to_imp(&self) -> &imp::EchidnaCoreEditor {
-        imp::EchidnaCoreEditor::from_instance(self)
-    }
-
+  
     pub fn file(&self) -> Option<sourceview::File> {
         self.property("file")
     }
 
+    fn sourceview(&self) -> View {
+        self.property("sourceview")
+    }
+
     pub fn save_file(&self, save_as: Option<&gio::File>) -> Result<(), Box<dyn Error>> {
-        let buffer = self.to_imp().sourceview.buffer().downcast::<Buffer>();
+        let buffer = self.sourceview().buffer().downcast::<Buffer>();
 
         match buffer {
             Ok(buffer) => match self.file() {
