@@ -1,0 +1,15 @@
+using Gtk 4.0;
+
+template EchidnaWorkspace : Gtk.Box {
+
+    Gtk.ListView {
+        model: Gtk.MultiSelection {
+            model: bind EchidnaWorkspace.model;
+    };
+        factory: Gtk.BuilderListItemFactory {
+            resource: "/io/fortressia/Echidna/components/workspace/builder.ui";
+        };
+
+        
+    }
+}

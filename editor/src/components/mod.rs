@@ -11,6 +11,7 @@ pub use editor::EchidnaCoreEditor;
 pub use sidebar::EchidnaSidebar;
 // pub use tab_label::TabLabel;
 pub use window::EchidnaWindow;
+pub mod workspace;
 
 pub mod prelude {
     pub use super::window::{file::*, menubar::*};

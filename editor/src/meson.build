@@ -7,7 +7,8 @@ blueprints = custom_target('blueprints',
     join_paths('components', 'editor', 'editor.blp'),
     join_paths('components', 'sidebar', 'sidebar.blp'),
     join_paths('components', 'window', 'window.blp'),
-    join_paths('components', 'window', 'menu.blp')
+    join_paths('components', 'window', 'menu.blp'),
+    join_paths('components', 'workspace', 'workspace.blp')
   ),
   output: '.',
   command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],
