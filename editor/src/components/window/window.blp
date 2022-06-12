@@ -1,0 +1,47 @@
+using Gtk 4.0;
+using Adw 1;
+template EchidnaWindow : Adw.ApplicationWindow {
+    title: _("Echidna Code");
+    default-width: 800;
+    default-height: 600;
+
+    Gtk.Box echidna-root {
+        orientation: vertical;
+
+        Adw.HeaderBar {
+
+        }
+
+        Gtk.Box main-ui {
+            orientation: vertical;
+
+            Gtk.Box bars-box {
+                vexpand: true;
+
+                .EchidnaSidebar sidebar {
+
+                }
+
+                Gtk.Box {
+                    orientation: vertical;
+
+                    Adw.TabBar tab_bar {
+                        hexpand: true;
+                        view: tab_view;
+                    }
+
+                    Adw.TabView tab_view {
+                        vexpand: true;
+                    }
+                }
+            }
+        
+            Gtk.Statusbar status-bar {
+                margin-start: 10;
+                margin-end: 10;
+                margin-top: 6;
+                margin-bottom: 6;
+            }
+        }
+    }
+}
