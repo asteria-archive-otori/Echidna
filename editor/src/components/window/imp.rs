@@ -12,9 +12,12 @@ use std::cell::RefCell;
 pub struct EchidnaWindow {
     #[template_child]
     pub tab_bar: TemplateChild<adw::TabBar>,
-    #[template_child]
-    pub sidebar: TemplateChild<super::super::sidebar::EchidnaSidebar>,
+   
     pub dialogs: RefCell<Vec<gtk::NativeDialog>>,
+    #[template_child]
+    open_button: TemplateChild<gtk::Button>,
+    #[template_child]
+    pub explorer: TemplateChild<gtk::Box>
 }
 
 #[glib::object_subclass]
