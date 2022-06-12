@@ -15,9 +15,13 @@ pub struct EchidnaWindow {
     #[template_child]
     pub tab_bar: TemplateChild<adw::TabBar>,
     pub settings: RefCell<Option<gio::Settings>>,
-    #[template_child]
-    pub sidebar: TemplateChild<super::super::sidebar::EchidnaSidebar>,
     pub dialogs: RefCell<Vec<gtk::NativeDialog>>,
+    #[template_child]
+    open_button: TemplateChild<gtk::Button>,
+    #[template_child]
+    pub settings_button: TemplateChild<gtk::Button>,
+    #[template_child]
+    pub explorer: TemplateChild<gtk::Box>
 }
 
 #[glib::object_subclass]
@@ -40,7 +44,7 @@ impl ObjectImpl for EchidnaWindow {
         let view = self.tab_bar.view().unwrap();
         let settings = gio::Settings::new("io.fortressia.Echidna");
 
-        self.sidebar.to_imp().settings_button.connect_clicked(clone!(@weak view, @weak settings =>
+        self.settings_button.connect_clicked(clone!(@weak view, @weak settings =>
             move |_| {
                 let builder = gtk::Builder::from_resource("/io/fortressia/Echidna/components/window/preferences.ui");
 
