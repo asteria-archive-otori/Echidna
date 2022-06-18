@@ -94,36 +94,3 @@ I'm interested to port GDK to Android and the Web (without the current state of 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed in the [`LICENSE`](./LICENSE) file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 *Credits to [Dogehouse](https://github.com/benawad/dogehouse) for the README template.*
-To use Visual Studio in Meson, use this instead of the one in [Compiling](#Compiling).
-
-```
-> meson _build --backend=vs
-```
-
-On Linux, Echidna Code is generally not intended for use on a native distro. It's recommended to develop and run Echidna with Flatpak. See [the part below](#building-with-flatpak-in-linux).
-
-### Building with Flatpak in Linux
-
-Firstly, install [Flatpak](https://flatpak.org/setup/) and [Flatpak Builder](https://docs.flatpak.org/en/latest/first-build.html).
-
-The official docs of Flatpak isn't great if you're looking to use it for development purposes, as many default parameters aren't suited for development purposes. 
-
-You should just stick to these two lovely angels: [GNOME Builder](https://flathub.org/apps/details/org.gnome.Builder) and [the Flatpak extension for Visual Studio Code](https://open-vsx.org/vscode/item?itemName=bilelmoussaoui.flatpak-vscode). 
-
-## FAQ
-
-## How will Echidna work under Flatpak?
-It's roughly the same as the one written in [the Flathub packaging disclaimer for VSCode](https://github.com/flathub/com.visualstudio.code/blob/master/flatpak-warning.txt).
-
-I will brew a GUI helper for that thooo. <3
-
-
-### Will you ship it to other platforms?
-Windows 10 is planned. Thankfully, I still keep my Windows 10 installation in my laptop, since I use it for games. MacOS however, kinda hard, since I don't have any Mac devices. If you are a Mac user, you can try [Building from Source](#building-from-source).
-
-I'm interested to port GDK to Android and the Web (without the current state of Broadway), but that'll take time definitely.
-## License
-
-This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed in the [`LICENSE`](./LICENSE) file, You can obtain one at https://mozilla.org/MPL/2.0/.
-
-*Credits to [Dogehouse](https://github.com/benawad/dogehouse) for the README template.*
