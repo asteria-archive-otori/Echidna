@@ -18,22 +18,14 @@ glib::wrapper! {
 
 impl EchidnaWindow {
     pub fn new<P: IsA<gtk::Application>>(application: &P) -> Self {
-        let object = glib::Object::new(&[("application", &application)]);
+        let win: Self =
+            glib::Object::new(&[("application", &application)]).expect("can't make window");
 
-        match object {
-            Ok(o) => o,
-            Err(e) => panic!("Error in making EchidnaApplication {}", e),
-        }
-    }
-
-    pub fn to_imp(&self) -> &imp::EchidnaWindow {
-        imp::EchidnaWindow::from_instance(self)
+        win
     }
 
     pub fn get_current_tab<A: IsA<gtk::Widget>>(&self) -> Result<A, Box<dyn Error>> {
-        let window_imp = self.to_imp();
-        let tab_bar = &window_imp.tab_bar;
-        let view = tab_bar.view().expect("No view in tab barr");
+        let view = self.tab_view();
         let page = view.selected_page();
 
         match page {
@@ -71,5 +63,9 @@ impl EchidnaWindow {
                 }
             },
         }
+    }
+
+    fn tab_view(&self) -> adw::TabView {
+        self.property("tab-view")
     }
 }

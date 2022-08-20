@@ -1,7 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-use super::file::FileImplementedEditor;
 use super::EchidnaWindow;
 use crate::prelude::*;
 use gio::{MenuModel, SimpleAction};
@@ -100,11 +99,11 @@ impl MenubarImplementedEditor for EchidnaWindow {
             let act_window_close = SimpleAction::new("close", None);
 
             self.add_action(&act_window_close);
-            let window = self.clone();
 
-            act_window_close.connect_activate(move |_action, _variant| {
+            act_window_close.connect_activate(clone!(@weak self as window =>
+                move |_action, _variant| {
                 window.close();
-            });
+            }));
         }
         {
             let action_open_file: SimpleAction = SimpleAction::new("open-file", None);

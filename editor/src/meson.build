@@ -5,7 +5,6 @@ gnome = import('gnome')
 blueprints = custom_target('blueprints',
   input: files(
     join_paths('components', 'editor', 'editor.blp'),
-    join_paths('components', 'sidebar', 'sidebar.blp'),
     join_paths('components', 'window', 'window.blp'),
     join_paths('components', 'window', 'menu.blp')
   ),
@@ -29,13 +28,11 @@ rust_sources = [
   'config.rs.in',
   'components/editor/imp.rs',
   'components/editor/mod.rs',
-  'components/sidebar/imp.rs',
-  'components/sidebar/mod.rs',
   'components/window/file.rs',
    'components/window/imp.rs',
    'components/window/mod.rs',
    'components/window/menubar.rs',
-   'components/window/sidebar.rs',
+
 ]
 
 conf = configuration_data()

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="echidna">
-	<schema id="com.fortressia.Echidna" path="/com/fortressia/Echidna/">
+	<schema id="io.fortressia.Echidna" path="/com/fortressia/Echidna/">
+		<key name='autosave' type='b'>
+			<default>false</default>
+			<summary>Automatically save opened files</summary>
+		<description>
+			If enabled, unsaved changes to files will be saved when 
+		</description>
+		</key>
+		
 	</schema>
 </schemalist>
